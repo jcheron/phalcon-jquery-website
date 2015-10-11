@@ -1,0 +1,131 @@
+@font-face {
+	font-family: 'Harabara';
+	src: url('./fonts/Harabara.eot');
+	src: local('Harabara'), url('./fonts/Harabara.woff') format('woff'), url('./fonts/Harabara.ttf') format('truetype');
+}
+#scroll{
+	position: relative;
+}
+.harabara {
+	font-family: 'Harabara' !important;
+}
+.carousel-inner > .item > img {
+    margin: 0 auto;
+}
+.flag {
+	width: 18px;
+	height: 12px;
+	background:url(../img/flags.png) no-repeat
+}
+.navbar{
+	margin-bottom: 0px;
+}
+.ajax-loader{
+	margin: auto;
+}
+
+.bs-docs-header {
+    box-sizing: border-box;
+    color: rgb(71, 69, 70);
+    height: 170px;
+    position: relative;
+    text-align: left;
+    text-shadow: rgba(0, 0, 0, 0.0980392) 0px 1px 0px;
+    perspective-origin: 950.5px 128px;
+    transform-origin: 950.5px 128px;
+    background: rgb(48,118,112) linear-gradient( rgb(132,211,178) 0px, rgb(48,118,112) 100%) repeat-x scroll 0% 0% / auto padding-box border-box;
+    border: 0px none rgb(205, 191, 227);
+    font: normal normal normal normal 24px/34.2857170104981px 'Segoe UI', Frutiger, 'Frutiger Linotype', 'Dejavu Sans', 'Helvetica Neue', Arial, sans-serif;
+    margin: 0px 0px 40px;
+    outline: rgb(205, 191, 227) none 0px;
+    padding: 30px 15px;
+}
+.bs-docs-header h1 {
+    box-sizing: border-box;
+    color: rgb(71, 69, 70);
+    height: 60px;
+    text-align: left;
+	text-shadow: 1px 1px 1px rgba(150, 150, 150, 0.64);
+    width: 760px;
+    perspective-origin: 380px 30px;
+    transform-origin: 380px 30px;
+    border: 0px none rgb(255, 255, 255);
+    font: normal normal 400 normal 60px/60px 'Segoe UI', Frutiger, 'Frutiger Linotype', 'Dejavu Sans', 'Helvetica Neue', Arial, sans-serif;
+    margin: 0px 380px 10px 0px;
+    outline: rgb(255, 255, 255) none 0px;
+}
+
+.bs-docs-header h1 #jquery{
+    color: rgb(255,255,255);
+    font-size: 30px;
+}
+.bs-docs-header p{
+    color: #C8EFD2;
+    font-size: 14px;
+    font-variant: 500;
+}
+.filter{
+	padding: 5px 35px 5px 15px!important;
+	border-radius: 4px;
+	width: auto!important;
+	display: inline-block!important;
+	float: right;
+	margin-left: 4px;
+	transition: opacity 0.15s linear 0s;
+	border: 1px solid rgb(245, 231, 158);
+}
+.filter .close{
+	top: 0px!important;
+}
+.filter text{
+	float: right!important;
+}
+
+#navbar2-navzone-1-dropdown-3-dropdown-item-1{
+	background: url(images/zoom.png) no-repeat left;
+	padding-left: 20px;
+	margin-left: 10px;
+}
+
+.bs-example:before {
+	display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #959595;
+    text-transform: capitalize;
+    letter-spacing: 1px;
+    content: "Example";
+    margin-bottom: 3px;
+}
+
+.sitemap {
+    box-sizing: border-box;
+    height: 300px;
+    width:100%;
+    perspective-origin: 950.5px 267.15625px;
+    -webkit-perspective-origin: 950.5px 267.15625px;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    transform-origin: 950.5px 267.15625px;
+    -webkit-transform-origin: 950.5px 267.15625px;
+    background: rgb(71, 69, 70) none repeat scroll 0% 0% / auto padding-box border-box;
+    border: 0px none rgb(24, 23, 27);
+    outline: rgb(24, 23, 27) none 0px;
+    padding: 30px 0px 0px;
+    -webkit-border-after: 0px none rgb(24, 23, 27);
+    -webkit-border-before: 0px none rgb(24, 23, 27);
+    -webkit-border-end: 0px none rgb(24, 23, 27);
+    -webkit-border-start: 0px none rgb(24, 23, 27);
+    margin-top: 10px;
+}
+.copyright{
+	color: white;
+}
+.jumbotron p{
+	font-size: 18px!important;
+}
+.jumbotron .lead{
+    font-weight: 500;
+}
+#response{
+	min-height: 500px;
+}
