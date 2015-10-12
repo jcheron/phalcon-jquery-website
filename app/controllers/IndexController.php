@@ -15,6 +15,7 @@ class IndexController extends ControllerBase
     public function indexAction(){
     	$navbar=$this->jquery->bootstrap()->htmlNavbar("navbarJS");
     	$navbar->setClass("");
+    	//$navbar->cssInverse();
     	$navbar->fromArray(array("brandImage"=>"img/miniPhalcon.png","brandHref"=>"index"));
 		$domaines=Domaine::find("isNull(idParent)");
     	$navbar->fromDatabaseObjects($domaines, function($domaine){
@@ -43,7 +44,7 @@ class IndexController extends ControllerBase
     		echo $rubrique->getDescription();
     		foreach ($rubrique->getExemples() as $exemple){
     			echo $exemple->getTitre();
-    			echo $exemple->getDescription();
+    			echo $this->replaceAlerts($exemple->getDescription());
     			$header=NULL;
     			if(StrUtils::isNotNull($exemple->getHeader())){
     				$header=$exemple->getHeader();
@@ -98,6 +99,14 @@ class IndexController extends ControllerBase
     }
 
     private function int($s){return(int)preg_replace('/[^\d]*(\-?\d*).*/','$1',$s);}
+
+    private function replaceAlerts($html){
+    	$startPoint = '{{';
+    	$endPoint = '}}';
+    	$separateur=':';
+    	$result = preg_replace('/('.preg_quote($startPoint).')(.*)('.preg_quote($separateur).')(.*)('.preg_quote($endPoint).')/sim', '<div class="alert alert-$2">$4</div>', $html);
+    	return $result;
+    }
 
 }
 

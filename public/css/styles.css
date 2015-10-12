@@ -58,6 +58,8 @@
 .bs-docs-header h1 #jquery{
     color: rgb(255,255,255);
     font-size: 30px;
+    font-weight: 600;
+    font-style: italic;
 }
 .bs-docs-header p{
     color: #C8EFD2;
