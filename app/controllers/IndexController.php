@@ -9,9 +9,11 @@ use Ajax\bootstrap\html\HtmlTabs;
 use utils\StrUtils;
 use Ajax\bootstrap\html\content\HtmlTabItem;
 use Ajax\bootstrap\html\content\HtmlDropdownItem;
+use Ajax\bootstrap\html\html5\HtmlSelect;
 
-class IndexController extends ControllerBase
-{
+class IndexController extends ControllerBase{
+	private $anchors=array();
+
     public function indexAction(){
     	$navbar=$this->jquery->bootstrap()->htmlNavbar("navbarJS");
     	$navbar->setClass("");
@@ -23,10 +25,10 @@ class IndexController extends ControllerBase
     		$lnk->getOnClick("index/content/main/".$domaine->getId(),"#response");
     		return $lnk;
     	});
-
 		$this->jquery->compile($this->view);
 		$this->view->setVars(array("jquery"=>$this->jquery->genCDNs()));
     }
+
     public function contentAction($param1,$param2=""){
     	if($param1=="main"){
     		$id=$param2;
@@ -42,8 +44,10 @@ class IndexController extends ControllerBase
     	foreach ($rubriques as $rubrique){
     		echo "<h1>".$rubrique->getTitre()."</h1>";
     		echo $rubrique->getDescription();
-    		foreach ($rubrique->getExemples() as $exemple){
-    			echo $exemple->getTitre();
+    		ob_start();
+    		$exemples=$rubrique->getExemples();
+    		foreach ($exemples as $exemple){
+    			echo $this->replaceTitre($exemple->getTitre());
     			echo $this->replaceAlerts($exemple->getDescription());
     			$header=NULL;
     			if(StrUtils::isNotNull($exemple->getHeader())){
@@ -62,6 +66,18 @@ class IndexController extends ControllerBase
 	    		$p=$this->jquery->bootstrap()->htmlPanel("id-".$exemple->getId(),"<p class='bs-example'>".$exec."</p>",$header,$footer);
 	    		echo $p->compile();
     		}
+    		$all=ob_get_contents();
+    		ob_end_clean();
+    		if(count($this->anchors)>2){
+    			$ddAnchors=new HtmlDropdown("anchors","Accès rapide");
+    			$ddAnchors->setStyle("btn-default");
+    			$ddAnchors->asButton();
+    			foreach ($this->anchors as $kAnchor=>$vAnchor){
+    				$ddAnchors->addItem($vAnchor,"#".$kAnchor);
+    			}
+    			echo $ddAnchors->compile();
+    		}
+    		echo $all;
     	}
     	$this->jquery->exec("Prism.highlightAll();",true);
     	if($param1=="main")
@@ -69,6 +85,7 @@ class IndexController extends ControllerBase
     	echo $this->jquery->compile();
 		$this->view->disable();
     }
+
     public function menuAction($id){
     	$id=$this->int($id);
     	$domaines=Domaine::find(array(
@@ -104,9 +121,18 @@ class IndexController extends ControllerBase
     	$startPoint = '{{';
     	$endPoint = '}}';
     	$separateur=':';
-    	$result = preg_replace('/('.preg_quote($startPoint).')(.*)('.preg_quote($separateur).')(.*)('.preg_quote($endPoint).')/sim', '<div class="alert alert-$2">$4</div>', $html);
+    	$result = preg_replace('/('.preg_quote($startPoint).')(.*?)('.preg_quote($separateur).')(.*)('.preg_quote($endPoint).')/sim', '<div class="alert alert-$2"><span class="glyphicon glyphicon-$2-sign" aria-hidden="true"></span> $4</div>', $html);
     	return $result;
     }
 
+    private function replaceTitre($titre){
+    	if(StrUtils::isNotNull($titre)){
+    		$num=count($this->anchors)+1;
+	    	$attr=StrUtils::cleanAttr($titre);
+	    	$this->anchors[$attr]=$num." - ".$titre;
+	    	$titre="<a name='".$attr."' class='anchor'><span class='octicon octicon-link'></span></a>".$num." - ".$titre;
+    	}
+    	return "<h3>".$titre."</h3>";
+    }
 }
 
