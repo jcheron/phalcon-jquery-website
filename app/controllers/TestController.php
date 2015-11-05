@@ -1,5 +1,6 @@
 <?php
 use Phalcon\Mvc\View;
+use Ajax\bootstrap\html\HtmlInputgroup;
 class TestController extends ControllerBase {
 
 	public function indexAction(){
@@ -28,5 +29,14 @@ class TestController extends ControllerBase {
 		});
 		$buttonsGroup->onClick("$('#reponse').html(this.value);");
 		echo $this->jquery->compile();
+	}
+
+	public function dd(){
+		$dropdown=$this->jquery->bootstrap()->htmlDropdown("dd2","Dropdown from Array");
+		$dropdown->fromArray(array("items"=>array("Elément 1","Elément 2","-","Elément 3","-Séparateur","Elément 4")));
+		$inputGroup=new HtmlInputgroup("ig-1");
+		$inputGroup->createRadio("ck1","");
+		$this->jquery->bootstrap()->htmlTabs($identifier)
+		echo $inputGroup;
 	}
 }

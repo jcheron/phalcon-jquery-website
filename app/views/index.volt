@@ -36,9 +36,10 @@
 	</div>
 	<div class="sitemap">
 		<div class="container">
-			<p class="copyright">© Kobject.net 2008-2015 - <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_new">Apache 2 Licence</a></p>
-			<p class="copyright">Created with <a href="https://phalconphp.com/" target="_new">Phalcon</a> & <a href="index" target="_self">Phalcon-jQuery</a></a></p>
-			
+			<ul>
+			<li class="copyright">Kobject.net © 2008-2015 - <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_new">Apache 2 Licence</a></li>
+			<li class="copyright">Created with <a href="https://phalconphp.com/" target="_new">Phalcon</a> & <a href="index" target="_self">Phalcon-jQuery</a></a></li>
+			</ul>
 		</div>
 	</div>
 	{{ script_foot }}

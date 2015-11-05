@@ -17,7 +17,6 @@ class IndexController extends ControllerBase{
     public function indexAction(){
     	$navbar=$this->jquery->bootstrap()->htmlNavbar("navbarJS");
     	$navbar->setClass("");
-    	//$navbar->cssInverse();
     	$navbar->fromArray(array("brandImage"=>"img/miniPhalcon.png","brandHref"=>"index"));
 		$domaines=Domaine::find("isNull(idParent)");
     	$navbar->fromDatabaseObjects($domaines, function($domaine){
@@ -45,7 +44,7 @@ class IndexController extends ControllerBase{
     		echo "<h1>".$rubrique->getTitre()."</h1>";
     		echo $rubrique->getDescription();
     		ob_start();
-    		$exemples=$rubrique->getExemples();
+    		$exemples=$rubrique->getExemples(['order' => 'ordre']);
     		foreach ($exemples as $exemple){
     			echo $this->replaceTitre($exemple->getTitre());
     			echo $this->replaceAlerts($exemple->getDescription());
@@ -61,7 +60,7 @@ class IndexController extends ControllerBase{
 	    		}
 	    		$footer=NULL;
 	    		if(StrUtils::isNotNull($exemple->getPhp())){
-	    			$footer="<pre><code class='language-php'>".$exemple->getPhp()."</code></pre>";
+	    			$footer="<pre><code class='language-php'>".htmlentities($exemple->getPhp())."</code></pre>";
 	    		}
 	    		$p=$this->jquery->bootstrap()->htmlPanel("id-".$exemple->getId(),"<p class='bs-example'>".$exec."</p>",$header,$footer);
 	    		echo $p->compile();
@@ -82,6 +81,7 @@ class IndexController extends ControllerBase{
     	$this->jquery->exec("Prism.highlightAll();",true);
     	if($param1=="main")
     		$this->jquery->get("index/menu/".$id,".col-md-3");
+    	$this->jquery->getOnClick("#response a.menu", "index/content/","#response");
     	echo $this->jquery->compile();
 		$this->view->disable();
     }
