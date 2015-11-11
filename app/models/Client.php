@@ -16,6 +16,11 @@ class Client extends \Phalcon\Mvc\Model
     protected $name;
 
     /**
+     *
+     * @var integer
+     */
+    protected  $part;
+    /**
      * Returns table name mapped in the model.
      *
      * @return string
@@ -62,6 +67,18 @@ class Client extends \Phalcon\Mvc\Model
 
 	public function setName($name) {
 		$this->name=$name;
+		return $this;
+	}
+	public function toString(){
+		return $this->name;
+	}
+
+	public function getPart() {
+		return $this->part;
+	}
+
+	public function setPart($part) {
+		$this->part=$part;
 		return $this;
 	}
 

@@ -31,12 +31,9 @@ class TestController extends ControllerBase {
 		echo $this->jquery->compile();
 	}
 
-	public function dd(){
-		$dropdown=$this->jquery->bootstrap()->htmlDropdown("dd2","Dropdown from Array");
-		$dropdown->fromArray(array("items"=>array("Elément 1","Elément 2","-","Elément 3","-Séparateur","Elément 4")));
-		$inputGroup=new HtmlInputgroup("ig-1");
-		$inputGroup->createRadio("ck1","");
-		$this->jquery->bootstrap()->htmlTabs($identifier)
-		echo $inputGroup;
+	public function clientsAction(){
+		$clients=Client::find();
+		$this->view->setRenderLevel(View::LEVEL_MAIN_LAYOUT);
+		$this->view->setVars(array("model"=>"Clients","objects"=>$clients));
 	}
 }

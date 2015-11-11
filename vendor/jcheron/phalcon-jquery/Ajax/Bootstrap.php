@@ -26,6 +26,8 @@ use Ajax\bootstrap\html\HtmlCarousel;
 use Ajax\bootstrap\html\HtmlTabs;
 use Ajax\bootstrap\html\HtmlModal;
 use Ajax\bootstrap\html\HtmlSplitbutton;
+use Ajax\bootstrap\html\HtmlInputgroup;
+use Ajax\bootstrap\html\HtmlListgroup;
 
 class Bootstrap extends BaseGui {
 
@@ -269,7 +271,17 @@ class Bootstrap extends BaseGui {
 		$tabs=new HtmlTabs($identifier);
 		return $this->addHtmlComponent($tabs);
 	}
-
+	/**
+	 * Return a new Bootstrap Html listGroup
+	 * @param string $identifier
+	 * @param array $items array of items to add
+	 * @return HtmlListgroup
+	 */
+	public function htmlListgroup($identifier,$items=array()){
+		$listGroup=new HtmlListgroup($identifier);
+		$listGroup->addItems($items);
+		return $this->addHtmlComponent($listGroup);
+	}
 	/**
 	 * Return a new Bootstrap Html modal dialog
 	 * @param string $identifier
@@ -290,9 +302,20 @@ class Bootstrap extends BaseGui {
 	 * @param array $items
 	 * @param string $cssStyle
 	 * @param string $onClick
+	 * @return HtmlSplitbutton
 	 */
 	public function htmlSplitbutton($identifier,$value="", $items=array(), $cssStyle="btn-default", $onClick=NULL) {
 		$split=new HtmlSplitbutton($identifier, $value, $items, $cssStyle,$onClick);
 		return $this->addHtmlComponent($split);
+	}
+
+	/**
+	 * Return a new Bootstrap Html InputGroup
+	 * @param string $identifier
+	 * @return HtmlInputgroup
+	 */
+	public function htmlInputgroup($identifier){
+		$inputGroup=new HtmlInputgroup($identifier);
+		return $this->addHtmlComponent($inputGroup);
 	}
 }
