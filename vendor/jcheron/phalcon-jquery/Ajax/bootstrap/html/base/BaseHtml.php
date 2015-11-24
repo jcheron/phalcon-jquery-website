@@ -224,7 +224,7 @@ abstract class BaseHtml extends BaseWidget {
 		$this->wrapAfter=$after.$this->wrapAfter;
 		return $this;
 	}
-
+	
 	public function addEvent($event, $jsCode, $stopPropagation=false, $preventDefault=false) {
 		if ($stopPropagation===true) {
 			$jsCode="event.stopPropagation();".$jsCode;
@@ -236,7 +236,7 @@ abstract class BaseHtml extends BaseWidget {
 		return $this;
 	}
 
-	protected function _addEvent($event, $jsCode) {
+	public function _addEvent($event, $jsCode) {
 		if (array_key_exists($event, $this->events)) {
 			if (is_array($this->events [$event])) {
 				$this->events [$event] []=$jsCode;
@@ -256,7 +256,7 @@ abstract class BaseHtml extends BaseWidget {
 	}
 
 	public function onClick($jsCode, $stopPropagation=false, $preventDefault=false) {
-		return $this->addEvent("click", $jsCode, $stopPropagation, $preventDefault);
+		return $this->on("click", $jsCode, $stopPropagation, $preventDefault);
 	}
 
 	public function setClick($jsCode) {
@@ -285,7 +285,7 @@ abstract class BaseHtml extends BaseWidget {
 		}
 	}
 
-	private function _ajaxOn($operation, $event, $url, $responseElement="", $parameters=array()) {
+	public function _ajaxOn($operation, $event, $url, $responseElement="", $parameters=array()) {
 		$params=array (
 				"url" => $url,
 				"responseElement" => $responseElement

@@ -1,5 +1,5 @@
 {
     "require": {
-        "jcheron/phalcon-jquery": "dev-master"
+        "jcheron/phalcon-jquery": "~v1.0.0"
     }
 }

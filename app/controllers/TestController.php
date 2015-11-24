@@ -1,6 +1,5 @@
 <?php
 use Phalcon\Mvc\View;
-use Ajax\bootstrap\html\HtmlInputgroup;
 class TestController extends ControllerBase {
 
 	public function indexAction(){
@@ -35,5 +34,11 @@ class TestController extends ControllerBase {
 		$clients=Client::find();
 		$this->view->setRenderLevel(View::LEVEL_MAIN_LAYOUT);
 		$this->view->setVars(array("model"=>"Clients","objects"=>$clients));
+	}
+	
+	public function clientAction($idClient){
+		$client=Client::findFirst($idClient);
+		echo $client->toString();
+		$this->view->disable();
 	}
 }

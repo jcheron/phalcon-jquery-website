@@ -172,6 +172,17 @@ class Jquery {
 
 		return $this->_add_event($element, $js, 'click');
 	}
+	
+	/**
+	 * Outputs a jQuery contextmenu event
+	 *
+	 * @param string The element to attach the event to
+	 * @param string The code to execute
+	 * @return string
+	 */
+	public function _contextmenu($element='this', $js='') {
+		return $this->_add_event($element, $js, 'contextmenu');
+	}
 
 	// --------------------------------------------------------------------
 
@@ -399,21 +410,21 @@ class Jquery {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Outputs a jQuery addClass event
-	 *
-	 * @param string - element
-	 * @param boolean $immediatly delayed if false
+	 * Insert content, specified by the parameter, after each element in the set of matched elements
+	 * @param string $element
+	 * @param string $value
+	 * @param boolean $immediatly defers the execution if set to false
 	 * @return string
 	 */
-	public function _addClass($element='this', $class='', $immediatly=false) {
+	public function after($element='this', $value='', $immediatly=false){
 		$element=$this->_prep_element($element);
-		$class=$this->_prep_value($class);
-		$str="$({$element}).addClass({$class});";
+		$value=$this->_prep_value($value);
+		$str="$({$element}).after({$value});";
 		if ($immediatly)
 			$this->jquery_code_for_compile[]=$str;
 		return $str;
 	}
-
+	
 	/**
 	 * Get or set the value of an attribute for the first element in the set of matched elements or set one or more attributes for every matched element.
 	 * @param string $element
@@ -434,23 +445,39 @@ class Jquery {
 	}
 
 	/**
-	 * Get or set the html of an attribute for the first element in the set of matched elements.
+	 * Execute a generic jQuery call with a value.
+	 * @param string $jQueryCall
 	 * @param string $element
-	 * @param string $value
+	 * @param string $param
 	 * @param boolean $immediatly delayed if false
 	 */
-	public function _html($element='this', $value="", $immediatly=false) {
+	public function _genericCallValue($jQueryCall,$element='this', $param="", $immediatly=false) {
 		$element=$this->_prep_element($element);
-		if (isset($value)) {
-			$value=$this->_prep_value($value);
-			$str="$({$element}).html({$value});";
+		if (isset($param)) {
+			$param=$this->_prep_value($param);
+			$str="$({$element}).{$jQueryCall}({$param});";
 		} else
-			$str="$({$element}).html();";
+			$str="$({$element}).{$jQueryCall}();";
+			if ($immediatly)
+				$this->jquery_code_for_compile[]=$str;
+			return $str;
+	}
+	/**
+	 * Execute a generic jQuery call with 2 elements.
+	 * @param string $jQueryCall
+	 * @param string $to
+	 * @param string $element
+	 * @param boolean $immediatly delayed if false
+	 * @return string
+	 */
+	public function _genericCallElement($jQueryCall,$to='this', $element, $immediatly=false) {
+		$to=$this->_prep_element($to);
+		$element=$this->_prep_element($element);
+		$str="$({$to}).{$jQueryCall}({$element});";
 		if ($immediatly)
 			$this->jquery_code_for_compile[]=$str;
-		return $str;
+			return $str;
 	}
-
 	// --------------------------------------------------------------------
 
 	/**
@@ -485,38 +512,6 @@ class Jquery {
 
 		$str="$({$element}).animate({\n$animations\n\t\t}".$speed.$extra.");";
 
-		if ($immediatly)
-			$this->jquery_code_for_compile[]=$str;
-		return $str;
-	}
-
-	/**
-	 * Insert content, specified by the parameter $element, to the end of each element in the set of matched elements $to.
-	 * @param string $to
-	 * @param string $element
-	 * @param boolean $immediatly delayed if false
-	 * @return string
-	 */
-	public function _append($to='this', $element, $immediatly=false) {
-		$to=$this->_prep_element($to);
-		$element=$this->_prep_element($element);
-		$str="$({$to}).append({$element});";
-		if ($immediatly)
-			$this->jquery_code_for_compile[]=$str;
-		return $str;
-	}
-
-	/**
-	 * Insert content, specified by the parameter $element, to the beginning of each element in the set of matched elements $to.
-	 * @param string $to
-	 * @param string $element
-	 * @param boolean $immediatly delayed if false
-	 * @return string
-	 */
-	public function _prepend($to='this', $element, $immediatly=false) {
-		$to=$this->_prep_element($to);
-		$element=$this->_prep_element($element);
-		$str="$({$to}).prepend({$element});";
 		if ($immediatly)
 			$this->jquery_code_for_compile[]=$str;
 		return $str;
@@ -601,23 +596,6 @@ class Jquery {
 	}
 
 	// --------------------------------------------------------------------
-
-	/**
-	 * Outputs a jQuery remove class event
-	 *
-	 * @param string $element element
-	 * @param string $class
-	 * @param boolean $immediatly delayed if false
-	 * @return string
-	 */
-	public function _removeClass($element='this', $class='', $immediatly=false) {
-		$element=$this->_prep_element($element);
-		$str="$({$element}).removeClass(\"$class\");";
-
-		if ($immediatly)
-			$this->jquery_code_for_compile[]=$str;
-		return $str;
-	}
 
 	// --------------------------------------------------------------------
 
@@ -716,23 +694,6 @@ class Jquery {
 	}
 
 	// --------------------------------------------------------------------
-
-	/**
-	 * Outputs a jQuery toggle class event
-	 *
-	 * @param string $element element
-	 * @param string $class
-	 * @param boolean $immediatly delayed if false
-	 * @return string
-	 */
-	public function _toggleClass($element='this', $class='', $immediatly=false) {
-		$element=$this->_prep_element($element);
-		$str="$({$element}).toggleClass(\"$class\");";
-
-		if ($immediatly)
-			$this->jquery_code_for_compile[]=$str;
-		return $str;
-	}
 
 	/**
 	 * Execute all handlers and behaviors attached to the matched elements for the given event.
@@ -959,8 +920,8 @@ class Jquery {
 	 * @return string
 	 */
 	public function _prep_element($element) {
-		if (strrpos($element, 'this')===false&&strrpos($element, 'event')===false) {
-			$element='"'.$element.'"';
+		if (strrpos($element, 'this')===false&&strrpos($element, 'event')===false&&strrpos($element, 'self')===false) {
+			$element='"'.addslashes($element).'"';
 		}
 		return $element;
 	}
@@ -977,7 +938,7 @@ class Jquery {
 		if (is_array($value)) {
 			$value=implode(",", $value);
 		}
-		if (strrpos($value, 'this')===false&&strrpos($value, 'event')===false) {
+		if (strrpos($value, 'this')===false&&strrpos($value, 'event')===false&&strrpos($value, 'self')===false) {
 			$value='"'.$value.'"';
 		}
 		return $value;
@@ -1011,22 +972,26 @@ class Jquery {
 			$loading_notifier.=$this->ajaxLoader;
 		}
 		$loading_notifier.='</div>';
-		$retour.="$(\"{$responseElement}\").empty();\n";
-		$retour.="\t\t$(\"{$responseElement}\").prepend('{$loading_notifier}');\n";
+		$retour.="$({$responseElement}).empty();\n";
+		$retour.="\t\t$({$responseElement}).prepend('{$loading_notifier}');\n";
 	}
 
-	public function _get($url, $params="{}", $responseElement="", $jsCallback=NULL, $attr="id", $immediatly=false) {
-		return $this->_ajax("get", $url,$params,$responseElement,$jsCallback,$attr,$immediatly);
+	public function _get($url, $params="{}", $responseElement="", $jsCallback=NULL, $attr="id", $hasLoader=true,$immediatly=false) {
+		return $this->_ajax("get", $url,$params,$responseElement,$jsCallback,$attr,$hasLoader,$immediatly);
 	}
-	public function _post($url, $params="{}", $responseElement="", $jsCallback=NULL, $attr="id", $immediatly=false) {
-		return $this->_ajax("post", $url,$params,$responseElement,$jsCallback,$attr,$immediatly);
+	public function _post($url, $params="{}", $responseElement="", $jsCallback=NULL, $attr="id", $hasLoader=true,$immediatly=false) {
+		return $this->_ajax("post", $url,$params,$responseElement,$jsCallback,$attr,$hasLoader,$immediatly);
 	}
 
-	protected function _ajax($method,$url, $params="{}", $responseElement="", $jsCallback=NULL, $attr="id", $immediatly=false) {
+	protected function _ajax($method,$url, $params="{}", $responseElement="", $jsCallback=NULL, $attr="id", $hasLoader=true,$immediatly=false) {
 		if(JString::isNull($params)){$params="{}";}
 		$jsCallback=isset($jsCallback) ? $jsCallback : "";
 		$retour=$this->_getAjaxUrl($url, $attr);
-		$this->addLoading($retour, $responseElement);
+		$responseElement=$this->_getResponseElement($responseElement);
+		$retour.="var self=this;\n";
+		if($hasLoader===true){
+			$this->addLoading($retour, $responseElement);
+		}
 		$retour.="$.".$method."(url,".$params.").done(function( data ) {\n";
 		$retour.=$this->_getOnAjaxDone($responseElement, $jsCallback)."});\n";
 		if ($immediatly)
@@ -1037,11 +1002,14 @@ class Jquery {
 	protected function _getAjaxUrl($url,$attr){
 		$url=$this->_correctAjaxUrl($url);
 		$retour="url='".$url."';\n";
+		$slash="/";
+		if(PhalconUtils::endsWith($url, "/"))
+			$slash="";
 		if(JString::isNotNull($attr)){
 			if ($attr=="value")
-				$retour.="url=url+'/'+$(this).val();\n";
-			else
-				$retour.="url=url+'/'+$(this).attr('".$attr."');\n";
+				$retour.="url=url+'".$slash."'+$(this).val();\n";
+			else if($attr!=null && $attr!=="")
+				$retour.="url=url+'".$slash."'+$(this).attr('".$attr."');\n";
 		}
 		return $retour;
 	}
@@ -1049,11 +1017,17 @@ class Jquery {
 	protected function _getOnAjaxDone($responseElement,$jsCallback){
 		$retour="";
 		if ($responseElement!=="") {
-			$responseElement=$this->_prep_value($responseElement);
 			$retour="\t$({$responseElement}).html( data );\n";
 		}
 		$retour.="\t".$jsCallback."\n";
 		return $retour;
+	}
+	
+	protected function _getResponseElement($responseElement){
+		if ($responseElement!=="") {
+			$responseElement=$this->_prep_value($responseElement);
+		}
+		return $responseElement;
 	}
 
 	protected function _correctAjaxUrl($url) {
@@ -1072,16 +1046,36 @@ class Jquery {
 	 * @param string $method Method use
 	 * @param string $jsCallback javascript code to execute after the request
 	 */
-	public function _json($url, $method="get", $params="{}", $jsCallback=NULL, $attr="id", $immediatly=false) {
+	public function _json($url, $method="get", $params="{}", $jsCallback=NULL, $attr="id", $context="document",$immediatly=false) {
 		$jsCallback=isset($jsCallback) ? $jsCallback : "";
 		$retour=$this->_getAjaxUrl($url, $attr);
 		$retour.="$.{$method}(url,".$params.").done(function( data ) {\n";
-		$retour.="\tdata=$.parseJSON(data);for(var key in data){if($('#'+key).length){ if($('#'+key).is('[value]')) { $('#'+key).val(data[key]);} else { $('#'+key).html(data[key]); }}};\n";
+		$retour.="\tdata=$.parseJSON(data);for(var key in data){"
+				."if($('#'+key,".$context.").length){ if($('#'+key,".$context.").is('[value]')) { $('#'+key,".$context.").val(data[key]);} else { $('#'+key,".$context.").html(data[key]); }}};\n";
 		$retour.="\t".$jsCallback."\n
 		});\n";
 		if ($immediatly)
 			$this->jquery_code_for_compile[]=$retour;
 		return $retour;
+	}
+	
+	/**
+	 * Makes an ajax request and receives the JSON data types by assigning DOM elements with the same name when $event fired on $element
+	 * @param string $element
+	 * @param string $event
+	 * @param string $url the request address
+	 * @param array $parameters default : array("preventDefault"=>true,"stopPropagation"=>true,"jsCallback"=>NULL,"attr"=>"id","params"=>"{}","method"=>"get")
+	 */
+	public function _jsonOn($event,$element, $url,$parameters=array()) {
+		$preventDefault=true;
+		$stopPropagation=true;
+		$jsCallback=null;
+		$attr="id";
+		$method="get";
+		$context="document";
+		$params="{}";
+		extract($parameters);
+		return $this->_add_event($element, $this->_json($url,$method, $params,$jsCallback, $attr,$context), $event, $preventDefault, $stopPropagation);
 	}
 
 	/**
@@ -1091,23 +1085,45 @@ class Jquery {
 	 * @param string $method Method use
 	 * @param string $jsCallback javascript code to execute after the request
 	 */
-	public function _jsonArray($maskSelector, $url, $method="get", $params="{}", $jsCallback=NULL, $attr="id", $immediatly=false) {
+	public function _jsonArray($maskSelector, $url, $method="get", $params="{}", $jsCallback=NULL, $attr="id",$immediatly=false) {
 		$jsCallback=isset($jsCallback) ? $jsCallback : "";
 		$retour=$this->_getAjaxUrl($url, $attr);
 		$retour.="$.{$method}(url,".$params.").done(function( data ) {\n";
-		$retour.="\tdata=$.parseJSON(data);$.each(data, function(index, value) {\n"."\tvar created=false;var maskElm=$('".$maskSelector."').first();maskElm.hide();"."\tvar newId=(maskElm.attr('id') || 'mask')+'-'+index;"."\tvar newElm=$('#'+newId);\n"."\tif(!newElm.length){\n"."\t\tnewElm=maskElm.clone();newElm.attr('id',newId);\n"."\t\tnewElm.appendTo($('".$maskSelector."').parent());\n"."\t}\n"."\tfor(var key in value){\n"."\t\t\tvar html = $('<div />').append($(newElm).clone()).html();\n"."\t\t\tif(html.indexOf('[['+key+']]')>-1){\n"."\t\t\t\tcontent=$(html.split('[['+key+']]').join(value[key]));\n"."\t\t\t\t$(newElm).replaceWith(content);newElm=content;\n"."\t\t\t}\n"."\t\tvar sel='[data-id=\"'+key+'\"]';if($(sel,newElm).length){\n"."\t\t\tvar selElm=$(sel,newElm);\n"."\t\t\t if(selElm.is('[value]')) { selElm.attr('value',value[key]);selElm.val(value[key]);} else { selElm.html(value[key]); }\n"."\t\t}\n"."}\n"."\t$(newElm).show(true);"."});\n";
+		$retour.="\tdata=$.parseJSON(data);$.each(data, function(index, value) {\n"."\tvar created=false;var maskElm=$('".$maskSelector."').first();maskElm.hide();"."\tvar newId=(maskElm.attr('id') || 'mask')+'-'+index;"."\tvar newElm=$('#'+newId);\n"."\tif(!newElm.length){\n"."\t\tnewElm=maskElm.clone();newElm.attr('id',newId);\n"."\t\tnewElm.appendTo($('".$maskSelector."').parent());\n"."\t}\n"."\tfor(var key in value){\n"."\t\t\tvar html = $('<div />').append($(newElm).clone()).html();\n"."\t\t\tif(html.indexOf('[['+key+']]')>-1){\n"."\t\t\t\tcontent=$(html.split('[['+key+']]').join(value[key]));\n"."\t\t\t\t$(newElm).replaceWith(content);newElm=content;\n"."\t\t\t}\n"."\t\tvar sel='[data-id=\"'+key+'\"]';if($(sel,newElm).length){\n"."\t\t\tvar selElm=$(sel,newElm);\n"."\t\t\t if(selElm.is('[value]')) { selElm.attr('value',value[key]);selElm.val(value[key]);} else { selElm.html(value[key]); }\n"."\t\t}\n"."}\n"."\t$(newElm).show(true);"."\n"."\t$(newElm).removeClass('hide');"."});\n";
 
 		$retour.="\t".$jsCallback."\n"."});\n";
 		if ($immediatly)
 			$this->jquery_code_for_compile[]=$retour;
 		return $retour;
 	}
-
-	public function _postForm($url, $form, $responseElement, $validation=false, $jsCallback=NULL, $attr="id", $immediatly=false) {
+	/**
+	 * Makes an ajax request and receives the JSON data types by assigning DOM elements with the same name when $event fired on $element
+	 * @param string $element
+	 * @param string $event
+	 * @param string $url the request address
+	 * @param array $parameters default : array("preventDefault"=>true,"stopPropagation"=>true,"jsCallback"=>NULL,"attr"=>"id","params"=>"{}","method"=>"get")
+	 */
+	public function _jsonArrayOn($event,$element, $maskSelector,$url,$parameters=array()) {
+		$preventDefault=true;
+		$stopPropagation=true;
+		$jsCallback=null;
+		$attr="id";
+		$method="get";
+		$params="{}";
+		extract($parameters);
+		return $this->_add_event($element, $this->_jsonArray($maskSelector,$url,$method, $params,$jsCallback, $attr), $event, $preventDefault, $stopPropagation);
+	}
+	
+	public function _postForm($url, $form, $responseElement, $validation=false, $jsCallback=NULL, $attr="id", $hasLoader=true,$immediatly=false) {
 		$jsCallback=isset($jsCallback) ? $jsCallback : "";
 		$retour=$this->_getAjaxUrl($url, $attr);
-		$this->addLoading($retour, $responseElement);
-		$retour.="$.post(url,$('#".$form."').serialize()).done(function( data ) {\n";
+		$retour.="\nvar params=$('#".$form."').serialize();\n";
+		$responseElement=$this->_getResponseElement($responseElement);
+		$retour.="var self=this;\n";
+		if($hasLoader===true){
+			$this->addLoading($retour, $responseElement);
+		}
+		$retour.="$.post(url,params).done(function( data ) {\n";
 		$retour.=$this->_getOnAjaxDone($responseElement, $jsCallback)."});\n";
 
 		if ($validation) {
@@ -1127,14 +1143,18 @@ class Jquery {
 	 * @param string $element
 	 * @param string $event
 	 * @param string $url
-	 * @param string $params
+	 * @param string $params queryString parameters (JSON format). default : {}
 	 * @param string $responseElement
-	 * @param boolean $preventDefault
-	 * @param string $jsCallback javascript code to execute after the request
-	 * @param string $attr the attribute value to pass to the url (default : id attribute value)
+	 * @param array $parameters default : array("preventDefault"=>true,"stopPropagation"=>true,"jsCallback"=>NULL,"attr"=>"id","hasLoader"=>true)
 	 */
-	public function _getOn($event,$element, $url, $params="{}", $responseElement="", $preventDefault=true, $stopPropagation=true, $jsCallback=NULL, $attr="id") {
-		return $this->_add_event($element, $this->_get($url, $params, $responseElement, $jsCallback, $attr), $event, $preventDefault, $stopPropagation);
+	public function _getOn($event,$element, $url, $params="{}", $responseElement="", $parameters=array()) {
+		$preventDefault=true;
+		$stopPropagation=true;
+		$jsCallback=null;
+		$attr="id";
+		$hasLoader=true;
+		extract($parameters);
+		return $this->_add_event($element, $this->_get($url, $params, $responseElement, $jsCallback, $attr,$hasLoader), $event, $preventDefault, $stopPropagation);
 	}
 
 	/**
@@ -1143,14 +1163,18 @@ class Jquery {
 	 * @param string $element
 	 * @param string $event
 	 * @param string $url
-	 * @param string $params
+	 * @param string $params queryString parameters (JSON format). default : {}
 	 * @param string $responseElement
-	 * @param boolean $preventDefault
-	 * @param string $jsCallback javascript code to execute after the request
-	 * @param string $attr the attribute value to pass to the url (default : id attribute value)
+	 * @param array $parameters default : array("preventDefault"=>true,"stopPropagation"=>true,"jsCallback"=>NULL,"attr"=>"id","hasLoader"=>true)
 	 */
-	public function _postOn($event,$element, $url, $params="{}", $responseElement="", $preventDefault=true, $stopPropagation=true, $jsCallback=NULL, $attr="id") {
-		return $this->_add_event($element, $this->_post($url, $params, $responseElement, $jsCallback, $attr), $event, $preventDefault, $stopPropagation);
+	public function _postOn($event,$element, $url, $params="{}", $responseElement="", $parameters=array()) {
+		$preventDefault=true;
+		$stopPropagation=true;
+		$jsCallback=null;
+		$attr="id";
+		$hasLoader=true;
+		extract($parameters);
+		return $this->_add_event($element, $this->_post($url, $params, $responseElement, $jsCallback, $attr,$hasLoader), $event, $preventDefault, $stopPropagation);
 	}
 
 	/**
@@ -1161,12 +1185,17 @@ class Jquery {
 	 * @param string $url
 	 * @param string $form
 	 * @param string $responseElement
-	 * @param boolean $preventDefault
-	 * @param string $jsCallback javascript code to execute after the request
-	 * @param string $attr the attribute value to pass to the url (default : id attribute value)
+	 * @param array $parameters default : array("preventDefault"=>true,"stopPropagation"=>true,"validation"=>false,"jsCallback"=>NULL,"attr"=>"id","hasLoader"=>true)
 	 */
-	public function _postFormOn($event,$element, $url, $form, $responseElement="", $preventDefault=true, $stopPropagation=true, $validation=false, $jsCallback=NULL, $attr="id") {
-		return $this->_add_event($element, $this->_postForm($url, $form, $responseElement, $validation, $jsCallback, $attr), $event, $preventDefault, $stopPropagation);
+	public function _postFormOn($event,$element, $url, $form, $responseElement="", $parameters=array()) {
+		$preventDefault=true;
+		$stopPropagation=true;
+		$validation=false;
+		$jsCallback=null;
+		$attr="id";
+		$hasLoader=true;
+		extract($parameters);
+		return $this->_add_event($element, $this->_postForm($url, $form, $responseElement, $validation, $jsCallback, $attr,$hasLoader), $event, $preventDefault, $stopPropagation);
 	}
 
 	/**

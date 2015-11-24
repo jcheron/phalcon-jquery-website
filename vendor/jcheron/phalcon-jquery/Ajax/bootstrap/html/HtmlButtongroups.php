@@ -2,12 +2,12 @@
 
 namespace Ajax\bootstrap\html;
 
-use Ajax\JsUtils;
 use Ajax\bootstrap\html\base\CssRef;
 use Ajax\bootstrap\html\base\HtmlDoubleElement;
 
 /**
  * Twitter Bootstrap Buttongroups component
+ * @see http://getbootstrap.com/components/#btn-groups
  * @author jc
  * @version 1.001
  */
@@ -140,18 +140,6 @@ class HtmlButtongroups extends HtmlDoubleElement {
 		return $this;
 	}
 
-	/**
-	 *
-	 * @param string $jsCode
-	 * @param boolean $stopPropagation
-	 * @param boolean $preventDefault
-	 */
-	public function onClick($jsCode, $stopPropagation=false, $preventDefault=false) {
-		foreach ( $this->elements as $element ) {
-			$element->onClick($jsCode, $stopPropagation, $preventDefault);
-		}
-	}
-
 	/*
 	 * (non-PHPdoc)
 	 * @see \Ajax\bootstrap\html\base\BaseHtml::on()
@@ -160,6 +148,7 @@ class HtmlButtongroups extends HtmlDoubleElement {
 		foreach ( $this->elements as $element ) {
 			$element->on($event, $jsCode, $stopPropagation, $preventDefault);
 		}
+		return $this;
 	}
 
 	public function getElements() {

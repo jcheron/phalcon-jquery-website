@@ -8,6 +8,7 @@ use Ajax\bootstrap\html\base\CssRef;
 
 /**
  * Twitter Bootstrap Button component
+ * @see http://getbootstrap.com/css/#buttons
  * @author jc
  * @version 1.001
  */
@@ -113,9 +114,5 @@ class HtmlButton extends HtmlDoubleElement {
 			$this->setProperty($key, $value);
 		}
 		return $array;
-	}
-
-	public function onClick($jsCode, $stopPropagation=false, $preventDefault=false) {
-		return $this->addEvent("click", $jsCode, $stopPropagation, $preventDefault);
 	}
 }
