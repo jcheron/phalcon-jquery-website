@@ -1,31 +1,59 @@
 <?php
 
 use Ajax\bootstrap\html\HtmlNavbar;
-use Ajax\bootstrap\html\HtmlListgroup;
-use Ajax\bootstrap\html\base\CssRef;
 use Ajax\bootstrap\html\HtmlLink;
 use Ajax\bootstrap\html\HtmlDropdown;
 use Ajax\bootstrap\html\HtmlTabs;
 use utils\StrUtils;
 use Ajax\bootstrap\html\content\HtmlTabItem;
 use Ajax\bootstrap\html\content\HtmlDropdownItem;
-use Ajax\bootstrap\html\html5\HtmlSelect;
+use utils\TranslateEngine;
+use Phalcon\Mvc\View;
+use Phalcon\Text;
 
 class IndexController extends ControllerBase{
 	private $anchors=array();
-
-    public function indexAction(){
+	
+    public function indexAction($lang=NULL){
+    	if($this->request->isAjax()){
+    		$this->view->setRenderLevel(View::LEVEL_MAIN_LAYOUT);
+    		$this->jquery->exec("Prism.highlightAll();",true);
+    	}
+    	if(isset($lang)){
+    		$this->translateEngine->setLanguage($lang,$this->session);
+    	}
     	$navbar=$this->jquery->bootstrap()->htmlNavbar("navbarJS");
     	$navbar->setClass("");
     	$navbar->fromArray(array("brandImage"=>"img/miniPhalcon.png","brandHref"=>"index"));
 		$domaines=Domaine::find("isNull(idParent)");
     	$navbar->fromDatabaseObjects($domaines, function($domaine){
-    		$lnk=new HtmlLink("lnk-".$domaine->getId(),"#",$domaine->getLibelle());
+    		$libelle=$this->translateEngine->translate($domaine->getId(),"domaine.libelle",$domaine->getLibelle());
+    		$lnk=new HtmlLink("lnk-".$domaine->getId(),"#",$libelle);
     		$lnk->getOnClick("index/content/main/".$domaine->getId(),"#response");
     		return $lnk;
     	});
+    	$right=$navbar->addZone("right");
+    	$ddLang=new HtmlDropdown("btLang");
+    	$ddLang->asButton();
+		foreach(TranslateEngine::$languages as $keyLang=>$valueLang){
+			$item=$ddLang->addItem($valueLang,$this->url->get("Index/index/".$keyLang));
+			$item->getOnClick("Index/index/".$keyLang,"body");
+			if(Text::startsWith($this->translateEngine->getLanguage(), $keyLang, true)){
+				$item->active();
+				$ddLang->setValue($valueLang." : ".$keyLang);
+			}
+		}
+    	$right->addElement($ddLang);
+    	$right->asForm();
+    	$expr=array();
+    	$expr[]=$this->translateEngine->translate(1,"index.header","jQuery, jQuery UI and Twitter Bootstrap library for phalcon MVC Framework");
+    	$expr[]=$this->translateEngine->translate(2,"index.header","Phalcon-jQuery is a library for Phalcon® for generating scripts or rich components (Bootstrap, jQueryUI) on server side.");
+    	$expr[]=$this->translateEngine->translate(1,"index.download","Download");
+    	$expr[]=$this->translateEngine->translate(1,"index.install","<p>Or</p><p class='lead'>Install with Composer</p><p>Create the file composer.json</p>");
+    	$expr[]=$this->translateEngine->translate(2,"index.install","Enter in the console");
+    	 
 		$this->jquery->compile($this->view);
-		$this->view->setVars(array("jquery"=>$this->jquery->genCDNs()));
+		$this->view->setVars(array("jquery"=>$this->jquery->genCDNs(),"expr"=>$expr,"lang"=>$this->translateEngine->getLanguage()));
     }
 
     public function contentAction($param1,$param2=""){
@@ -41,16 +69,17 @@ class IndexController extends ControllerBase{
         	"order" => "ordre"
     	));
     	foreach ($rubriques as $rubrique){
-    		echo "<h1>".$rubrique->getTitre()."</h1>";
-    		echo $rubrique->getDescription();
+    		
+    		echo "<h1>".$this->translateEngine->translate($rubrique->getId(),"rubrique.titre",$rubrique->getTitre())."</h1>";
+    		echo $this->translateEngine->translate($rubrique->getId(),"rubrique.description",$rubrique->getDescription());
     		ob_start();
     		$exemples=$rubrique->getExemples(['order' => 'ordre']);
     		foreach ($exemples as $exemple){
-    			echo $this->replaceTitre($exemple->getTitre());
-    			echo $this->replaceAlerts($exemple->getDescription());
+    			echo $this->replaceTitre($this->translateEngine->translate($exemple->getId(),"exemple.titre",$exemple->getTitre()));
+    			echo $this->replaceAlerts($this->translateEngine->translate($exemple->getId(),"exemple.description",$exemple->getDescription()));
     			$header=NULL;
     			if(StrUtils::isNotNull($exemple->getHeader())){
-    				$header=$exemple->getHeader();
+    				$header=$this->translateEngine->translate($exemple->getId(),"exemple.header",$exemple->getHeader());
     			}
 	    		$exec="";
 	    		if($exemple->getExecPHP()){
@@ -68,7 +97,7 @@ class IndexController extends ControllerBase{
     		$all=ob_get_contents();
     		ob_end_clean();
     		if(count($this->anchors)>2){
-    			$ddAnchors=new HtmlDropdown("anchors","Accès rapide");
+    			$ddAnchors=new HtmlDropdown("anchors",$this->translateEngine->translate(1,"index.menu","Quick access"));
     			$ddAnchors->setStyle("btn-default");
     			$ddAnchors->asButton();
     			foreach ($this->anchors as $kAnchor=>$vAnchor){
@@ -94,19 +123,24 @@ class IndexController extends ControllerBase{
     	));
 		$tabs=new HtmlTabs("tabs");
 		$tabs->setTabstype("pills");
+	
 		$tabs->fromDatabaseObjects($domaines, function($domaine){
 			if(count($domaine->getDomaines())>0){
-				$dd= new HtmlDropdown("tab-".$domaine->getId(),$domaine->getLibelle());
+				$libelle=$this->translateEngine->translate($domaine->getId(),"domaine.libelle",$domaine->getLibelle());
+				$dd= new HtmlDropdown("tab-".$domaine->getId(),$libelle);
 				$dd->setTagName("button");
 				$dd->setStyle("btn-primary");
 				$dd->fromDatabaseObjects($domaine->getDomaines(), function($sousDomaine){
 					$ddItem= new HtmlDropdownItem("ddItem-".$sousDomaine->getId());
-					$ddItem->setCaption($sousDomaine->getLibelle());
+					$libelle=$this->translateEngine->translate($sousDomaine->getId(),"domaine.libelle",$sousDomaine->getLibelle());
+					$ddItem->setCaption($libelle);
 					return $ddItem;
 				});
 				return $dd;
-			} else
-			return new HtmlTabItem("tab-".$domaine->getId(),$domaine->getLibelle());
+			} else{
+				$libelle=$this->translateEngine->translate($domaine->getId(),"domaine.libelle",$domaine->getLibelle());
+				return new HtmlTabItem("tab-".$domaine->getId(),$libelle);
+			}
 		});
 		$tabs->setStacked();
 		echo $tabs->compile($this->jquery);

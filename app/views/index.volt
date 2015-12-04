@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html language="{{ lang }}">
 	<head>
 		<title>phalcon-jQuery</title>
 		<meta charset="UTF-8">
@@ -21,7 +21,7 @@
 	<div class="bs-docs-header">
 		<div class="container">
 			<h1><span class="harabara">phalcon</span> <span id="jquery">jQuery</span></h1>
-			<p>jQuery, jQuery UI and Twitter Bootstrap library for phalcon MVC Framework</p>
+			<p>{{ expr[0] }}</p>
 		</div>
 	</div>
 	<div class="img-rounded container" id="content">

@@ -13,6 +13,7 @@ use Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
 use Phalcon\Mvc\Dispatcher as MvcDispatcher;
 use Phalcon\Events\Manager as EventsManager;
+use utils\TranslateEngine;
 
 /**
  * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
@@ -82,7 +83,7 @@ $di->setShared('modelsMetadata', function () {
 $di->setShared('session', function () {
     $session = new SessionAdapter();
     $session->start();
-
+    (new TranslateEngine())->initialize($session);
     return $session;
 });
 

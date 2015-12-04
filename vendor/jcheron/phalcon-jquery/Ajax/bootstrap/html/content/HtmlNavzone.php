@@ -33,6 +33,10 @@ class HtmlNavzone extends BaseHtml {
 	public function setClass($value) {
 		$this->setMemberCtrl($this->class, $value, CssRef::navbarZoneClasses());
 	}
+	
+	public function asForm() {
+		$this->addToMember($this->class, "navbar-form");
+	}
 
 	public function addElement($element) {
 		if($element instanceof HtmlLink){
@@ -105,6 +109,11 @@ class HtmlNavzone extends BaseHtml {
 	public static function right($identifier, $elements=array()) {
 		$result=new HtmlNavzone($identifier);
 		return $result->setValues("navbar-right", "ul", $elements);
+	}
+	
+	public static function formRight($identifier, $elements=array()) {
+		$result=new HtmlNavzone($identifier);
+		return $result->setValues("navbar-right navbar-form", "ul", $elements);
 	}
 
 	public static function nav($identifier, $elements=array()) {
