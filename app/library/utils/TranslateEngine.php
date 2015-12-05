@@ -48,5 +48,9 @@ class TranslateEngine {
 		$this->initialize($session,true);
 		return $this;
 	}
+	public function getTranslations() {
+		return $this->translations;
+	}
+	
 	
 }

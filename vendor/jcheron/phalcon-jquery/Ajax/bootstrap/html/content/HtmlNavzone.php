@@ -26,7 +26,7 @@ class HtmlNavzone extends BaseHtml {
 	public function __construct($identifier) {
 		parent::__construct($identifier);
 		$this->tagName="ul";
-		$this->_template='<%tagName% class="nav navbar-nav %class%">%elements%</%tagName%>';
+		$this->_template='<%tagName% id="%identifier%" class="nav navbar-nav %class%">%elements%</%tagName%>';
 		$this->elements=array ();
 	}
 

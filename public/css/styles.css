@@ -377,7 +377,9 @@ h5:hover .anchor .octicon-link,
 h6:hover .anchor .octicon-link {
     display: inline-block;
 }
-
+.highlight{
+	background-color: #FFFF00;
+}
 .mega-octicon { font-size: 32px; }
 
 .octicon-alert:before { content: '\f02d'} /*  */

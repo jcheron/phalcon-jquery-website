@@ -10,6 +10,7 @@ use Ajax\bootstrap\html\content\HtmlDropdownItem;
 use utils\TranslateEngine;
 use Phalcon\Mvc\View;
 use Phalcon\Text;
+use Ajax\bootstrap\html\HtmlInputgroup;
 
 class IndexController extends ControllerBase{
 	private $anchors=array();
@@ -45,13 +46,22 @@ class IndexController extends ControllerBase{
 		}
     	$right->addElement($ddLang);
     	$right->asForm();
+    	$left=$navbar->addZone("left","leftZ");
+    	$left->asForm();
+    	$searchInput=new HtmlInputgroup("search");
+    	$searchInput->createButton("btSearch","Go","right");
+    	$searchInput->setPlaceHolder($this->translateEngine->translate(1,"index.search","Search..."));
+    	$left->addElement($searchInput);
+    	$this->jquery->postOnClick("#btSearch","Index/search",'{"text":$("#search").val()}', "#response");
+    	
     	$expr=array();
     	$expr[]=$this->translateEngine->translate(1,"index.header","jQuery, jQuery UI and Twitter Bootstrap library for phalcon MVC Framework");
     	$expr[]=$this->translateEngine->translate(2,"index.header","Phalcon-jQuery is a library for Phalcon® for generating scripts or rich components (Bootstrap, jQueryUI) on server side.");
     	$expr[]=$this->translateEngine->translate(1,"index.download","Download");
     	$expr[]=$this->translateEngine->translate(1,"index.install","<p>Or</p><p class='lead'>Install with Composer</p><p>Create the file composer.json</p>");
     	$expr[]=$this->translateEngine->translate(2,"index.install","Enter in the console");
-    	 
+    	
+    	
 		$this->jquery->compile($this->view);
 		$this->view->setVars(array("jquery"=>$this->jquery->genCDNs(),"expr"=>$expr,"lang"=>$this->translateEngine->getLanguage()));
     }
@@ -111,6 +121,9 @@ class IndexController extends ControllerBase{
     	if($param1=="main")
     		$this->jquery->get("index/menu/".$id,".col-md-3");
     	$this->jquery->getOnClick("#response a.menu", "index/content/","#response");
+    	if($this->request->has("anchor")){
+    		$this->jquery->exec('$(document).scrollTop( $("[name=\''.$this->request->get("anchor").'\']").offset().top );',true);
+    	}
     	echo $this->jquery->compile();
 		$this->view->disable();
     }
@@ -167,6 +180,119 @@ class IndexController extends ControllerBase{
 	    	$titre="<a name='".$attr."' class='anchor'><span class='octicon octicon-link'></span></a>".$num." - ".$titre;
     	}
     	return "<h3>".$titre."</h3>";
+    }
+    
+    public function searchAction(){
+    	$text=$_POST["text"];
+    	if(Text::startsWith($this->translateEngine->getLanguage(), "en", true)){
+    		$domaines=Domaine::find("libelle LIKE '%".$text."%'");
+    		$rubriques=Rubrique::find("titre LIKE '%".$text."%' OR description LIKE '%".$text."%'");
+    		$exemples=Exemple::find("titre LIKE '%".$text."%' OR description LIKE '%".$text."%'");
+    	}else{
+    		$domaines=array();
+    		$rubriques=array();
+    		$exemples=array();
+    		$translations=$this->translateEngine->getTranslations();
+    		if($text!=""){
+	    		$arrayTranslations=$translations->filter(function($object) use($text){
+	    			if( $object->getName()=="domaine.libelle" && stristr($object->getText(),$text)!==false){
+	    				return $object;
+	    			}
+	    		});
+	    		if(sizeof($arrayTranslations)>0)
+	    			$domaines=Domaine::find($this->_getCondition($arrayTranslations));
+	    		
+	    		$arrayRubriques=$translations->filter(function($object) use($text){
+	    			if( Text::startsWith($object->getName(),"rubrique" && stristr($object->getText(),$text)!==false)){
+	    				return $object;
+	    			}
+	    		});
+	    		if(sizeof($arrayRubriques)>0)
+	    			$rubriques=Rubrique::find($this->_getCondition($arrayRubriques));
+	    		
+	    		$arrayExemples=$translations->filter(function($object) use($text){
+	    			if( Text::startsWith($object->getName(),"exemple" )){
+	    				if(stristr($object->getText(),$text)!==false)
+	    					return $object;
+	    			}
+	    		});
+	    		if(sizeof($arrayExemples)>0)
+	    			$exemples=Exemple::find($this->_getCondition($arrayExemples));
+    		}
+    	}
+    	$this->_searchResults($text, $domaines, $rubriques, $exemples);
+    	 
+    }
+    private function _getCondition($array){
+    	$ids=array_map(function($item){return "id=".$item->getIdElement();}, $array);
+    	return implode(" OR ", $ids);
+    	
+    }
+    private function _highlight($text,$word){
+    	if($word=="")
+    		return $text;
+    	else{
+    		return str_ireplace($word, "<span class='highlight'>".$word."</span>", $text);
+    	}
+    }
+    
+    private function _searchResults($text,$domaines,$rubriques,$exemples){
+    	$hasResults=false;
+    	$this->view->disable();
+    	$dom=$this->jquery->bootstrap()->htmlPanel("listDomaines","","Domaines (".sizeof($domaines).")");
+    	if(sizeof($domaines)>0){
+    		$hasResults=true;
+    		foreach ($domaines as $domaine){
+    			$libelle=$this->translateEngine->translate($domaine->getId(),"domaine.libelle",$domaine->getLibelle());
+    			$dom->addContent((new HtmlLink("dom-".$domaine->getId(),"",$this->_highlight($libelle,$text)))->setClass("domaine"));
+    		}
+    		echo $dom;
+    	}
+    	
+    	
+    	$rub=$this->jquery->bootstrap()->htmlPanel("listRubriques","","Rubriques (".sizeof($rubriques).")");
+    	if(sizeof($rubriques)>0){
+    		$hasResults=true;
+    		foreach ($rubriques as $rubrique){
+    			$titre=$this->translateEngine->translate($rubrique->getId(),"rubrique.titre",$rubrique->getTitre());
+    			$rub->addContent((new HtmlLink("rub-".$rubrique->getDomaine()->getId(),"",$this->_highlight($titre,$text)))->setClass("rubrique")->setProperty("data-anchor",StrUtils::cleanAttr($rubrique->getTitre())));
+    		}
+    		echo $rub;
+    	}
+    	 
+    	$ex=$this->jquery->bootstrap()->htmlPanel("listExemples","","Exemples (".sizeof($exemples).")");
+    	if(sizeof($exemples)>0){
+    		$rubrique="";
+    		$domaine="";
+    		$hasResults=true;
+    		foreach ($exemples as $exemple){
+    			$newRubrique=$exemple->getRubrique();
+    			if($domaine!=$newRubrique->getDomaine()){
+    				$domaine=$newRubrique->getDomaine();
+    				$libelle=$this->translateEngine->translate($domaine->getId(),"domaine.libelle",$domaine->getLibelle());
+    				$ex->addContent("<h2>".$this->_highlight($libelle,$text)."</h2>");
+    			}
+    			if($rubrique!=$newRubrique){
+    				$rubrique=$newRubrique;
+    				$titre=$this->translateEngine->translate($rubrique->getId(),"rubrique.titre",$rubrique->getTitre());
+    				$ex->addContent("<h3>".$this->_highlight($titre,$text)."</h3>");
+    			}
+    			$titre=$this->translateEngine->translate($exemple->getId(),"exemple.titre",$exemple->getTitre());
+    			$description=$this->translateEngine->translate($exemple->getId(),"exemple.description",$exemple->getDescription());
+    			 
+    			$ex->addContent((new HtmlLink("ex-".$domaine->getId(),"","<h4>".$this->_highlight($titre,$text)."</h4>"))->setClass("exemple")->setProperty("data-anchor",StrUtils::cleanAttr($titre)));
+    			$ex->addContent("<div>".$this->_highlight(strip_tags($description),$text)."</div>");
+    	
+    		}
+    		echo $ex;
+    	}
+    	if($hasResults){
+    		$this->jquery->getOnClick(".domaine","index/content/main/","#response");
+    		$this->jquery->postOnClick(".rubrique, .exemple","index/content/",'{anchor:$(self).attr("data-anchor")}',"#response");
+    	}else{
+    		echo $this->jquery->bootstrap()->htmlPanel("listNoResults","Aucun résultat trouvé","Domaines, rubriques, exmples");
+    	}
+    	echo $this->jquery->compile();    	
     }
 }
 
