@@ -14,7 +14,7 @@ use Ajax\bootstrap\html\HtmlInputgroup;
 
 class IndexController extends ControllerBase{
 	private $anchors=array();
-	
+
     public function indexAction($lang=NULL){
     	if($this->request->isAjax()){
     		$this->view->setRenderLevel(View::LEVEL_MAIN_LAYOUT);
@@ -25,7 +25,7 @@ class IndexController extends ControllerBase{
     	}
     	$navbar=$this->jquery->bootstrap()->htmlNavbar("navbarJS");
     	$navbar->setClass("");
-    	$navbar->fromArray(array("brandImage"=>"img/miniPhalcon.png","brandHref"=>"index"));
+    	$navbar->fromArray(array("brand"=>$this->translateEngine->translate(1,"index.home","home"),"brandHref"=>"index"));
 		$domaines=Domaine::find("isNull(idParent)");
     	$navbar->fromDatabaseObjects($domaines, function($domaine){
     		$libelle=$this->translateEngine->translate($domaine->getId(),"domaine.libelle",$domaine->getLibelle());
@@ -46,7 +46,7 @@ class IndexController extends ControllerBase{
 		}
     	$right->addElement($ddLang);
     	$right->asForm();
-    	$left=$navbar->addZone("left","leftZ");
+    	$left=$navbar->addZone("right","leftZ");
     	$left->asForm();
     	$searchInput=new HtmlInputgroup("search");
     	$searchInput->createButton("btSearch","Go","right");
@@ -56,12 +56,12 @@ class IndexController extends ControllerBase{
     	
     	$expr=array();
     	$expr[]=$this->translateEngine->translate(1,"index.header","jQuery, jQuery UI and Twitter Bootstrap library for phalcon MVC Framework");
-    	$expr[]=$this->translateEngine->translate(2,"index.header","Phalcon-jQuery is a library for Phalcon® for generating scripts or rich components (Bootstrap, jQueryUI) on server side.");
+    	$expr[]=$this->translateEngine->translate(2,"index.header","Phalcon-jQuery is a Phalcon® library for generating scripts or rich components (Bootstrap, jQueryUI) on server side.");
     	$expr[]=$this->translateEngine->translate(1,"index.download","Download");
     	$expr[]=$this->translateEngine->translate(1,"index.install","<p>Or</p><p class='lead'>Install with Composer</p><p>Create the file composer.json</p>");
     	$expr[]=$this->translateEngine->translate(2,"index.install","Enter in the console");
     	
-    	
+    	$navbar->cssInverse();
 		$this->jquery->compile($this->view);
 		$this->view->setVars(array("jquery"=>$this->jquery->genCDNs(),"expr"=>$expr,"lang"=>$this->translateEngine->getLanguage()));
     }
@@ -122,7 +122,7 @@ class IndexController extends ControllerBase{
     		$this->jquery->get("index/menu/".$id,".col-md-3");
     	$this->jquery->getOnClick("#response a.menu", "index/content/","#response");
     	if($this->request->has("anchor")){
-    		$this->jquery->exec('$(document).scrollTop( $("[name=\''.$this->request->get("anchor").'\']").offset().top );',true);
+    		$this->jquery->exec('if($("[name=\''.$this->request->get("anchor").'\']")){$(document).scrollTop( $("[name=\''.$this->request->get("anchor").'\']").offset().top );}',true);
     	}
     	echo $this->jquery->compile();
 		$this->view->disable();
@@ -270,7 +270,7 @@ class IndexController extends ControllerBase{
     			if($domaine!=$newRubrique->getDomaine()){
     				$domaine=$newRubrique->getDomaine();
     				$libelle=$this->translateEngine->translate($domaine->getId(),"domaine.libelle",$domaine->getLibelle());
-    				$ex->addContent("<h2>".$this->_highlight($libelle,$text)."</h2>");
+    				$ex->addContent("<h2>".$this->_highlight($libelle,$text)."</h2><hr>");
     			}
     			if($rubrique!=$newRubrique){
     				$rubrique=$newRubrique;
@@ -290,7 +290,7 @@ class IndexController extends ControllerBase{
     		$this->jquery->getOnClick(".domaine","index/content/main/","#response");
     		$this->jquery->postOnClick(".rubrique, .exemple","index/content/",'{anchor:$(self).attr("data-anchor")}',"#response");
     	}else{
-    		echo $this->jquery->bootstrap()->htmlPanel("listNoResults","Aucun résultat trouvé","Domaines, rubriques, exmples");
+    		echo $this->jquery->bootstrap()->htmlPanel("listNoResults","Aucun résultat trouvé","Domaines, rubriques, exemples");
     	}
     	echo $this->jquery->compile();    	
     }

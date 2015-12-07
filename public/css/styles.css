@@ -25,6 +25,9 @@
 .navbar{
 	margin-bottom: 0px;
 }
+.navbar-brand{
+		font-family: 'Harabara' !important;
+}
 .ajax-loader{
 	margin: auto;
 	width: 100px;
@@ -88,7 +91,12 @@
 .filter text{
 	float: right!important;
 }
-
+header {
+    background-color: rgb(34,34,34);
+}
+#content .nav-pills>li>a {
+    padding: 5px 15px;
+}
 #navbar2-navzone-1-dropdown-3-dropdown-item-1{
 	background: url(images/zoom.png) no-repeat left;
 	padding-left: 20px;
