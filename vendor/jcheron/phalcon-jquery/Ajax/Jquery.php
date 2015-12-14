@@ -867,11 +867,14 @@ class Jquery {
 		$script='$(document).ready(function() {'."\n";
 		$script.=implode('', $this->jquery_code_for_compile);
 		$script.='});';
-
+		//$this->jquery_code_for_compile=array();
 		$output=($script_tags===FALSE) ? $script : $this->inline($script);
 
-		if ($view!=NULL)
+		if ($view!=NULL){
 			$view->setVar($view_var, $output);
+			$this->_clear_compile();
+		}
+		
 		return $output;
 	}
 
@@ -1089,7 +1092,7 @@ class Jquery {
 	public function _jsonArray($maskSelector, $url, $method="get", $params="{}", $jsCallback=NULL, $attr="id", $context=null,$immediatly=false) {
 		$jsCallback=isset($jsCallback) ? $jsCallback : "";
 		$retour=$this->_getAjaxUrl($url, $attr);
-		if($context==null){
+		if($context===null){
 			$appendTo="\t\tnewElm.appendTo($('".$maskSelector."').parent());\n";
 			$newElm = "$('#'+newId)";
 		}else{

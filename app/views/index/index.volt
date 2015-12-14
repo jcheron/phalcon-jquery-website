@@ -14,3 +14,7 @@
 <p>{{ expr[4] }}</p>
 	<pre><code class="language-bash">composer install</code></pre>
 </div>
+{% if hasScript==true %}
+{{ script_foot }}
+{%
+ endif %}

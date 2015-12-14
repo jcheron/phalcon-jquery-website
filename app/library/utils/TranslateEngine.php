@@ -2,6 +2,7 @@
 namespace utils;
 
 use Phalcon\Text;
+use Phalcon\Mvc\Model\Message;
 /**
  * Utilitaire de traduction
  * @author jc
@@ -11,6 +12,8 @@ use Phalcon\Text;
 class TranslateEngine {
 	private $translations;
 	private $language="en";
+	private $message;
+	
 	public static $languages=array("en"=>"English","fr"=>"Français");
 	public function initialize($session,$force=false){
 		if(!$session->has('translateEngine') || $force){
@@ -19,6 +22,7 @@ class TranslateEngine {
 		}
 	}
 	public function translate($idElement,$key,$default){
+		$this->message="";
 		if(Text::startsWith($this->language, "en", true)){
 			return $default;
 		}
@@ -30,27 +34,43 @@ class TranslateEngine {
 		if(is_array($trans)){
 			if(sizeof($trans)>0)
 				$trans=$trans[0];
-			else return $default;
+			else {
+				$this->message=$this->translate(1,"translate.info", "");
+				return $default;
+			}
 		}
 		if(is_a($trans,"Translation"))
 			return $trans->getText();
-		else return $default;
+		else{
+			$this->message=$this->translate(1,"translate.info", "");
+			return $default;
+		}
 	}
+	
 	public function setRequest($request){
 		if(!isset($this->language))
 			$this->language=$request->getBestLanguage();
 	}
+	
 	public function getLanguage() {
 		return $this->language;
 	}
+	
 	public function setLanguage($language,$session) {
 		$this->language = $language;
 		$this->initialize($session,true);
 		return $this;
 	}
+	
 	public function getTranslations() {
 		return $this->translations;
 	}
 	
+	public function hasMessage(){
+		return $this->message!=null && $this->message!="";
+	}
 	
+	public function getMessage(){
+		return $this->message;
+	}
 }

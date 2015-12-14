@@ -16,44 +16,63 @@ class IndexController extends ControllerBase{
 	private $anchors=array();
 
     public function indexAction($lang=NULL){
-    	if($this->request->isAjax()){
-    		$this->view->setRenderLevel(View::LEVEL_MAIN_LAYOUT);
-    		$this->jquery->exec("Prism.highlightAll();",true);
-    	}
+    	$partial=false;
+    	$hasScript=false;
     	if(isset($lang)){
     		$this->translateEngine->setLanguage($lang,$this->session);
     	}
-    	$navbar=$this->jquery->bootstrap()->htmlNavbar("navbarJS");
-    	$navbar->setClass("");
-    	$navbar->fromArray(array("brand"=>$this->translateEngine->translate(1,"index.home","home"),"brandHref"=>"index"));
-		$domaines=Domaine::find("isNull(idParent)");
-    	$navbar->fromDatabaseObjects($domaines, function($domaine){
-    		$libelle=$this->translateEngine->translate($domaine->getId(),"domaine.libelle",$domaine->getLibelle());
-    		$lnk=new HtmlLink("lnk-".$domaine->getId(),"#",$libelle);
-    		$lnk->getOnClick("index/content/main/".$domaine->getId(),"#response");
-    		return $lnk;
-    	});
-    	$right=$navbar->addZone("right");
-    	$ddLang=new HtmlDropdown("btLang");
-    	$ddLang->asButton();
-		foreach(TranslateEngine::$languages as $keyLang=>$valueLang){
-			$item=$ddLang->addItem($valueLang,$this->url->get("Index/index/".$keyLang));
-			$item->getOnClick("Index/index/".$keyLang,"body");
-			if(Text::startsWith($this->translateEngine->getLanguage(), $keyLang, true)){
-				$item->active();
-				$ddLang->setValue($valueLang." : ".$keyLang);
+    	if($this->request->isAjax()){
+    		if(isset($lang)){
+    			$this->view->setRenderLevel(View::LEVEL_MAIN_LAYOUT);
+    			if($this->session->has("idDomaine")){
+    				$idDomaine=$this->session->get("idDomaine");
+    				if($idDomaine[0]=="main")
+    					$this->dispatcher->forward(array("action"=>"content","params"=>array("main",$idDomaine[1],false)));
+    				else
+    					$this->dispatcher->forward(array("action"=>"content","params"=>array($idDomaine[0],"",false)));
+    			}
+    		}else{
+    			$this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
+    			$partial=true;
+    			$hasScript=true;
+    		}
+    		$this->jquery->exec("Prism.highlightAll();",true);
+    	}
+
+    	$this->session->remove("idDomaine");
+    	if(!$partial){
+	    	$navbar=$this->jquery->bootstrap()->htmlNavbar("navbarJS");
+	    	$navbar->setClass("");
+	    	$navbar->fromArray(array("brand"=>$this->translateEngine->translate(1,"index.home","home"),"brandHref"=>"Index"));
+			$domaines=Domaine::find("isNull(idParent)");
+	    	$navbar->fromDatabaseObjects($domaines, function($domaine){
+	    		$libelle=$this->translateEngine->translate($domaine->getId(),"domaine.libelle",$domaine->getLibelle());
+	    		$lnk=new HtmlLink("lnk-".$domaine->getId(),"#",$libelle);
+	    		$lnk->getOnClick("Index/content/main/".$domaine->getId(),"#response");
+	    		return $lnk;
+	    	});
+	    	$right=$navbar->addZone("right");
+	    	$ddLang=new HtmlDropdown("btLang");
+	    	$ddLang->asButton();
+			foreach(TranslateEngine::$languages as $keyLang=>$valueLang){
+				$item=$ddLang->addItem($valueLang,$this->url->get("Index/index/".$keyLang));
+				$item->getOnClick("Index/index/".$keyLang,"body");
+				if(Text::startsWith($this->translateEngine->getLanguage(), $keyLang, true)){
+					$item->active();
+					$ddLang->setValue($valueLang." : ".$keyLang);
+				}
 			}
-		}
-    	$right->addElement($ddLang);
-    	$right->asForm();
-    	$left=$navbar->addZone("right","leftZ");
-    	$left->asForm();
-    	$searchInput=new HtmlInputgroup("search");
-    	$searchInput->createButton("btSearch","Go","right");
-    	$searchInput->setPlaceHolder($this->translateEngine->translate(1,"index.search","Search..."));
-    	$left->addElement($searchInput);
-    	$this->jquery->postOnClick("#btSearch","Index/search",'{"text":$("#search").val()}', "#response");
-    	
+	    	$right->addElement($ddLang);
+	    	$right->asForm();
+	    	$left=$navbar->addZone("right","leftZ");
+	    	$left->asForm();
+	    	$searchInput=new HtmlInputgroup("search");
+	    	$searchInput->createButton("btSearch","Go","right");
+	    	$searchInput->setPlaceHolder($this->translateEngine->translate(1,"index.search","Search..."));
+	    	$left->addElement($searchInput);
+	    	$this->jquery->postOnClick("#btSearch","Index/search",'{"text":$("#search").val()}', "#response");
+	    	$navbar->cssInverse();
+    	}
     	$expr=array();
     	$expr[]=$this->translateEngine->translate(1,"index.header","jQuery, jQuery UI and Twitter Bootstrap library for phalcon MVC Framework");
     	$expr[]=$this->translateEngine->translate(2,"index.header","Phalcon-jQuery is a Phalcon® library for generating scripts or rich components (Bootstrap, jQueryUI) on server side.");
@@ -61,12 +80,18 @@ class IndexController extends ControllerBase{
     	$expr[]=$this->translateEngine->translate(1,"index.install","<p>Or</p><p class='lead'>Install with Composer</p><p>Create the file composer.json</p>");
     	$expr[]=$this->translateEngine->translate(2,"index.install","Enter in the console");
     	
-    	$navbar->cssInverse();
 		$this->jquery->compile($this->view);
-		$this->view->setVars(array("jquery"=>$this->jquery->genCDNs(),"expr"=>$expr,"lang"=>$this->translateEngine->getLanguage()));
+		$this->view->setVars(array("jquery"=>$this->jquery->genCDNs(),"expr"=>$expr,"lang"=>$this->translateEngine->getLanguage(),"hasScript"=>$hasScript));
     }
 
-    public function contentAction($param1,$param2=""){
+    private function _getArrayFromDomaine($domaine,&$array){
+    	$domaineParent=$domaine->getDomaine();
+    	if(isset($domaineParent) && $domaineParent){
+    		$this->_getArrayFromDomaine($domaineParent,$array);
+    	}
+    	$array[]=$domaine;
+    }
+    public function contentAction($param1,$param2="",$disableView=true){
     	if($param1=="main"){
     		$id=$param2;
     	}
@@ -74,10 +99,25 @@ class IndexController extends ControllerBase{
     		$id=$param1;
     	}
     	$id=$this->int($id);
+    	$this->session->set("idDomaine",array($param1,$param2));
     	$rubriques=Rubrique::find(  array(
         	"idDomaine = ".$id,
         	"order" => "ordre"
     	));
+    	
+    	$bc=$this->jquery->bootstrap()->htmlBreadcrumbs("bc",array(array("content"=>"Index","data-ajax"=>"Index")),true,function ($e){return $e->getProperty("data-ajax");});
+    	$bc->addGlyph("glyphicon-home",0);
+    	$domaines=array();
+    	
+    	$do=Domaine::findFirst($id);
+    	$this->_getArrayFromDomaine($do, $domaines);
+    	$bc->fromDatabaseObjects($domaines, function($domaine){
+    			$lnk= new HtmlLink("bc-".$domaine->getLibelle(),"",$domaine->getLibelle());
+    			$lnk->setProperty("data-ajax", "content/".$domaine->getId());
+    			return $lnk;
+    	});
+    	$bc->autoGetOnClick("#response");
+    	echo $bc->compile($this->jquery);
     	foreach ($rubriques as $rubrique){
     		
     		echo "<h1>".$this->translateEngine->translate($rubrique->getId(),"rubrique.titre",$rubrique->getTitre())."</h1>";
@@ -115,6 +155,11 @@ class IndexController extends ControllerBase{
     			}
     			echo $ddAnchors->compile();
     		}
+    		if($this->translateEngine->hasMessage()){
+    			$message=$this->translateEngine->getMessage();
+    			$alert=$this->jquery->bootstrap()->htmlAlert("alert-translate",$message);
+    			$all=$alert.$all;
+    		}
     		echo $all;
     	}
     	$this->jquery->exec("Prism.highlightAll();",true);
@@ -122,10 +167,16 @@ class IndexController extends ControllerBase{
     		$this->jquery->get("index/menu/".$id,".col-md-3");
     	$this->jquery->getOnClick("#response a.menu", "index/content/","#response");
     	if($this->request->has("anchor")){
-    		$this->jquery->exec('if($("[name=\''.$this->request->get("anchor").'\']")){$(document).scrollTop( $("[name=\''.$this->request->get("anchor").'\']").offset().top );}',true);
+    		$this->jquery->exec('if($("[name=\''.$this->request->get("anchor").'\']").offset()){$(document).scrollTop( $("[name=\''.$this->request->get("anchor").'\']").offset().top );}',true);
     	}
-    	echo $this->jquery->compile();
-		$this->view->disable();
+    	if($disableView){
+			$this->view->disable();
+			echo $this->jquery->compile($this->view);		
+    	}else{
+    		$this->jquery->postOnClick("#btSearch","Index/search",'{"text":$("#search").val()}', "#response");
+    		
+    		$this->jquery->compile($this->view);
+    	}
     }
 
     public function menuAction($id){
