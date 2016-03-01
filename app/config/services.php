@@ -88,27 +88,27 @@ $di->setShared('session', function () {
 });
 
 	$di->set('dispatcher', function () {
-	
+
 		// Create an event manager
 		$eventsManager = new EventsManager();
-	
+
 		// Attach a listener for type "dispatch"
 		$eventsManager->attach("dispatch", function ($event, $dispatcher) {
 			// ...
 		});
-	
+
 			$dispatcher = new MvcDispatcher();
-	
+
 			// Bind the eventsManager to the view component
 			$dispatcher->setEventsManager($eventsManager);
-	
+
 			return $dispatcher;
-	
+
 	}, true);
-	
+
 $di->set("jquery",function(){
-	$jquery= new Ajax\JsUtils(array("driver"=>"Jquery"));
-	//$jquery->setAjaxLoader("Chargement...");
+	$jquery= new Ajax\JsUtils(array("driver"=>"Jquery","debug"=>false));
+	$jquery->setAjaxLoader("Chargement...");
 	$jquery->bootstrap(new Ajax\Bootstrap());//Optional for Twitter Bootstrap
 
 	return $jquery;

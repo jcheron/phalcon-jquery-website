@@ -4,7 +4,6 @@ namespace Ajax\bootstrap\html\phalcon;
 
 use Ajax\bootstrap\html\phalcon\PhBsElement;
 use Phalcon\Forms\Element\Select;
-use Ajax\bootstrap\html\base\HtmlDoubleElement;
 use Ajax\bootstrap\html\html5\HtmlSelect;
 
 class PhBsSelect extends PhBsElement {

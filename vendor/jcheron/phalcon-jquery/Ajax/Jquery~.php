@@ -811,7 +811,7 @@ class Jquery {
 	 * @param boolean $stopPropagation Prevents the event from bubbling up the DOM tree, preventing any parent handlers from being notified of the event.
 	 * @return string
 	 */
-	public function _add_event($element, $js, $event, $preventDefault=false, $stopPropagation=false,$immediatly=true) {
+	public function _add_event($element, $js, $event, $preventDefault=false, $stopPropagation=false) {
 		if (is_array($js)) {
 			$js=implode("\n\t\t", $js);
 		}
@@ -825,8 +825,7 @@ class Jquery {
 			$event="\n\t$(".$this->_prep_element($element).").bind('{$event}',function(event){\n\t\t{$js}\n\t});\n";
 		else
 			$event="\n\t$(".$this->_prep_element($element).").{$event}(function(event){\n\t\t{$js}\n\t});\n";
-		if($immediatly)
-			$this->jquery_code_for_compile[]=$event;
+		$this->jquery_code_for_compile[]=$event;
 		return $event;
 	}
 
@@ -872,15 +871,17 @@ class Jquery {
 		$script='$(document).ready(function() {'."\n";
 		$script.=implode('', $this->jquery_code_for_compile);
 		$script.='});';
-
 		$this->jquery_code_for_compile=array();
-		if($this->params["debug"]==false){
+		if($this->params["debug"]){
 			$script=$this->minify($script);
 		}
 		$output=($script_tags===FALSE) ? $script : $this->inline($script);
 
-		if ($view!=NULL)
+		if ($view!=NULL){
 			$view->setVar($view_var, $output);
+			$this->_clear_compile();
+		}
+
 		return $output;
 	}
 
@@ -1048,13 +1049,37 @@ class Jquery {
 		return $url;
 	}
 
+	private function minify($input) {
+		if(trim($input) === "") return $input;
+		return preg_replace(
+				array(
+						// Remove comment(s)
+						'#\s*("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')\s*|\s*\/\*(?!\!|@cc_on)(?>[\s\S]*?\*\/)\s*|\s*(?<![\:\=])\/\/.*(?=[\n\r]|$)|^\s*|\s*$#',
+						// Remove white-space(s) outside the string and regex
+						'#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\'|\/\*(?>.*?\*\/)|\/(?!\/)[^\n\r]*?\/(?=[\s.,;]|[gimuy]|$))|\s*([!%&*\(\)\-=+\[\]\{\}|;:,.<>?\/])\s*#s',
+						// Remove the last semicolon
+						'#;+\}#',
+						// Minify object attribute(s) except JSON attribute(s). From `{'foo':'bar'}` to `{foo:'bar'}`
+						'#([\{,])([\'])(\d+|[a-z_][a-z0-9_]*)\2(?=\:)#i',
+						// --ibid. From `foo['bar']` to `foo.bar`
+						'#([a-z0-9_\)\]])\[([\'"])([a-z_][a-z0-9_]*)\2\]#i'
+				),
+				array(
+						'$1',
+						'$1$2',
+						'}',
+						'$1$3',
+						'$1.$3'
+				),
+				$input);
+	}
+
 	/**
 	 * Makes an ajax request and receives the JSON data types by assigning DOM elements with the same name
 	 * @param string $url the request address
 	 * @param string $params Paramètres passés au format JSON
 	 * @param string $method Method use
 	 * @param string $jsCallback javascript code to execute after the request
-	 * @param boolean $immediatly
 	 */
 	public function _json($url, $method="get", $params="{}", $jsCallback=NULL, $attr="id", $context="document",$immediatly=false) {
 		$jsCallback=isset($jsCallback) ? $jsCallback : "";
@@ -1062,9 +1087,8 @@ class Jquery {
 		$retour.="$.{$method}(url,".$params.").done(function( data ) {\n";
 		$retour.="\tdata=$.parseJSON(data);for(var key in data){"
 				."if($('#'+key,".$context.").length){ if($('#'+key,".$context.").is('[value]')) { $('#'+key,".$context.").val(data[key]);} else { $('#'+key,".$context.").html(data[key]); }}};\n";
-		$retour.="\t".$jsCallback."\n".
-				"\t$(document).trigger('jsonReady',[data]);\n".
-		"});\n";
+		$retour.="\t".$jsCallback."\n
+		});\n";
 		if ($immediatly)
 			$this->jquery_code_for_compile[]=$retour;
 		return $retour;
@@ -1075,7 +1099,7 @@ class Jquery {
 	 * @param string $element
 	 * @param string $event
 	 * @param string $url the request address
-	 * @param array $parameters default : array("preventDefault"=>true,"stopPropagation"=>true,"jsCallback"=>NULL,"attr"=>"id","params"=>"{}","method"=>"get","immediatly"=>true)
+	 * @param array $parameters default : array("preventDefault"=>true,"stopPropagation"=>true,"jsCallback"=>NULL,"attr"=>"id","params"=>"{}","method"=>"get")
 	 */
 	public function _jsonOn($event,$element, $url,$parameters=array()) {
 		$preventDefault=true;
@@ -1085,9 +1109,8 @@ class Jquery {
 		$method="get";
 		$context="document";
 		$params="{}";
-		$immediatly=true;
 		extract($parameters);
-		return $this->_add_event($element, $this->_json($url,$method, $params,$jsCallback, $attr,$context), $event, $preventDefault, $stopPropagation,$immediatly);
+		return $this->_add_event($element, $this->_json($url,$method, $params,$jsCallback, $attr,$context), $event, $preventDefault, $stopPropagation);
 	}
 
 	/**
@@ -1097,7 +1120,6 @@ class Jquery {
 	 * @param string $method Method use
 	 * @param string $jsCallback javascript code to execute after the request
 	 * @param string $context jquery DOM element, array container.
-	 * @param boolean $immediatly
 	 */
 	public function _jsonArray($maskSelector, $url, $method="get", $params="{}", $jsCallback=NULL, $attr="id", $context=null,$immediatly=false) {
 		$jsCallback=isset($jsCallback) ? $jsCallback : "";
@@ -1113,7 +1135,7 @@ class Jquery {
 		$retour.="\tdata=$.parseJSON(data);$.each(data, function(index, value) {\n"."\tvar created=false;var maskElm=$('".$maskSelector."').first();maskElm.hide();"."\tvar newId=(maskElm.attr('id') || 'mask')+'-'+index;"."\tvar newElm=".$newElm.";\n"."\tif(!newElm.length){\n"."\t\tnewElm=maskElm.clone();newElm.attr('id',newId);\n";
 		$retour.= $appendTo;
 		$retour.="\t}\n"."\tfor(var key in value){\n"."\t\t\tvar html = $('<div />').append($(newElm).clone()).html();\n"."\t\t\tif(html.indexOf('[['+key+']]')>-1){\n"."\t\t\t\tcontent=$(html.split('[['+key+']]').join(value[key]));\n"."\t\t\t\t$(newElm).replaceWith(content);newElm=content;\n"."\t\t\t}\n"."\t\tvar sel='[data-id=\"'+key+'\"]';if($(sel,newElm).length){\n"."\t\t\tvar selElm=$(sel,newElm);\n"."\t\t\t if(selElm.is('[value]')) { selElm.attr('value',value[key]);selElm.val(value[key]);} else { selElm.html(value[key]); }\n"."\t\t}\n"."}\n"."\t$(newElm).show(true);"."\n"."\t$(newElm).removeClass('hide');"."});\n";
-		$retour.="\t$(document).trigger('jsonReady',[data]);\n";
+
 		$retour.="\t".$jsCallback."\n"."});\n";
 		if ($immediatly)
 			$this->jquery_code_for_compile[]=$retour;
@@ -1134,9 +1156,8 @@ class Jquery {
 		$method="get";
 		$context = null;
 		$params="{}";
-		$immediatly=true;
 		extract($parameters);
-		return $this->_add_event($element, $this->_jsonArray($maskSelector,$url,$method, $params,$jsCallback, $attr, $context), $event, $preventDefault, $stopPropagation,$immediatly);
+		return $this->_add_event($element, $this->_jsonArray($maskSelector,$url,$method, $params,$jsCallback, $attr, $context), $event, $preventDefault, $stopPropagation);
 	}
 
 	public function _postForm($url, $form, $responseElement, $validation=false, $jsCallback=NULL, $attr="id", $hasLoader=true,$immediatly=false) {
@@ -1178,9 +1199,8 @@ class Jquery {
 		$jsCallback=null;
 		$attr="id";
 		$hasLoader=true;
-		$immediatly=true;
 		extract($parameters);
-		return $this->_add_event($element, $this->_get($url, $params, $responseElement, $jsCallback, $attr,$hasLoader), $event, $preventDefault, $stopPropagation,$immediatly);
+		return $this->_add_event($element, $this->_get($url, $params, $responseElement, $jsCallback, $attr,$hasLoader), $event, $preventDefault, $stopPropagation);
 	}
 
 	/**
@@ -1199,9 +1219,8 @@ class Jquery {
 		$jsCallback=null;
 		$attr="id";
 		$hasLoader=true;
-		$immediatly=true;
 		extract($parameters);
-		return $this->_add_event($element, $this->_post($url, $params, $responseElement, $jsCallback, $attr,$hasLoader), $event, $preventDefault, $stopPropagation,$immediatly);
+		return $this->_add_event($element, $this->_post($url, $params, $responseElement, $jsCallback, $attr,$hasLoader), $event, $preventDefault, $stopPropagation);
 	}
 
 	/**
@@ -1212,7 +1231,7 @@ class Jquery {
 	 * @param string $url
 	 * @param string $form
 	 * @param string $responseElement
-	 * @param array $parameters default : array("preventDefault"=>true,"stopPropagation"=>true,"validation"=>false,"jsCallback"=>NULL,"attr"=>"id","hasLoader"=>true,"immediatly"=>true)
+	 * @param array $parameters default : array("preventDefault"=>true,"stopPropagation"=>true,"validation"=>false,"jsCallback"=>NULL,"attr"=>"id","hasLoader"=>true)
 	 */
 	public function _postFormOn($event,$element, $url, $form, $responseElement="", $parameters=array()) {
 		$preventDefault=true;
@@ -1221,9 +1240,8 @@ class Jquery {
 		$jsCallback=null;
 		$attr="id";
 		$hasLoader=true;
-		$immediatly=true;
 		extract($parameters);
-		return $this->_add_event($element, $this->_postForm($url, $form, $responseElement, $validation, $jsCallback, $attr,$hasLoader), $event, $preventDefault, $stopPropagation,$immediatly);
+		return $this->_add_event($element, $this->_postForm($url, $form, $responseElement, $validation, $jsCallback, $attr,$hasLoader), $event, $preventDefault, $stopPropagation);
 	}
 
 	/**
@@ -1232,7 +1250,6 @@ class Jquery {
 	 * @param string $jqueryCall
 	 * @param mixed $param
 	 * @param string $jsCallback javascript code to execute after the jquery call
-	 * @param boolean $immediatly
 	 * @return string
 	 */
 	public function _doJQuery($element, $jqueryCall, $param="", $jsCallback="", $immediatly=false) {
@@ -1256,11 +1273,10 @@ class Jquery {
 	 * @param boolean $preventDefault
 	 * @param boolean $stopPropagation
 	 * @param string $jsCallback javascript code to execute after the jquery call
-	 * @param boolean $immediatly
 	 * @return string
 	 */
-	public function _doJQueryOn($event, $element, $elementToModify, $jqueryCall, $param="", $preventDefault=false, $stopPropagation=false, $jsCallback="",$immediatly=true) {
-		return $this->_add_event($element, $this->_doJQuery($elementToModify, $jqueryCall, $param, $jsCallback), $event, $preventDefault, $stopPropagation,$immediatly);
+	public function _doJQueryOn($event, $element, $elementToModify, $jqueryCall, $param="", $preventDefault=false, $stopPropagation=false, $jsCallback="") {
+		return $this->_add_event($element, $this->_doJQuery($elementToModify, $jqueryCall, $param, $jsCallback), $event, $preventDefault, $stopPropagation);
 	}
 
 	/**
@@ -1283,36 +1299,10 @@ class Jquery {
 	 * @param string $js Code to execute
 	 * @param boolean $preventDefault
 	 * @param boolean $stopPropagation
-	 * @param boolean $immediatly
 	 * @return String
 	 */
-	public function _execOn($element, $event, $js, $preventDefault=false, $stopPropagation=false,$immediatly=true) {
-		return $this->_add_event($element, $this->_exec($js), $event, $preventDefault, $stopPropagation,$immediatly);
+	public function _execOn($element, $event, $js, $preventDefault=false, $stopPropagation=false) {
+		return $this->_add_event($element, $this->_exec($js), $event, $preventDefault, $stopPropagation);
 	}
-
-	private function minify($input) {
-	if(trim($input) === "") return $input;
-	return preg_replace(
-			array(
-					// Remove comment(s)
-					'#\s*("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')\s*|\s*\/\*(?!\!|@cc_on)(?>[\s\S]*?\*\/)\s*|\s*(?<![\:\=])\/\/.*(?=[\n\r]|$)|^\s*|\s*$#',
-					// Remove white-space(s) outside the string and regex
-					'#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\'|\/\*(?>.*?\*\/)|\/(?!\/)[^\n\r]*?\/(?=[\s.,;]|[gimuy]|$))|\s*([!%&*\(\)\-=+\[\]\{\}|;:,.<>?\/])\s*#s',
-					// Remove the last semicolon
-					'#;+\}#',
-					// Minify object attribute(s) except JSON attribute(s). From `{'foo':'bar'}` to `{foo:'bar'}`
-					'#([\{,])([\'])(\d+|[a-z_][a-z0-9_]*)\2(?=\:)#i',
-					// --ibid. From `foo['bar']` to `foo.bar`
-					'#([a-z0-9_\)\]])\[([\'"])([a-z_][a-z0-9_]*)\2\]#i'
-			),
-			array(
-					'$1',
-					'$1$2',
-					'}',
-					'$1$3',
-					'$1.$3'
-			),
-			$input);
-}
 }
 /* End of file Jquery.php */
