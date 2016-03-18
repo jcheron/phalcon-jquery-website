@@ -17,8 +17,8 @@ class DefaultConfig extends Config {
 						"_" => "input_hidden",
 						"f" => "input_file",
 						"radio" => "radio",
-						"mail" => "input_email"
-				)
+						"mail" => "input_email" 
+				) 
 		));
 	}
 }
