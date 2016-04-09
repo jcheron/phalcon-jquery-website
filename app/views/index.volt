@@ -14,17 +14,17 @@
 	</head>
 	<body>
 	<header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
-	<div class="container">
+	<div id="menu-container" class="ui container">
 	{{q["navbarJS"]}}
 	</div>
 	</header>
 	<div class="bs-docs-header">
-		<div class="container">
+		<div class="ui container">
 			<h1><span class="harabara">phalcon</span> <span id="jquery">jQuery</span></h1>
 			<p>{{ expr[0] }}</p>
 		</div>
 	</div>
-	<div class="img-rounded container" id="content">
+	<div class="img-rounded ui container" id="content">
 		<div class="row">
 			<div class="col-md-9" role="main">
 				<div id="response">
@@ -35,7 +35,7 @@
 		</div>
 	</div>
 	<div class="sitemap">
-		<div class="container">
+		<div class="ui container">
 			<ul>
 			<li class="copyright">Kobject.net © 2008-2015 - <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_new">Apache 2 Licence</a></li>
 			<li class="copyright">Created with <a href="https://phalconphp.com/" target="_new">Phalcon</a> & <a href="index" target="_self">Phalcon-jQuery</a></a></li>

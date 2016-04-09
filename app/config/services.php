@@ -107,9 +107,10 @@ $di->setShared('session', function () {
 	}, true);
 
 $di->set("jquery",function(){
-	$jquery= new Ajax\JsUtils(array("driver"=>"Jquery","debug"=>false));
+	$jquery= new Ajax\JsUtils(array("driver"=>"Jquery","debug"=>true));
 	$jquery->setAjaxLoader("Chargement...");
 	$jquery->bootstrap(new Ajax\Bootstrap());//Optional for Twitter Bootstrap
+	$jquery->semantic(new Ajax\Semantic());//Optional for Semantic-UI
 
 	return $jquery;
 });

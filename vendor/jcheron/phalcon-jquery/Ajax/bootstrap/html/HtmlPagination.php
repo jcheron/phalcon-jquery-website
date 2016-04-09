@@ -1,12 +1,11 @@
 <?php
 namespace Ajax\bootstrap\html;
 
-use Ajax\bootstrap\html\base\HtmlDoubleElement;
+use Ajax\bootstrap\html\base\HtmlBsDoubleElement;
 use Ajax\bootstrap\html\base\HtmlNavElement;
-use Ajax\bootstrap\html\base\BaseHtml;
 use Ajax\bootstrap\html\base\CssRef;
-use Ajax\service\JString;
 use Ajax\service\PhalconUtils;
+use Ajax\common\html\BaseHtml;
 
 /**
  * Twitter Bootstrap Pagination component
@@ -15,33 +14,33 @@ use Ajax\service\PhalconUtils;
  * @version 1.001
  */
 class HtmlPagination extends HtmlNavElement {
-	
+
 	/**
 	 * @var int
 	 */
 	protected $from;
-	
+
 	/**
 	 * @var int
 	 */
 	protected $to;
-	
-	
+
+
 	/**
 	 * @var int
 	 */
 	protected $countVisible;
-	
+
 	/**
 	 * @var int
 	 */
 	protected $active;
-	
+
 	/**
 	 * @var string
 	 */
 	protected $urlMask;
-	
+
 	/**
 	 * @param string $identifier
 	 */
@@ -58,10 +57,10 @@ class HtmlPagination extends HtmlNavElement {
 			$this->countVisible=$countVisible;
 		$this->createContent();
 	}
-	
+
 	private function createElement($num,$content,$disabled=false,$current=false){
 		$count=sizeof($this->content)+1;
-		$elem=new HtmlDoubleElement("li-".$this->identifier."-".$count,"li");
+		$elem=new HtmlBsDoubleElement("li-".$this->identifier."-".$count,"li");
 		if($disabled){
 			$elem->setProperty("class", "disabled");
 		}
@@ -80,7 +79,7 @@ class HtmlPagination extends HtmlNavElement {
 		$this->content[]=$elem;
 		return $this;
 	}
-	
+
 	protected function createContent(){
 		$this->content=array();
 		$this->createElement($this->active-1,"<span aria-hidden='true'>&laquo;</span>",$this->active===1);
@@ -91,11 +90,11 @@ class HtmlPagination extends HtmlNavElement {
 		}
 		$this->createElement($this->active+1,"<span aria-hidden='true'>&raquo;</span>",$this->active===$this->to);
 	}
-	
+
 	protected function half(){
 		return (int)($this->countVisible/2);
 	}
-	
+
 	protected function getStart(){
 		$result=1;
 		if($this->countVisible!==$this->to-$this->from+1){
@@ -116,7 +115,7 @@ class HtmlPagination extends HtmlNavElement {
 	 * @param Dispatcher $dispatcher the request dispatcher
 	 * @return \Ajax\bootstrap\html\HtmlPagination
 	 */
-	public function fromDispatcher($dispatcher){
+	public function fromDispatcher($dispatcher,$startIndex=0){
 		$items=array($dispatcher->getControllerName(),$dispatcher->getActionName());
 		$items=array_merge($items,$dispatcher->getParams());
 		$url=implode("/", $items);
@@ -131,11 +130,11 @@ class HtmlPagination extends HtmlNavElement {
 		}
 		return $this;
 	}
-	
+
 	public function getUrl($index){
 		return str_ireplace("%page%", $index, $this->urlMask);
 	}
-	
+
 	/**
 	 * define the buttons size
 	 * available values : "lg","","sm","xs"
@@ -150,7 +149,7 @@ class HtmlPagination extends HtmlNavElement {
 			$size="pagination-".$size;
 		return $this->addToPropertyCtrl("class", $size, CssRef::sizes("pagination"));
 	}
-	
+
 	public function getFrom() {
 		return $this->from;
 	}
@@ -191,6 +190,6 @@ class HtmlPagination extends HtmlNavElement {
 		$this->createContent();
 		return $this;
 	}
-	
-	
+
+
 }

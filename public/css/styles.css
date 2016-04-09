@@ -12,6 +12,12 @@
   font-weight: normal;
   font-style: normal;
 }
+/*
+--------------------------------------------Semantic
+*/
+.ui.menu:first-child{
+	margin-bottom: 0;
+}
 #scroll{
 	position: relative;
 }

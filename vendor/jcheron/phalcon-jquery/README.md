@@ -2,8 +2,14 @@
 
 **A JQuery and UI library** (JQuery UI, Twitter Bootstrap) for Phalcon MVC framework
 
+[Phalcon-jQuery website](http://phalcon-jquery.kobject.net/)
+
 [![Build Status](https://travis-ci.org/jcheron/phalcon-jquery-tests-suite.svg?branch=master)](https://travis-ci.org/jcheron/phalcon-jquery-tests-suite)
 [![Latest Stable Version](https://poser.pugx.org/jcheron/phalcon-jquery/v/stable)](https://packagist.org/packages/jcheron/phalcon-jquery) [![Total Downloads](https://poser.pugx.org/jcheron/phalcon-jquery/downloads)](https://packagist.org/packages/jcheron/phalcon-jquery) [![Latest Unstable Version](https://poser.pugx.org/jcheron/phalcon-jquery/v/unstable)](https://packagist.org/packages/jcheron/phalcon-jquery) [![License](https://poser.pugx.org/jcheron/phalcon-jquery/license)](https://packagist.org/packages/jcheron/phalcon-jquery)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jcheron/phalcon-jquery/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jcheron/phalcon-jquery/?branch=master)
+<a href="http://phalconist.com/jcheron/phalcon-jquery" target="_blank">
+![Phalcon-jQuery](http://phalconist.com/jcheron/phalcon-jquery/default.svg)
+</a>
 
  **Phalcon 1.3.4 and 2.0 compatible**
 
@@ -38,11 +44,11 @@ Create the composer.json file in the app directory as follows:
 ```json
 {
     "require": {
-        "jcheron/phalcon-jquery": "dev-master"
+        "jcheron/phalcon-jquery": "~v1.0.0"
     }
 }
 ```
-Run the composer installer :
+In the app directory, run the composer installer :
 
 ```bash
 php composer.phar install
@@ -120,7 +126,7 @@ In the corresponding view, insert the jquery variable for stylesheets and javasc
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<?=jquery?>
+		<?=$jquery?>
 	</head>
 ```
 

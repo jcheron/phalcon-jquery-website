@@ -27,6 +27,8 @@ class Domaine extends \Phalcon\Mvc\Model
      */
     protected $ordre;
 
+    protected $dataAjax;
+
     /**
      * Method to set the value of field id
      *
@@ -146,6 +148,16 @@ class Domaine extends \Phalcon\Mvc\Model
 		$this->ordre=$ordre;
 		return $this;
 	}
+
+	public function getDataAjax() {
+		return $this->dataAjax;
+	}
+
+	public function setDataAjax($dataAjax) {
+		$this->dataAjax=$dataAjax;
+		return $this;
+	}
+
 
 
 }

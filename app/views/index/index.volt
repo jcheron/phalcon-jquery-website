@@ -2,9 +2,9 @@
 	<p class="lead">
 	{{ expr[1] }}
 	</p>
-	<p><a class="btn btn-primary btn-lg" href="https://github.com/jcheron/phalcon-jquery/archive/v1.0.3.zip" role="button">
+	<p><a class="btn btn-primary btn-lg" href="https://github.com/jcheron/phalcon-jquery/archive/v1.0.5.zip" role="button">
 	<span class="octicon octicon-mark-github"></span>
-	{{ expr[2] }} <span class="label label-info">Phalcon-jQuery Azhar v1.0.3</span></a></p>
+	{{ expr[2] }} <span class="label label-info">Phalcon-jQuery Azhar v1.0.5</span></a></p>
 	{{ expr[3] }}
 	<pre><code class="language-javascript">{
     "require": {

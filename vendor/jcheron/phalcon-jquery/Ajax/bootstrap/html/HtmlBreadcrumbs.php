@@ -1,7 +1,7 @@
 <?php
 namespace Ajax\bootstrap\html;
 
-use Ajax\bootstrap\html\base\HtmlDoubleElement;
+use Ajax\bootstrap\html\base\HtmlBsDoubleElement;
 use Ajax\bootstrap\html\HtmlLink;
 use Ajax\JsUtils;
 use Phalcon\Mvc\View;
@@ -83,7 +83,7 @@ class HtmlBreadcrumbs extends HtmlNavElement {
 		if(!isset($index)){
 			$index=sizeof($this->content)-1;
 		}
-		$li=new HtmlDoubleElement("","li");
+		$li=new HtmlBsDoubleElement("","li");
 		$li->setClass("active");
 		$li->setContent($this->content[$index]->getContent());
 		$this->content[$index]=$li;
@@ -197,14 +197,15 @@ class HtmlBreadcrumbs extends HtmlNavElement {
 	 * @param Dispatcher $dispatcher the request dispatcher
 	 * @return \Ajax\bootstrap\html\HtmlBreadcrumbs
 	 */
-	public function fromDispatcher($dispatcher){
+	public function fromDispatcher($dispatcher,$startIndex=0){
+		$this->startIndex=$startIndex;
 		$params=$dispatcher->getParams();
 		$action=$dispatcher->getActionName();
 		$items=array($dispatcher->getControllerName());
 		if(\sizeof($params)>0 || \strtolower($action)!="index" ){
 			$items[]=$action;
 			foreach ($params as $p){
-				if(\is_object($p)==false)
+				if(\is_object($p)===false)
 				$items[]=$p;
 			}
 		}

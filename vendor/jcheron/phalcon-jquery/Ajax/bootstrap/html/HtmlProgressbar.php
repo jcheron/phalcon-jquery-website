@@ -2,13 +2,13 @@
 
 namespace Ajax\bootstrap\html;
 
-use Ajax\bootstrap\html\base\HtmlDoubleElement;
+use Ajax\bootstrap\html\base\HtmlBsDoubleElement;
 use Ajax\JsUtils;
 use Phalcon\Mvc\View;
 use Ajax\bootstrap\html\base\CssRef;
 use Ajax\service\JArray;
 
-class HtmlProgressbar extends HtmlDoubleElement {
+class HtmlProgressbar extends HtmlBsDoubleElement {
 	protected $value;
 	protected $max;
 	protected $min;
