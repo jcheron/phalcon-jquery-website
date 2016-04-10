@@ -15,13 +15,31 @@ use Ajax\semantic\html\base\HtmlSemDoubleElement;
 use Ajax\semantic\html\base\constants\Size;
 use Ajax\semantic\html\elements\HtmlInput;
 use Ajax\semantic\html\base\constants\Direction;
+use utils\gui\SemanticGui;
 
 class IndexController extends ControllerBase{
 	private $anchors=array();
+	private $gui;
+
+	public function initialize(){
+		parent::initialize();
+		$actionName=$this->dispatcher->getActionName();
+		if($actionName==="index" || $actionName==="bootstrap"){
+			$this->session->set("framework", "bootstrap");
+		}elseif ($actionName==="semantic"){
+			$this->session->set("framework", "semantic");
+		}
+		if($this->session->get("framework")==="bootstrap"){
+			$this->gui=new \utils\gui\BootstrapGui($this);
+		}else{
+			$this->gui=new SemanticGui($this);
+		}
+	}
 
     public function indexAction($lang=NULL){
     	$partial=false;
     	$hasScript=false;
+
     	if(isset($lang)){
     		$this->translateEngine->setLanguage($lang,$this->session);
     	}
@@ -45,11 +63,7 @@ class IndexController extends ControllerBase{
 
     	$this->session->remove("idDomaine");
     	if(!$partial){
-    		if($this->session->get("framework")==="bootstrap"){
-	    		$this->bsMenu();
-    		}else{
-    			$this->semMenu();
-    		}
+    		$this->gui->getMainMenu();
     	}
     	$expr=array();
     	$expr[]=$this->translateEngine->translate(1,"index.header","jQuery, jQuery UI, Twitter Bootstrap and Semantic-UI library for phalcon MVC Framework");
@@ -96,7 +110,6 @@ class IndexController extends ControllerBase{
     	$bc->autoGetOnClick("#response");
     	echo $bc->compile($this->jquery);
     	foreach ($rubriques as $rubrique){
-
     		echo "<h1>".$this->translateEngine->translate($rubrique->getId(),"rubrique.titre",$rubrique->getTitre())."</h1>";
     		echo $this->translateEngine->translate($rubrique->getId(),"rubrique.description",$rubrique->getDescription());
     		ob_start();
@@ -151,7 +164,6 @@ class IndexController extends ControllerBase{
 			echo $this->jquery->compile($this->view);
     	}else{
     		$this->jquery->postOnClick("#btSearch","Index/search",'{"text":$("#search").val()}', "#response");
-
     		$this->jquery->compile($this->view);
     	}
     }
@@ -363,7 +375,6 @@ class IndexController extends ControllerBase{
     }
 	public function semanticAction($idDomaine=null){
 		$this->view->setMainView("index2");
-		$this->session->set("framework", "semantic");
 		if(isset($idDomaine))
 			$this->jquery->get("Index/content/".$idDomaine,"#response");
 		$this->indexAction($this->translateEngine->getLanguage());
@@ -371,7 +382,6 @@ class IndexController extends ControllerBase{
 
 	public function bootstrapAction($idDomaine=null){
 		$this->view->setMainView("index");
-		$this->session->set("framework", "bootstrap");
 		if(isset($idDomaine))
 			$this->jquery->get("Index/content/".$idDomaine,"#response");
 		$this->indexAction($this->translateEngine->getLanguage());
@@ -379,8 +389,7 @@ class IndexController extends ControllerBase{
 
     public function semMenu(){
     	$menu=$this->jquery->semantic()->htmlMenu("navbarJS");
-
-    	$menu->addItem("home");
+    	$menu->addItem($this->translateEngine->translate(1,"index.home","home"));
     	$domaines=Domaine::find("isNull(idParent)");
     	$menu->fromDatabaseObjects($domaines, function($domaine){
     		$libelle=$this->translateEngine->translate($domaine->getId(),"domaine.libelle",$domaine->getLibelle());
@@ -394,10 +403,10 @@ class IndexController extends ControllerBase{
     		}
     		return $item;
     	});
-    	$menu->getItem(0)->addToProperty("class","navbar-brand")->setProperty("href",$this->url->get("/Index"));
-    	$menu->setInverted()->setSize(Size::MEDIUM);
-    	$input=new HtmlInput("search");
-    	$input->addIcon("search",Direction::RIGHT)->asLink()->setCircular()->setInverted();
+    	$menu->getItem(0)->addToProperty("class","navbar-brand")->setProperty("href",$this->url->get("Index"));
+    	$menu->setInverted()->setSize(Size::LARGE);
+    	$input=new HtmlInput("search","search","",$this->translateEngine->translate(1,"index.search","Search..."));
+    	$input->addIcon("search",Direction::RIGHT)->asLink();
     	$this->jquery->postOnClick("#div-search i","Index/search",'{"text":$("#search").val()}', "#response");
     	$ddLang=new \Ajax\semantic\html\modules\HtmlDropdown("idLang");
     	foreach(TranslateEngine::$languages as $keyLang=>$valueLang){
@@ -408,11 +417,10 @@ class IndexController extends ControllerBase{
     		}
     	}
     	$ddLang->asButton();
-    	$menu2=$this->jquery->semantic()->htmlMenu("menu2",array($ddLang));
+    	$menu2=$this->jquery->semantic()->htmlMenu("menu2",array($input,$ddLang));
     	$menu2->setPosition("right");
     	$menu2->setInverted();
     	$menu->addItem($menu2);
-    	$menu->addItem($input);
     	return $menu;
     }
 }
