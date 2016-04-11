@@ -35,6 +35,13 @@
 #top, #navbarJS{
 	height: 52px;
 }
+
+.semantic-bread{
+	padding: 8px 15px;
+	margin-bottom: 20px;
+	background-color: #f5f5f5;
+	border-radius: 4px;
+}
 /*#top{
 	height: 60px;
 	 position: relative;;

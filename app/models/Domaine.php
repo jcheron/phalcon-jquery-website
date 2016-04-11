@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @author jc
+ *
+ */
 class Domaine extends \Phalcon\Mvc\Model
 {
 
@@ -27,7 +31,16 @@ class Domaine extends \Phalcon\Mvc\Model
      */
     protected $ordre;
 
-    protected $dataAjax;
+
+    /**
+     * @var boolean
+     */
+    protected $semantic;
+
+    /**
+     * @var string
+     */
+    protected $component;
 
     /**
      * Method to set the value of field id
@@ -149,12 +162,21 @@ class Domaine extends \Phalcon\Mvc\Model
 		return $this;
 	}
 
-	public function getDataAjax() {
-		return $this->dataAjax;
+	public function getSemantic() {
+		return $this->semantic;
 	}
 
-	public function setDataAjax($dataAjax) {
-		$this->dataAjax=$dataAjax;
+	public function setSemantic($semantic) {
+		$this->semantic=$semantic;
+		return $this;
+	}
+
+	public function getComponent() {
+		return $this->component;
+	}
+
+	public function setComponent($component) {
+		$this->component=$component;
 		return $this;
 	}
 

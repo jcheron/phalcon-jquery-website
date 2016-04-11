@@ -11,9 +11,9 @@ abstract class BaseGUI {
 	}
 
 	public abstract function getMainMenu();
-	public abstract function getBreadcrumbs();
+	public abstract function getBreadcrumbs($domaines);
 	public abstract function getMenuTabs($domaines);
 	public abstract function getAnchorsDropDown($anchors);
-	public abstract function getalert($id,$style,$message);
-	public abstract function getpanel($id,$content,$header,$footer);
+	public abstract function getAlert($id,$style,$message);
+	public abstract function getPanel($id,$content,$header,$footer);
 }

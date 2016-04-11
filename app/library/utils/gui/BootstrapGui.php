@@ -8,6 +8,10 @@ use Ajax\bootstrap\html\HtmlDropdown;
 use utils\TranslateEngine;
 use Ajax\service\JString;
 use Ajax\bootstrap\html\HtmlInputgroup;
+use Ajax\bootstrap\html\HtmlTabs;
+use Ajax\bootstrap\html\content\HtmlDropdownItem;
+use Ajax\bootstrap\html\content\HtmlTabItem;
+use Ajax\bootstrap\html\HtmlAlert;
 
 class BootstrapGui extends BaseGUI {
 
@@ -16,8 +20,8 @@ class BootstrapGui extends BaseGUI {
 		// TODO Auto-generated method stub
 	}
 
-	public function getpanel($id, $content, $header, $footer) {
-		// TODO Auto-generated method stub
+	public function getPanel($id, $content, $header, $footer) {
+		return $this->controller->jquery->bootstrap()->htmlPanel($id,$content,$header,$footer);
 	}
 
 	public function getMainMenu() {
@@ -31,7 +35,7 @@ class BootstrapGui extends BaseGUI {
     	$navbar->fromDatabaseObjects($domaines, function($domaine) use ($url,$translateEngine) {
     		$libelle=$translateEngine->translate($domaine->getId(),"domaine.libelle",$domaine->getLibelle());
     		$lnk=new HtmlLink("lnk-".$domaine->getId(),"#",$libelle);
-    		if($domaine->getDataAjax()!=null){
+    		if($domaine->getSemantic()){
     			$lnk->setHref($url->get("Index/semantic/".$domaine->getId()));
     		}
     		else
@@ -62,15 +66,49 @@ class BootstrapGui extends BaseGUI {
     	return $navbar;
 	}
 
-	public function getalert($id, $style, $message) {
-		// TODO Auto-generated method stub
+	public function getAlert($id, $style, $message) {
+		return new HtmlAlert($id,$message,$style);
 	}
 
 	public function getMenuTabs($domaines) {
-		// TODO Auto-generated method stub
+		$jquery=$this->controller->jquery;
+		$translateEngine=$this->controller->getTranslateEngine();
+
+		$tabs=new HtmlTabs("tabs");
+		$tabs->setTabstype("pills");
+		$tabs->fromDatabaseObjects($domaines, function($domaine) use ($translateEngine){
+			if(count($domaine->getDomaines())>0){
+				$libelle=$translateEngine->translate($domaine->getId(),"domaine.libelle",$domaine->getLibelle());
+				$dd= new HtmlDropdown("tab-".$domaine->getId(),$libelle);
+				$dd->setTagName("button");
+				$dd->setStyle("btn-primary");
+				$dd->fromDatabaseObjects($domaine->getDomaines(), function($sousDomaine) use ($translateEngine){
+					$ddItem= new HtmlDropdownItem("ddItem-".$sousDomaine->getId());
+					$libelle=$translateEngine->translate($sousDomaine->getId(),"domaine.libelle",$sousDomaine->getLibelle());
+					$ddItem->setCaption($libelle);
+					return $ddItem;
+				});
+				return $dd;
+			} else{
+				$libelle=$translateEngine->translate($domaine->getId(),"domaine.libelle",$domaine->getLibelle());
+				return new HtmlTabItem("tab-".$domaine->getId(),$libelle);
+			}
+		});
+		$tabs->setStacked();
+		$jquery->getOnClick("ul.nav-stacked a", "index/content/","#response");
+		return $tabs;
 	}
 
-	public function getBreadcrumbs() {
-		// TODO Auto-generated method stub
+	public function getBreadcrumbs($domaines) {
+		$jquery=$this->controller->jquery;
+		$bc=$jquery->bootstrap()->htmlBreadcrumbs("bc",array(array("content"=>"Index","data-ajax"=>"Index")),true,0,function ($e){return $e->getProperty("data-ajax");});
+		$bc->addGlyph("glyphicon-home",0);
+		$bc->fromDatabaseObjects($domaines, function($domaine){
+			$lnk= new HtmlLink("bc-".$domaine->getLibelle(),"",$domaine->getLibelle());
+			$lnk->setProperty("data-ajax", "content/".$domaine->getId());
+			return $lnk;
+		});
+		$bc->autoGetOnClick("#response");
+		return $bc;
 	}
 }

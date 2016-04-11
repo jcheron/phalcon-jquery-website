@@ -1,20 +1,11 @@
 <?php
 
-use Ajax\bootstrap\html\HtmlNavbar;
 use Ajax\bootstrap\html\HtmlLink;
 use Ajax\bootstrap\html\HtmlDropdown;
-use Ajax\bootstrap\html\HtmlTabs;
 use utils\StrUtils;
-use Ajax\bootstrap\html\content\HtmlTabItem;
-use Ajax\bootstrap\html\content\HtmlDropdownItem;
 use utils\TranslateEngine;
 use Phalcon\Mvc\View;
 use Phalcon\Text;
-use Ajax\bootstrap\html\HtmlInputgroup;
-use Ajax\semantic\html\base\HtmlSemDoubleElement;
-use Ajax\semantic\html\base\constants\Size;
-use Ajax\semantic\html\elements\HtmlInput;
-use Ajax\semantic\html\base\constants\Direction;
 use utils\gui\SemanticGui;
 
 class IndexController extends ControllerBase{
@@ -95,20 +86,12 @@ class IndexController extends ControllerBase{
         	"idDomaine = ".$id,
         	"order" => "ordre"
     	));
-
-    	$bc=$this->jquery->bootstrap()->htmlBreadcrumbs("bc",array(array("content"=>"Index","data-ajax"=>"Index")),true,0,function ($e){return $e->getProperty("data-ajax");});
-    	$bc->addGlyph("glyphicon-home",0);
     	$domaines=array();
-
     	$do=Domaine::findFirst($id);
     	$this->_getArrayFromDomaine($do, $domaines);
-    	$bc->fromDatabaseObjects($domaines, function($domaine){
-    			$lnk= new HtmlLink("bc-".$domaine->getLibelle(),"",$domaine->getLibelle());
-    			$lnk->setProperty("data-ajax", "content/".$domaine->getId());
-    			return $lnk;
-    	});
-    	$bc->autoGetOnClick("#response");
+		$bc=$this->gui->getBreadcrumbs($domaines);
     	echo $bc->compile($this->jquery);
+
     	foreach ($rubriques as $rubrique){
     		echo "<h1>".$this->translateEngine->translate($rubrique->getId(),"rubrique.titre",$rubrique->getTitre())."</h1>";
     		echo $this->translateEngine->translate($rubrique->getId(),"rubrique.description",$rubrique->getDescription());
@@ -131,7 +114,7 @@ class IndexController extends ControllerBase{
 	    		if(StrUtils::isNotNull($exemple->getPhp())){
 	    			$footer="<pre><code class='language-php'>".htmlentities($exemple->getPhp())."</code></pre>";
 	    		}
-	    		$p=$this->jquery->bootstrap()->htmlPanel("id-".$exemple->getId(),"<p class='bs-example'>".$exec."</p>",$header,$footer);
+	    		$p=$this->gui->getPanel("id-".$exemple->getId(), "<p class='bs-example'>".$exec."</p>", $header, $footer);
 	    		echo $p->compile();
     		}
     		$all=ob_get_contents();
@@ -147,7 +130,7 @@ class IndexController extends ControllerBase{
     		}
     		if($this->translateEngine->hasMessage()){
     			$message=$this->translateEngine->getMessage();
-    			$alert=$this->jquery->bootstrap()->htmlAlert("alert-translate",$message);
+    			$alert=$this->gui->getAlert("alert-translate","warning",$message);
     			$all=$alert.$all;
     		}
     		echo $all;
@@ -174,30 +157,9 @@ class IndexController extends ControllerBase{
         	"idParent = ".$id,
         	"order" => "ordre"
     	));
-		$tabs=new HtmlTabs("tabs");
-		$tabs->setTabstype("pills");
+		$tabs=$this->gui->getMenuTabs($domaines);
 
-		$tabs->fromDatabaseObjects($domaines, function($domaine){
-			if(count($domaine->getDomaines())>0){
-				$libelle=$this->translateEngine->translate($domaine->getId(),"domaine.libelle",$domaine->getLibelle());
-				$dd= new HtmlDropdown("tab-".$domaine->getId(),$libelle);
-				$dd->setTagName("button");
-				$dd->setStyle("btn-primary");
-				$dd->fromDatabaseObjects($domaine->getDomaines(), function($sousDomaine){
-					$ddItem= new HtmlDropdownItem("ddItem-".$sousDomaine->getId());
-					$libelle=$this->translateEngine->translate($sousDomaine->getId(),"domaine.libelle",$sousDomaine->getLibelle());
-					$ddItem->setCaption($libelle);
-					return $ddItem;
-				});
-				return $dd;
-			} else{
-				$libelle=$this->translateEngine->translate($domaine->getId(),"domaine.libelle",$domaine->getLibelle());
-				return new HtmlTabItem("tab-".$domaine->getId(),$libelle);
-			}
-		});
-		$tabs->setStacked();
 		echo $tabs->compile($this->jquery);
-		$this->jquery->getOnClick("ul.nav-stacked a", "index/content/","#response");
     	echo $this->jquery->compile();
     	$this->view->disable();
     }
@@ -335,93 +297,18 @@ class IndexController extends ControllerBase{
     	echo $this->jquery->compile();
     }
 
-    private function bsMenu(){
-    	$navbar=$this->jquery->bootstrap()->htmlNavbar("navbarJS");
-    	$navbar->setClass("");
-    	$navbar->fromArray(array("brand"=>$this->translateEngine->translate(1,"index.home","home"),"brandHref"=>$this->url->get("Index")));
-    	$domaines=Domaine::find("isNull(idParent)");
-    	$navbar->fromDatabaseObjects($domaines, function($domaine){
-    		$libelle=$this->translateEngine->translate($domaine->getId(),"domaine.libelle",$domaine->getLibelle());
-    		$lnk=new HtmlLink("lnk-".$domaine->getId(),"#",$libelle);
-    		if($domaine->getDataAjax()!=null){
-    			$lnk->setHref($this->url->get("Index/semantic/".$domaine->getId()));
-    		}
-    		else
-    			$lnk->getOnClick("Index/content/main/".$domaine->getId(),"#response");
-    			return $lnk;
-    	});
-    		$right=$navbar->addZone("right");
-    		$ddLang=new HtmlDropdown("btLang");
-    		$ddLang->asButton();
-    		foreach(TranslateEngine::$languages as $keyLang=>$valueLang){
-    			$item=$ddLang->addItem($valueLang,$this->url->get("Index/index/".$keyLang));
-    			$item->getOnClick("Index/index/".$keyLang,"body");
-    			if(Text::startsWith($this->translateEngine->getLanguage(), $keyLang, true)){
-    				$item->active();
-    				$ddLang->setValue($valueLang." : ".$keyLang);
-    			}
-    		}
-    		$right->addElement($ddLang);
-    		$right->asForm();
-    		$left=$navbar->addZone("right","leftZ");
-    		$left->asForm();
-    		$searchInput=new HtmlInputgroup("search");
-    		$searchInput->createButton("btSearch","Go","right");
-    		$searchInput->setPlaceHolder($this->translateEngine->translate(1,"index.search","Search..."));
-    		$left->addElement($searchInput);
-    		$this->jquery->postOnClick("#btSearch","Index/search",'{"text":$("#search").val()}', "#response");
-    		$navbar->cssInverse();
-    	return $navbar;
-    }
 	public function semanticAction($idDomaine=null){
 		$this->view->setMainView("index2");
 		if(isset($idDomaine))
-			$this->jquery->get("Index/content/".$idDomaine,"#response");
+			$this->jquery->get("Index/content/main/".$idDomaine,"#response");
 		$this->indexAction($this->translateEngine->getLanguage());
 	}
 
 	public function bootstrapAction($idDomaine=null){
 		$this->view->setMainView("index");
 		if(isset($idDomaine))
-			$this->jquery->get("Index/content/".$idDomaine,"#response");
+			$this->jquery->get("Index/content/main/".$idDomaine,"#response");
 		$this->indexAction($this->translateEngine->getLanguage());
 	}
-
-    public function semMenu(){
-    	$menu=$this->jquery->semantic()->htmlMenu("navbarJS");
-    	$menu->addItem($this->translateEngine->translate(1,"index.home","home"));
-    	$domaines=Domaine::find("isNull(idParent)");
-    	$menu->fromDatabaseObjects($domaines, function($domaine){
-    		$libelle=$this->translateEngine->translate($domaine->getId(),"domaine.libelle",$domaine->getLibelle());
-    		$item=new HtmlSemDoubleElement("menu-".$libelle,"a","item");
-    		$item->setContent($libelle);
-    		if($domaine->getDataAjax()==null){
-    			$item->setProperty("href",$this->url->get("Index/bootstrap/".$domaine->getId()));
-    		}
-    		else{
-    			$item->getOnClick("Index/content/main/".$domaine->getId(),"#response");
-    		}
-    		return $item;
-    	});
-    	$menu->getItem(0)->addToProperty("class","navbar-brand")->setProperty("href",$this->url->get("Index"));
-    	$menu->setInverted()->setSize(Size::LARGE);
-    	$input=new HtmlInput("search","search","",$this->translateEngine->translate(1,"index.search","Search..."));
-    	$input->addIcon("search",Direction::RIGHT)->asLink();
-    	$this->jquery->postOnClick("#div-search i","Index/search",'{"text":$("#search").val()}', "#response");
-    	$ddLang=new \Ajax\semantic\html\modules\HtmlDropdown("idLang");
-    	foreach(TranslateEngine::$languages as $keyLang=>$valueLang){
-    		$item=$ddLang->addItem($valueLang,$this->url->get("Index/index/".$keyLang));
-    		$item->getOnClick("Index/index/".$keyLang,"body");
-    		if(Text::startsWith($this->translateEngine->getLanguage(), $keyLang, true)){
-    			$ddLang->setValue($valueLang." : ".$keyLang);
-    		}
-    	}
-    	$ddLang->asButton();
-    	$menu2=$this->jquery->semantic()->htmlMenu("menu2",array($input,$ddLang));
-    	$menu2->setPosition("right");
-    	$menu2->setInverted();
-    	$menu->addItem($menu2);
-    	return $menu;
-    }
 }
 

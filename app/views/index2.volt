@@ -25,13 +25,13 @@
 		</div>
 	</div>
 	<div class="img-rounded ui container" id="content">
-		<div class="row">
-			<div class="col-md-9" role="main">
-				<div id="response">
-				{{ content() }}
+		<div class="ui grid">
+				<div class="thirteen wide column">
+					<div id="response">
+					{{ content() }}
+					</div>
 				</div>
-			</div>
-			<div class="col-md-3" role="complementary"></div>
+				<div class="col-md-3 three wide column"></div>
 		</div>
 	</div>
 	<div class="sitemap">
