@@ -17,7 +17,13 @@ class BootstrapGui extends BaseGUI {
 
 
 	public function getAnchorsDropDown($anchors) {
-		// TODO Auto-generated method stub
+		$ddAnchors=$this->controller->jquery->bootstrap()->htmlDropdown("anchors",$this->controller->getTranslateEngine()->translate(1,"index.menu","Quick access"));
+    	$ddAnchors->setStyle("btn-default");
+    	$ddAnchors->asButton();
+    	foreach ($anchors as $kAnchor=>$vAnchor){
+    		$ddAnchors->addItem($vAnchor,"#".$kAnchor);
+    	}
+    	return $ddAnchors;
 	}
 
 	public function getPanel($id, $content, $header, $footer) {

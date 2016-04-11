@@ -1,7 +1,6 @@
 <?php
 
 use Ajax\bootstrap\html\HtmlLink;
-use Ajax\bootstrap\html\HtmlDropdown;
 use utils\StrUtils;
 use utils\TranslateEngine;
 use Phalcon\Mvc\View;
@@ -91,11 +90,11 @@ class IndexController extends ControllerBase{
     	$this->_getArrayFromDomaine($do, $domaines);
 		$bc=$this->gui->getBreadcrumbs($domaines);
     	echo $bc->compile($this->jquery);
-
+    	ob_start();
     	foreach ($rubriques as $rubrique){
     		echo "<h1>".$this->translateEngine->translate($rubrique->getId(),"rubrique.titre",$rubrique->getTitre())."</h1>";
     		echo $this->translateEngine->translate($rubrique->getId(),"rubrique.description",$rubrique->getDescription());
-    		ob_start();
+
     		$exemples=$rubrique->getExemples(['order' => 'ordre']);
     		foreach ($exemples as $exemple){
     			echo $this->replaceTitre($this->translateEngine->translate($exemple->getId(),"exemple.titre",$exemple->getTitre()));
@@ -117,24 +116,22 @@ class IndexController extends ControllerBase{
 	    		$p=$this->gui->getPanel("id-".$exemple->getId(), "<p class='bs-example'>".$exec."</p>", $header, $footer);
 	    		echo $p->compile();
     		}
-    		$all=ob_get_contents();
-    		ob_end_clean();
-    		if(count($this->anchors)>2){
-    			$ddAnchors=new HtmlDropdown("anchors",$this->translateEngine->translate(1,"index.menu","Quick access"));
-    			$ddAnchors->setStyle("btn-default");
-    			$ddAnchors->asButton();
-    			foreach ($this->anchors as $kAnchor=>$vAnchor){
-    				$ddAnchors->addItem($vAnchor,"#".$kAnchor);
-    			}
-    			echo $ddAnchors->compile();
-    		}
-    		if($this->translateEngine->hasMessage()){
-    			$message=$this->translateEngine->getMessage();
-    			$alert=$this->gui->getAlert("alert-translate","warning",$message);
-    			$all=$alert.$all;
-    		}
-    		echo $all;
     	}
+
+    	$all=ob_get_contents();
+    	ob_end_clean();
+    	if(count($this->anchors)>2){
+    		echo "<br>";
+    		$ddAnchors=$this->gui->getAnchorsDropDown($this->anchors);
+    		echo $ddAnchors->compile($this->jquery);
+    	}
+    	if($this->translateEngine->hasMessage()){
+    		$message=$this->translateEngine->getMessage();
+    		$alert=$this->gui->getAlert("alert-translate","warning",$message);
+    		$all=$alert.$all;
+    	}
+    	echo $all;
+
     	$this->jquery->exec("Prism.highlightAll();",true);
     	if($param1=="main")
     		$this->jquery->get("index/menu/".$id,".col-md-3");

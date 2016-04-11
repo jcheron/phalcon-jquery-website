@@ -16,11 +16,18 @@ use Ajax\semantic\html\modules\HtmlDropdown;
 use Ajax\semantic\html\collections\HtmlMenu;
 use Ajax\semantic\html\content\HtmlDropdownItem;
 use Ajax\semantic\html\collections\HtmlMessage;
+use Ajax\semantic\html\base\constants\Color;
 
 class SemanticGui extends BaseGUI {
 
 	public function getAnchorsDropDown($anchors) {
-		// TODO Auto-generated method stub
+		$ddAnchors=new HtmlDropdown("anchors",$this->controller->getTranslateEngine()->translate(1,"index.menu","Quick access"));
+    	$ddAnchors->asButton()->setColor(Color::ORANGE);
+    	foreach ($anchors as $kAnchor=>$vAnchor){
+    		$item=$ddAnchors->addItem($vAnchor);
+    		$item->setProperty("href", "#".$kAnchor);
+    	}
+    	return $ddAnchors;
 	}
 
 	public function getPanel($id, $content, $header, $footer) {
@@ -120,7 +127,7 @@ class SemanticGui extends BaseGUI {
 	public function getBreadcrumbs($domaines) {
 		$jquery=$this->controller->jquery;
 		$bc=$jquery->semantic()->htmlBreadcrumb("bc",array(array("content"=>"Index","href"=>$this->controller->url->get("Index"))),true,0,function ($e){return $e->getProperty("data-ajax");});
-		$bc->setContentSeparator("<i class='right angle icon divider'></i>");
+		$bc->setContentDivider("<i class='right angle icon divider'></i>");
 		$bc->addIcon("home",0);
 		$bc->fromDatabaseObjects($domaines, function($domaine){
 			$lnk= new HtmlSemDoubleElement("bc-".$domaine->getLibelle(),"a","section");

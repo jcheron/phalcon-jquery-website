@@ -146,7 +146,7 @@ class HtmlBreadcrumb extends HtmlSemNavElement{
 		}
 		$count=$this->count();
 		for($i=1;$i<$count;$i++){
-			$this->content[$i]->wrap($this->_contentSeparator);
+			$this->content[$i]->wrap($this->getContentDivider($i-1));
 		}
 		return parent::compile($js, $view);
 	}
@@ -193,6 +193,20 @@ class HtmlBreadcrumb extends HtmlSemNavElement{
 			$icon=new HtmlIcon("icon-".$this->identifier, $icon);
 			$item->wrapContent($icon);
 		}
+	}
+
+	public function addItem($item){
+		$itemO=parent::addItem($item);
+		$this->addToPropertyCtrl("class", "section", array("section"));
+		return $itemO;
+	}
+
+	public function asLinks(){
+		$this->contentAs("a");
+	}
+
+	public function asTexts(){
+		$this->contentAs("div");
 	}
 
 }
