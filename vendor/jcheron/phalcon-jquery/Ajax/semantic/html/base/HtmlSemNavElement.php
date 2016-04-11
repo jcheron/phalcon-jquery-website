@@ -88,5 +88,10 @@ abstract class HtmlSemNavElement extends HtmlSemCollection {
 		return $this;
 	}
 
+	public function setIconContentSeparator($iconContentSeparator) {
+		$this->_contentSeparator="<i class='".$iconContentSeparator."'></i>";
+		return $this;
+	}
+
 
 }

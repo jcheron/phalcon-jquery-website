@@ -78,7 +78,7 @@ class SemanticGui extends BaseGUI {
 	public function getAlert($id, $style, $message) {
 		$messageO=new HtmlMessage($id,$message);
 		$messageO->setStyle($style);
-		$messageO->setIcon($style." circle");
+		$messageO->setIcon($style);
 		return $messageO;
 	}
 
@@ -113,13 +113,13 @@ class SemanticGui extends BaseGUI {
     			return $elm;
     		}
     	});
-    	$jquery->getOnClick("#tabs a.item", "index/content/","#response");
+    	$jquery->getOnClick("#tabs a.item", "Index/content/","#response");
     	return $tabs;
 	}
 
 	public function getBreadcrumbs($domaines) {
 		$jquery=$this->controller->jquery;
-		$bc=$jquery->semantic()->htmlBreadcrumb("bc",array(array("content"=>"Index","data-ajax"=>"Index")),true,0,function ($e){return $e->getProperty("data-ajax");});
+		$bc=$jquery->semantic()->htmlBreadcrumb("bc",array(array("content"=>"Index","href"=>$this->controller->url->get("Index"))),true,0,function ($e){return $e->getProperty("data-ajax");});
 		$bc->setContentSeparator("<i class='right angle icon divider'></i>");
 		$bc->addIcon("home",0);
 		$bc->fromDatabaseObjects($domaines, function($domaine){
