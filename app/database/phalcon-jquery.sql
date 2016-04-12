@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Lun 07 Décembre 2015 à 02:09
+-- Généré le :  Mar 12 Avril 2016 à 03:38
 -- Version du serveur :  5.6.21
 -- Version de PHP :  5.6.3
 
@@ -53,42 +53,63 @@ CREATE TABLE IF NOT EXISTS `domaine` (
 `id` int(11) NOT NULL,
   `libelle` varchar(50) NOT NULL,
   `idParent` int(11) DEFAULT NULL,
-  `ordre` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+  `ordre` int(11) NOT NULL,
+  `semantic` tinyint(1) DEFAULT NULL,
+  `component` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
 
 --
 -- Contenu de la table `domaine`
 --
 
-INSERT INTO `domaine` (`id`, `libelle`, `idParent`, `ordre`) VALUES
-(1, 'jQuery', NULL, 0),
-(2, 'Bootstrap', NULL, 0),
-(3, 'HtmlButton', 2, 1),
-(4, 'HtmlButtonGroups', 2, 3),
-(5, 'jQueryUI', NULL, 0),
-(7, 'HtmlGlyphButton', 2, 2),
-(8, 'Ajax functions', 1, 1),
-(9, 'Get', 8, 1),
-(10, 'Post', 8, 2),
-(11, 'Events', 1, 2),
-(12, 'HtmlDropdown', 2, 4),
-(13, 'HtmlSplitButton', 2, 5),
-(14, 'HtmlCarousel', 2, 20),
-(15, 'HtmlInputGroup', 2, 6),
-(16, 'HtmlModal', 2, 7),
-(17, 'HtmlAlert', 2, 8),
-(18, 'HtmlProgressbar', 2, 9),
-(19, 'HtmlTabs', 2, 10),
-(20, 'HtmlListGroup', 2, 11),
-(21, 'HtmlPanel', 2, 12),
-(22, 'HtmlNavbar', 2, 11),
-(23, 'HtmlAccordion', 2, 14),
-(24, 'HtmlBreadcrumbs', 2, 15),
-(25, 'HtmlPagination', 2, 16),
-(26, 'PostForm', 8, 3),
-(27, 'DOM manipulation', 1, 4),
-(28, 'JSON', 8, 5),
-(29, 'HtmlGridSystem', 2, 20);
+INSERT INTO `domaine` (`id`, `libelle`, `idParent`, `ordre`, `semantic`, `component`) VALUES
+(1, 'jQuery', NULL, 0, 0, NULL),
+(2, 'Bootstrap', NULL, 0, 0, NULL),
+(3, 'HtmlButton', 2, 1, 0, NULL),
+(4, 'HtmlButtonGroups', 2, 3, 0, NULL),
+(5, 'jQueryUI', NULL, 0, 0, NULL),
+(7, 'HtmlGlyphButton', 2, 2, 0, NULL),
+(8, 'Ajax functions', 1, 1, 0, NULL),
+(9, 'Get', 8, 1, 0, NULL),
+(10, 'Post', 8, 2, 0, NULL),
+(11, 'Events', 1, 2, 0, NULL),
+(12, 'HtmlDropdown', 2, 4, 0, NULL),
+(13, 'HtmlSplitButton', 2, 5, 0, NULL),
+(14, 'HtmlCarousel', 2, 20, 0, NULL),
+(15, 'HtmlInputGroup', 2, 6, 0, NULL),
+(16, 'HtmlModal', 2, 7, 0, NULL),
+(17, 'HtmlAlert', 2, 8, 0, NULL),
+(18, 'HtmlProgressbar', 2, 9, 0, NULL),
+(19, 'HtmlTabs', 2, 10, 0, NULL),
+(20, 'HtmlListGroup', 2, 11, 0, NULL),
+(21, 'HtmlPanel', 2, 12, 0, NULL),
+(22, 'HtmlNavbar', 2, 11, 0, NULL),
+(23, 'HtmlAccordion', 2, 14, 0, NULL),
+(24, 'HtmlBreadcrumbs', 2, 15, 0, NULL),
+(25, 'HtmlPagination', 2, 16, 0, NULL),
+(26, 'PostForm', 8, 3, 0, NULL),
+(27, 'DOM manipulation', 1, 4, 0, NULL),
+(28, 'JSON', 8, 5, 0, NULL),
+(29, 'HtmlGridSystem', 2, 20, 0, NULL),
+(30, 'HtmlLabel', 2, 30, 0, NULL),
+(31, 'Semantic-UI', NULL, 4, 1, NULL),
+(32, 'Eléments', 31, 1, 1, 'HtmlDropdown'),
+(33, 'Button', 32, 1, 1, NULL),
+(34, 'Container', 32, 2, 1, NULL),
+(35, 'Collections', 31, 2, 1, NULL),
+(36, 'Breadcrumb', 35, 1, 1, NULL),
+(37, 'Grid', 35, 2, 1, NULL),
+(38, 'Message', 35, 5, NULL, NULL),
+(39, 'Menu', 35, 4, NULL, NULL),
+(40, 'Modules', 31, 4, 1, NULL),
+(41, 'Dropdown', 40, 4, NULL, NULL),
+(42, 'Divider', 32, 3, NULL, NULL),
+(43, 'Header', 32, 5, NULL, NULL),
+(44, 'Icon', 32, 6, NULL, NULL),
+(45, 'Input', 32, 8, NULL, NULL),
+(46, 'Label', 32, 9, NULL, NULL),
+(47, 'List', 32, 10, NULL, NULL),
+(48, 'Segment', 32, 14, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -105,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `exemple` (
   `idRubrique` int(11) NOT NULL,
   `execPHP` tinyint(1) NOT NULL,
   `ordre` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=146 DEFAULT CHARSET=utf8;
 
 --
 -- Contenu de la table `exemple`
@@ -113,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `exemple` (
 
 INSERT INTO `exemple` (`id`, `titre`, `description`, `header`, `php`, `idRubrique`, `execPHP`, `ordre`) VALUES
 (1, 'Single button', NULL, NULL, '$button=new Ajax\\bootstrap\\html\\HtmlButton("btOkay","Okay");\necho $button;', 1, 1, 0),
-(2, NULL, NULL, NULL, 'use Ajax\\bootstrap\\html\\HtmlButton;\r\nuse Ajax\\bootstrap\\html\\base\\CssRef;\r\n\r\n$bt0=new HtmlButton("bt0","Slamwiki",CssRef::CSS_DANGER,$this->jquery->hide("#bt1"));\r\n$bt0->addBadge("Cours");\r\n$bt1=new HtmlButton("bt1");\r\n$bt1->setValue("Button default");\r\n$bt1->addBadge("21");\r\n\r\necho $bt0->compile($this->jquery);\r\necho $bt1->compile($this->jquery);\r\necho $this->jquery->compile();', 1, 1, 0),
+(2, NULL, NULL, NULL, 'use Ajax\\bootstrap\\html\\HtmlButton;use Ajax\\bootstrap\\html\\base\\CssRef;$bt0=new HtmlButton("bt0","Slamwiki",CssRef::CSS_DANGER,$this->jquery->hide("#bt1"));$bt0->addBadge("Cours");$bt1=new HtmlButton("bt1");$bt1->setValue("Button default");$bt1->addBadge("21");echo $bt0->compile($this->jquery);echo $bt1->compile($this->jquery);echo $this->jquery->compile();', 1, 1, 0),
 (3, NULL, NULL, NULL, '$bt=new Ajax\\bootstrap\\html\\HtmlGlyphButton("glButton1","glyphicon-equalizer","Equalizer");\necho $bt;', 6, 1, 0),
 (4, NULL, '<p>It is also possible to create a Button glyph from the index of the glyph</p>\n', NULL, '$bt=new Ajax\\bootstrap\\html\\HtmlGlyphButton("glButton2",120,"Glyph numéro 120");\necho $bt;', 6, 1, 2),
 (5, NULL, '<p>Overview of all usable glyphicons</p>\n', NULL, '$i=0;\nforeach(Ajax\\bootstrap\\html\\base\\CssRef::glyphIcons() as $glyph){\n	$bt=new Ajax\\bootstrap\\html\\HtmlGlyphButton("glybutton-".$i++,$glyph);\n	$bt->setTitle($glyph);\n	echo $bt;\n}', 6, 1, 3),
@@ -181,13 +202,13 @@ INSERT INTO `exemple` (`id`, `titre`, `description`, `header`, `php`, `idRubriqu
 (71, 'With header', NULL, NULL, '$panel=$this->jquery->bootstrap()->htmlPanel("panel-2","Contenu","Header"); \necho $panel;', 20, 1, 2),
 (73, 'And footer', NULL, NULL, '$panel=$this->jquery->bootstrap()->htmlPanel("panel-3","Contenu","Header","Footer"); \necho $panel;', 20, 1, 3),
 (74, 'Styles', NULL, NULL, 'use Ajax\\bootstrap\\html\\base\\CssRef;\n$panel=$this->jquery->bootstrap()->htmlPanel("panel-4","Contenu","Header");\n$panel->setStyle(CssRef::CSS_INFO);\n echo $panel;\n$panel->setStyle(CssRef::CSS_WARNING);\n echo $panel;\n$panel->setStyle(CssRef::CSS_DANGER);\n echo $panel;', 20, 1, 4),
-(75, 'Badges et labels', NULL, NULL, '$listGroup->getItem(0)->addBadge("22");\n$listGroup->getItem(1)->addLabel("New","info")->addBadge("0");\necho $listGroup;', 19, 1, 2),
+(75, 'Badges and labels', NULL, NULL, '$listGroup->getItem(0)->addBadge("22");\n$listGroup->getItem(1)->addLabel("New","info")->addBadge("0");\necho $listGroup;', 19, 1, 2),
 (76, 'Active, disable', NULL, NULL, '$listGroup->getItem(2)->setActive();\n$listGroup->getItem(4)->setDisabled();\necho $listGroup;', 19, 1, 4),
 (77, 'Links', '<p>If the tagName of the main container doesn''t exist <strong>ul</strong>, the added items are links.</p>', NULL, '$listGroup=$this->jquery->bootstrap()->htmlListgroup("lg-2",array("Cras justo odio","Dapibus ac facilisis in","Morbi leo risus","Porta ac consectetur ac","Vestibulum at eros"),"div");\necho $listGroup;', 19, 1, 5),
 (78, 'Styles', NULL, NULL, 'use Ajax\\bootstrap\\html\\base\\CssRef;\n$listGroup->getItem(0)->setStyle(CssRef::CSS_SUCCESS);\n$listGroup->getItem(1)->setStyle(CssRef::CSS_WARNING);\n$listGroup->getItem(2)->setStyle(CssRef::CSS_INFO);\necho $listGroup;', 19, 1, 6),
 (79, 'Custom Content', NULL, NULL, '$listGroup->getItem(3)->setHeadingAndContent("List group item heading","Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.",4);\necho $listGroup;', 19, 1, 6),
 (80, 'Loading from a model', NULL, NULL, '$clients=Client::find();\n$listGroup=$this->jquery->bootstrap()->htmlListgroup(''lg-clients'');\necho $listGroup->fromDatabaseObjects($clients, function($client){\n		return $client->getName();\n	});', 19, 1, 7),
-(81, 'Loading more complex', NULL, NULL, 'use Ajax\\bootstrap\\html\\base\\HtmlDoubleElement;\n$clients=Client::find();\n$listGroup=$this->jquery->bootstrap()->htmlListgroup(''lg-clients'');\necho $listGroup->fromDatabaseObjects($clients, function($client){\n	$element=new HtmlDoubleElement("list-gi-".$client->getId(),"li");\n	$element->setContent($client->getName());	\n	$element->addBadge($client->getPart());\n	return $element;\n	});', 19, 1, 8),
+(81, 'More complex loading', NULL, NULL, 'use Ajax\\bootstrap\\html\\base\\HtmlBsDoubleElement;$clients=Client::find();$listGroup=$this->jquery->bootstrap()->htmlListgroup(''lg-clients'');echo $listGroup->fromDatabaseObjects($clients, function($client){	$element=new HtmlBsDoubleElement("list-gi-".$client->getId(),"li");	$element->setContent($client->getName());		$element->addBadge($client->getPart());	return $element;	});', 19, 1, 8),
 (82, 'Pills', NULL, NULL, '$tabs->setTabstype("pills");\necho $tabs;', 18, 1, 5),
 (83, 'Stacked', NULL, NULL, '$tabs->setStacked(true);\necho $tabs;', 18, 1, 8),
 (84, 'Creation', NULL, NULL, '$navbar=$this->jquery->bootstrap()->htmlNavbar("nb-1","Accueil");\necho $navbar;', 22, 1, 1),
@@ -201,11 +222,11 @@ INSERT INTO `exemple` (`id`, `titre`, `description`, `header`, `php`, `idRubriqu
 (93, 'Creation', NULL, NULL, '$accordion=$this->jquery->bootstrap()->htmlAccordion("accordion1");\n$accordion->addPanel("Panel 1","Contenu du panel 1");\n$accordion->addPanel("Panel 2","Contenu du panel 2");\necho $accordion;', 23, 1, 1),
 (94, 'Calling a view and passing parameters', NULL, NULL, '$clients=Client::find();\n$accordion=$this->jquery->bootstrap()->htmlAccordion("accordion2");\n$accordion->renderContentPanel("Clients",$this->view,"test","clients",array("model"=>"Clients","objects"=>$clients));\necho $accordion;', 23, 1, 5),
 (95, 'Calling an action on a controller', NULL, NULL, '$accordion=$this->jquery->bootstrap()->htmlAccordion("accordion3"); \n$accordion->forwardPanel("Clients",$this,"test","clients");\n echo $accordion;', 23, 1, 4),
-(97, 'Get on event', '<ul id="getOn">\n	<li id="1">Client 1</li>\n	<li id="2">Client 2</li>\n</ul>\n\n<div class="alert alert-info" id="alert-reponse">Survolez un élément de la liste pour afficher le client</div>\n\n<p>Ci-dessous le code de l''action <strong>client </strong>sollicitée sur <strong>mouseenter</strong>. L''<strong>id</strong> de l''élément survolé est passé par défaut en paramètre de la requête et correspond à <strong>$idClient</strong> :</p>\n\n<pre class="language-php">\n<code>\n	public function clientAction($idClient){\n		$client=Client::findFirst($idClient);\n		echo $client-&gt;toString();\n		$this-&gt;view-&gt;disable();\n	}\n</code></pre>\n', NULL, '$this->jquery->getOn("mouseenter","#getOn li","Test/client","#alert-reponse",array("hasLoader"=>false));', 5, 1, 5),
-(98, 'Get on event with the passage of another HTML attribute', '<p>The default attribute passed to the query is <strong> id </ strong>, it is possible to send another: either an existing HTML attribute or a custom attribute (<strong> data-id </ strong>) as in the following: </p><p>Html source code :</p><ul id="getOnData">	<li data-id="1" id="cli-1">Client 1</li>	<li data-id="2" id="cli-2">Client 2</li></ul><pre class="language-html"><code>&lt;ul id="getOnData"&gt;&lt;li id="cli-1" data-id="1"&gt;Client 1&lt;/li&gt;&lt;li id="cli-2" data-id="2"&gt;Client 2&lt;/li&gt;&lt;/ul&gt;</code></pre><div class="alert alert-info" id="alert-reponse-2">Mouse over an item in the list to display the customer</div><p>Below is the code of the action <strong> customer </ strong> solicited on <strong> mouseEnter </ strong>. The <strong> id </ strong> of the element is send by default as a request parameter and corresponds to <strong> $idClient </strong></p><pre class="language-php"><code>	public function clientAction($idClient){		$client=Client::findFirst($idClient);		echo $client-&gt;toString();		$this-&gt;view-&gt;disable();	}</code></pre>', NULL, '$this->jquery->getOn("mouseenter","#getOnData li","Test/client","#alert-reponse-2",array("attr"=>"data-id","hasLoader"=>false));', 5, 1, 6),
+(97, 'Get on event', '<ul id="getOn">\n	<li id="1">Client 1</li>\n	<li id="2">Client 2</li>\n</ul>\n\n<div class="alert alert-info" id="alert-reponse">Hover an item in the list to show the customer</div>\n\n<p>Below the code of the <strong>client</strong> action called on <strong>mouseenter</strong> event. The overflown element <strong>id</strong> is send to the request and corresponds to <strong>$idClient</strong> :</p>\n\n<pre class="language-php">\n<code>\n	public function clientAction($idClient){\n		$client=Client::findFirst($idClient);\n		echo $client-&gt;toString();\n		$this-&gt;view-&gt;disable();\n	}\n</code></pre>\n', NULL, '$this->jquery->getOn("mouseenter","#getOn li","Test/client","#alert-reponse",array("hasLoader"=>false));', 5, 1, 5),
+(98, 'Get on event with the passage of another HTML attribute', '<p>The default attribute passed to the query is <strong> id </strong>, it is possible to send another: either an existing HTML attribute or a custom attribute (<strong> data-id </strong>) as in the following: </p><p>Html source code :</p><ul id="getOnData">	<li data-id="1" id="cli-1">Client 1</li>	<li data-id="2" id="cli-2">Client 2</li></ul><pre class="language-html"><code>&lt;ul id="getOnData"&gt;&lt;li id="cli-1" data-id="1"&gt;Client 1&lt;/li&gt;&lt;li id="cli-2" data-id="2"&gt;Client 2&lt;/li&gt;&lt;/ul&gt;</code></pre><div class="alert alert-info" id="alert-reponse-2">Mouse over an item in the list to display the customer</div><p>Below is the code of the action <strong> customer </strong> solicited on <strong> mouseEnter </strong>. The <strong> id </ strong> of the element is send by default as a request parameter and corresponds to <strong> $idClient</strong></p><pre class="language-php"><code>	public function clientAction($idClient){		$client=Client::findFirst($idClient);		echo $client-&gt;toString();		$this-&gt;view-&gt;disable();	}</code></pre>', NULL, '$this->jquery->getOn("mouseenter","#getOnData li","Test/client","#alert-reponse-2",array("attr"=>"data-id","hasLoader"=>false));', 5, 1, 6),
 (99, 'Get on click', NULL, NULL, '$this->jquery->getOnClick("#getOnClick li","Test/client","#alert-reponse-3");', 5, 0, 6),
 (100, 'Creation', '<p>...</p>\n', NULL, '$bc=$this->jquery->bootstrap()->htmlBreadcrumbs("bc1",array("Home","Library"));\necho $bc;\n', 25, 1, 1),
-(101, 'Synchronization from the Phalcon dispatcher', '<p>In this case we have to dynamically modify the content of Breadcrumbs component from the new url displayed via ajax. You can do this in the controller afterDispatchingRoute method, by calling the methods: <!-- p--></p>\n\n<ul>\n	<li><strong>fromDispatcher </strong> which built the elements of breadcrumbs component from the requested url</li>\n	<li>and <strong> jsSetContent </strong> that displays javascript component content</li>\n</ul>\n\n<pre>\n<code class="language-php">public function afterExecuteRoute($dispatcher){		$bc=$this-&gt;jquery-&gt;bootstrap()-&gt;htmlBreadcrumbs("bc10");		$bc-&gt;fromDispatcher($dispatcher);		$bc-&gt;addGlyph("glyphicon-home",0);		$bc-&gt;jsSetContent($this-&gt;jquery);		$bc-&gt;autoGetOnClick("#ajax-content");		$this-&gt;jquery-&gt;compile($this-&gt;view);	}</code></pre>\n', NULL, '$bc=$this->jquery->bootstrap()->htmlBreadcrumbs("bc10",array("Accueil","Clients","1"));\n$bc->autoGetOnClick("#ajax-content");\n$bc->getElement(0)->wrapContentWithGlyph("glyphicon-home");\necho $bc->compile($this->jquery);\necho $this->jquery->bootstrap()->htmlAlert("ajax-content");', 25, 1, 10),
+(101, 'Synchronization from the Phalcon dispatcher', '<p>In this case we have to dynamically modify the content of Breadcrumbs component from the new url displayed via ajax. You can do this in the controller afterDispatchingRoute method, by calling the methods:</p><ul>	<li><strong>fromDispatcher </strong> which built the elements of breadcrumbs component from the requested url</li>	<li>and <strong> jsSetContent </strong> that displays javascript component content</li></ul><pre><code class="language-php">public function afterExecuteRoute($dispatcher){		$bc=$this-&gt;jquery-&gt;bootstrap()-&gt;htmlBreadcrumbs("bc10");		$bc-&gt;fromDispatcher($dispatcher);		$bc-&gt;addGlyph("glyphicon-home",0);		$bc-&gt;jsSetContent($this-&gt;jquery);		$bc-&gt;autoGetOnClick("#ajax-content");		$this-&gt;jquery-&gt;compile($this-&gt;view);	}</code></pre>', NULL, '$bc=$this->jquery->bootstrap()->htmlBreadcrumbs("bc10",array("Accueil","Clients","1"));\n$bc->autoGetOnClick("#ajax-content");\n$bc->getElement(0)->wrapContentWithGlyph("glyphicon-home");\necho $bc->compile($this->jquery);\necho $this->jquery->bootstrap()->htmlAlert("ajax-content");', 25, 1, 10),
 (102, 'Adding elements', NULL, NULL, '$bc=$this->jquery->bootstrap()->htmlBreadcrumbs("bc2");\n$bc->addElement("Accueil");\necho $bc;', 25, 1, 2),
 (103, 'Adding links', NULL, NULL, 'use Ajax\\bootstrap\\html\\HtmlLink;\n$bc=$this->jquery->bootstrap()->htmlBreadcrumbs("bc3");\n$bc->addElement(new HtmlLink("id-accueil","index","Accueil"));\n$bc->addElement(new HtmlLink("id-clients","Test/clients","Clients"));\necho $bc;', 25, 1, 3),
 (104, 'Adding from arrays', NULL, NULL, 'use Ajax\\bootstrap\\html\\HtmlLink;\n$bc=$this->jquery->bootstrap()->htmlBreadcrumbs("bc4");\n$bc->addElements(array(array("identifier"=>"item1","href"=>"index","content"=>"Accueil"),array("identifier"=>"item2","href"=>"Test/clients","content"=>"Clients")));\necho $bc;', 25, 1, 4),
@@ -213,24 +234,40 @@ INSERT INTO `exemple` (`id`, `titre`, `description`, `header`, `php`, `idRubriqu
 (106, 'Glyphicons', NULL, NULL, '$bc->addGlyph("glyphicon-star",1);\necho $bc;', 25, 1, 6),
 (107, 'Association of Javascript code', '<p>The method <strong>autoGetOnClick</strong> displays in the target element <strong>#div-centent-7</strong> the result of the ajax request corresponding to the attribut&nbsp;<strong>data-ajax</strong> of each element.<br />\n<br />\nThe <strong>data-ajax</strong> attribute correspond to the url associated to each element in ajax.<br />\n<br />\n<strong>data-ajax</strong> is automaticaly assigned by default hierarchically constructing the path to an element using its caption :</p>\n\n<ul>\n	<li>Home =&gt; Home</li>\n	<li>Clients =&gt; Home/Clients</li>\n</ul>\n\n<p>It is possible to use another HTML attribute <strong> data-ajax </strong> to store the URLs associated with the elements: &amp; nbsp; use in this case &amp; nbsp; <strong> setattr($otherAttribute)</strong></p>\n\n<p>It is also possible to change the function that generates the url for each item used in ajax with <strong> setHrefFunction($function) </strong>.</p>\n\n<p>The default function uses the labels of items &amp; nbsp;</p>\n\n<pre>\n<code class="language-php">function($element){return $element-&gt;getContent();}</code></pre>\n', NULL, '$bc=$this->jquery->bootstrap()->htmlBreadcrumbs("bc7",array("Home","Clients")); \n$bc->autoGetOnClick("#div-content-7");\necho $bc->compile($this->jquery);\necho $this->jquery->bootstrap()->htmlAlert("div-content-7");', 25, 1, 7),
 (108, 'Creation', NULL, NULL, '$page=$this->jquery->bootstrap()->htmlPagination("page-1",1,5,2);\necho $page;', 26, 1, 1),
-(109, 'Association de code javascript', NULL, NULL, '$page=$this->jquery->bootstrap()->htmlPagination("page-7",1,3);\n$page->setUrlMask("pagination/client/%page%");\n$page->autoGetOnClick("#div-content-7");\necho $page->compile($this->jquery);\necho $this->jquery->bootstrap()->htmlAlert("div-content-7");', 26, 1, 7),
-(110, 'Synchronization from the Phalcon dispatcher', '<p>Il s''agit dans ce cas de modifier dynamiquement le contenu du composant Pagination à partir de la nouvelle url affichée via ajax. Il est possible d''effectuer cette opération dans la méthode afterDispatchingRoute du controller, en appelant les méthodes :</p><ul>	<li><strong>fromDispatcher </strong>qui construit les éléments du composant breadcrumbs à partir de l''url sollicitée</li>	<li>et <strong>jsSetContent </strong>qui affiche en javascript le contenu du composant</li></ul><pre><code class="language-php">	public function afterExecuteRoute($dispatcher){		$bc=$this-&gt;jquery-&gt;bootstrap()-&gt;htmlPagination("page-10",1,3,NULL,2);		$bc-&gt;fromDispatcher($dispatcher);		$bc-&gt;jsSetContent($this-&gt;jquery);		$bc-&gt;autoGetOnClick("#div-content-10");		$this-&gt;jquery-&gt;compile($this-&gt;view);	}</code></pre>', NULL, '$page=$this->jquery->bootstrap()->htmlPagination("page-10",1,3,NULL,2);\n$page->setUrlMask("pagination/client/%page%");\n$page->autoGetOnClick("#div-content-10");\necho $page->compile($this->jquery);\necho $this->jquery->bootstrap()->htmlAlert("div-content-10");', 26, 1, 10),
+(109, 'Association of javascript code', NULL, NULL, '$page=$this->jquery->bootstrap()->htmlPagination("page-7",1,3);\n$page->setUrlMask("pagination/client/%page%");\n$page->autoGetOnClick("#div-content-7");\necho $page->compile($this->jquery);\necho $this->jquery->bootstrap()->htmlAlert("div-content-7");', 26, 1, 7),
+(110, 'Synchronization from the Phalcon dispatcher', '<p>In this case we have to dynamically modify the content of Pagination component from the new url displayed via ajax. You can do this in the controller afterDispatchingRoute method, by calling the methods:</p><ul>	<li><strong>fromDispatcher </strong> which built the elements of breadcrumbs component from the requested url</li>	<li>and <strong> jsSetContent </strong> that displays javascript component content</li></ul><pre><code class="language-php">	public function afterExecuteRoute($dispatcher){		$bc=$this-&gt;jquery-&gt;bootstrap()-&gt;htmlPagination("page-10",1,3,NULL,2);		$bc-&gt;fromDispatcher($dispatcher);		$bc-&gt;jsSetContent($this-&gt;jquery);		$bc-&gt;autoGetOnClick("#div-content-10");		$this-&gt;jquery-&gt;compile($this-&gt;view);	}</code></pre>', NULL, '$page=$this->jquery->bootstrap()->htmlPagination("page-10",1,3,NULL,2);\n$page->setUrlMask("pagination/client/%page%");\n$page->autoGetOnClick("#div-content-10");\necho $page->compile($this->jquery);\necho $this->jquery->bootstrap()->htmlAlert("div-content-10");', 26, 1, 10),
 (111, 'Sizes', NULL, NULL, '$page=$this->jquery->bootstrap()->htmlPagination("page-4",1,5,2);\n$page->setSize("lg");\necho $page;\n$page->setSize("xs");\necho $page;\n$page->setSize("sm");\necho $page;', 26, 1, 4),
 (112, 'Styles', NULL, NULL, '$bt=$this->jquery->bootstrap()->htmlButton("bt-2","Default");\necho $bt;\n$bt->setContent("Primary");\n$bt->setStyle("primary");\necho $bt;\n$bt->setContent("Info");\n$bt->setStyle("info");\necho $bt;\n$bt->setContent("Warning");\n$bt->setStyle("warning");\necho $bt;\n$bt->setContent("Danger");\n$bt->setStyle("danger");\necho $bt;', 1, 1, 2),
-(113, 'blur', '<p>Correspond à la perte du focus</p>\n\n<p><input class="form-control" id="input-1" type="text" /></p>\n\n<div class="alert alert-info" id="message-1">&nbsp;</div>\n', NULL, '$this->jquery->blur("#input-1","$(''#message-1'').html(''blur'');");', 28, 1, 1),
-(115, 'change', '<p>Correspond au changement du contenu du contrôle. Notez que le change ne se produit que sur perte de focus par l''élément modifié.</p>\n\n<p><input class="form-control" id="input-2" type="text" /></p>\n\n<div class="alert alert-info" id="message-2">&nbsp;</div>\n', NULL, '$this->jquery->change("#input-2","$(''#message-2'').html(''change'');");', 28, 1, 2),
-(116, 'click', '<p>Correspond au click sur un élément.</p>\n\n<p id="p">Paragraphe à cliquer...</p>\n\n<div class="alert alert-info" id="message-3">&nbsp;</div>\n', NULL, '$this->jquery->click("#p","$(''#message-3'').append(''click '');");', 28, 1, 3),
-(117, 'contextmenu', '<p>Correspond à l''affichage du menu contextuel&nbsp;sur un élément.</p>\n\n<p id="p4">Paragraphe à cliquer avec le bouton droit...</p>\n\n<div class="alert alert-info" id="message-4">&nbsp;</div>\n', NULL, '$this->jquery->contextmenu("#p4","$(''#message-4'').append(''contextmenu '');");', 28, 1, 4),
-(118, 'addClass', '<p id="p">Ajoute une class css aux éléments HTML spécifiés.</p>\n\n<p>Dans l''appel de la méthode addClass, le 3ème paramètre (true) permet l''exécution immédiate du code.</p>\n', NULL, '$this->jquery->addClass("#p","alert alert-warning",true);', 29, 1, 1),
-(119, 'append', '<p>Insère&nbsp;du contenu, spécifié par le paramètre, après chacun des éléments correspondants au sélecteur</p>\n\n<p><a class="btn btn-default" id="bt-append">Insérer</a></p>\n\n<ul id="identite">\n	<li id="1">&nbsp;Nom :&nbsp;</li>\n	<li id="2">&nbsp;Prénom :&nbsp;</li>\n</ul>\n', NULL, '$this->jquery->click("#bt-append",$this->jquery->append("#identite li","<input type=''text'' class=''form-control''>"));', 29, 1, 2),
-(120, 'append', '<p>Ajoute du contenu a l''intérieur des éléments spécifiés.</p>\n', NULL, '$this->jquery->append("#to","<br>");', 29, 0, 3),
-(121, 'attr', '<p>modifie la valeur de l''attribut HTML du premier élement correspondant</p>\n\n<p><input class="form-control" id="input" /></p>\n', NULL, '$this->jquery->attr("#input","value","Essai",true);', 29, 1, 4),
+(113, 'blur', '<p>The blur event is sent to an element when it loses focus</p>\n\n<p><input class="form-control" id="input-1" type="text" /></p>\n\n<div class="alert alert-info" id="message-1">&nbsp;</div>\n', NULL, '$this->jquery->blur("#input-1","$(''#message-1'').html(''blur'');");', 28, 1, 1),
+(115, 'change', '<p>The change event is sent to an element when its value changes. This event is limited to input elements, textarea boxes and select elements.</p>\n\n<p><input class="form-control" id="input-2" type="text" /></p>\n\n<div class="alert alert-info" id="message-2">&nbsp;</div>\n', NULL, '$this->jquery->change("#input-2","$(''#message-2'').html(''change'');");', 28, 1, 2),
+(116, 'click', '<p>The click event is sent to an element when the mouse pointer is over the element, and the mouse button is pressed and released</p>\n\n<p id="p">Paragraph to click...</p>\n\n<div class="alert alert-info" id="message-3">&nbsp;</div>\n', NULL, '$this->jquery->click("#p","$(''#message-3'').append(''click '');");', 28, 1, 3),
+(117, 'contextmenu', '<p>The contextmenu event is sent to an element when the right button of the mouse is clicked on it, but before the context menu is displayed.</p>\n\n<p id="p4">click Right on this paragraph...</p>\n\n<div class="alert alert-info" id="message-4">&nbsp;</div>\n', NULL, '$this->jquery->contextmenu("#p4","$(''#message-4'').append(''contextmenu '');");', 28, 1, 4),
+(118, 'addClass', '<p id="p">Adds the specified class(es) to each element in the set of matched elements.</p>\n\n<p>In the call of addClass method, the third parameter (true) enables the immediate execution of the code.</p>\n', NULL, '$this->jquery->addClass("#p","alert alert-warning",true);', 29, 1, 1),
+(119, 'append', '<p>Insert content, specified by the parameter, after each of the corresponding elements in the selector</p>\n\n<p><a class="btn btn-default" id="bt-append">Insert</a></p>\n\n<ul id="identite">\n	<li id="1">&nbsp;Firstname :&nbsp;</li>\n	<li id="2">&nbsp;Lastname :&nbsp;</li>\n</ul>\n', NULL, '$this->jquery->click("#bt-append",$this->jquery->append("#identite li","<input type=''text'' class=''form-control''>"));', 29, 1, 2),
+(120, 'append', '<p>Add content within the specified elements.</p>\n', NULL, '$this->jquery->append("#to","<br>");', 29, 0, 3),
+(121, 'attr', '<p>The .attr() method sets the value of attributes</p>\n\n<p><input class="form-control" id="input" /></p>\n', NULL, '$this->jquery->attr("#input","value","Essai",true);', 29, 1, 4),
 (122, 'json', '<div class="alert alert-info" id="ex1">\n<p><label id="id">id</label></p>\n\n<p><label id="name">name</label></p>\n</div>\n', NULL, '$this->jquery->json("json/json/1","get","{}",null,"id","$(''#ex1'')",true);', 30, 1, 1),
 (123, 'jsonOn with a callback', '<p>The <strong>callback </strong>function is used here to change the bootstrap progressbar.</p>\n\n<p><a class="btn btn-primary btAjax" data-ajax="1">Client 1</a> <a class="btn btn-primary btAjax" data-ajax="2">Client 2</a> <a class="btn btn-primary btAjax" data-ajax="3">Client 3</a></p>\n\n<div class="alert alert-info" id="ex3"><input class="form-control" id="name" type="text" value="" />\n<div class="progress">\n<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="[[part]]" class="progress-bar progress-bar-striped active" id="pb2" role="progressbar" style="width: 1%">1%</div>\n</div>\n</div>\n', NULL, '$this->jquery->jsonOn("click",".btAjax","json/json",array("attr"=>"data-ajax","context"=>"$(''#ex3'')","jsCallback"=>"$(''#pb2'').css(''width'', data[''part'']+''%'').attr(''aria-valuenow'', data[''part'']).html(data[''part'']+''%'');"));', 30, 1, 3),
 (124, 'jsonArray', '<p><a class="btn btn-primary" id="btJsonArray">Charger les clients</a> <a class="btn btn-primary" id="btShowMask">Afficher le masque</a></p>\n<script>$(''#btShowMask'').click(function() {$(''#repeat'').toggleClass(''hide'');});</script>\n\n<div class="alert alert-info" id="ex3">\n<div class="hide" id="repeat">\n<div class="row">\n<div class="col-xs-6 col-md-3"><a class="thumbnail" href="#"><img src="public/img/client/client[[id]].jpg" /> </a></div>\n\n<div class="col-xs-6 col-md-9"><input class="form-control" data-id="name" readonly="true" type="text" value="" />\n<div class="progress">\n<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="[[part]]" class="progress-bar progress-bar-striped active" role="progressbar" style="width: [[part]]%">[[part]]%</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n', NULL, '$this->jquery->jsonArrayOn("click","#btJsonArray","#repeat", "json/jsonArray", array());', 30, 1, 4),
 (125, 'jsonOn', '<p><a class="btn btn-primary btAjax2" data-ajax="1">Client 1</a> <a class="btn btn-primary btAjax2" data-ajax="2">Client 2</a></p>\n\n<div class="alert alert-info" id="ex2"><input class="form-control" id="name" type="text" value="" /></div>\n', NULL, '$this->jquery->jsonOn("click",".btAjax2","json/json",array("attr"=>"data-ajax","context"=>"$(''#ex2'')"));', 30, 1, 2),
 (126, 'Creation', NULL, NULL, 'use Ajax\\bootstrap\\html\\HtmlPanel;\n$gs=$this->jquery->bootstrap()->htmlGridSystem("gs-2");\n$gs->getCell(1,1)->setContent(new HtmlPanel("p1","1,1"));\n$gs->getCell(2,2)->setContent(new HtmlPanel("p2","2,2"))->setWidthForAll(6);\n$gs->getCell(1,3)->setContent(new HtmlPanel("p3","1,3"))->setWidthForAll(2);\n\necho $gs;', 31, 1, 2),
-(127, 'Creation', NULL, NULL, 'use Ajax\\bootstrap\\html\\HtmlPanel;\n$gs=$this->jquery->bootstrap()->htmlGridSystem("gs-1",6,12);\n$gs->setContentForAll("gs");\n$gs->getCell(3,6)->setContent("milieu");\n$gs->getRow(3)->merge("md",6,5);\n$gs->getRow(5)->merge("md",1,11);\n\necho $gs;', 31, 1, 1);
+(127, 'Creation', NULL, NULL, 'use Ajax\\bootstrap\\html\\HtmlPanel;\n$gs=$this->jquery->bootstrap()->htmlGridSystem("gs-1",6,12);\n$gs->setContentForAll("gs");\n$gs->getCell(3,6)->setContent("milieu");\n$gs->getRow(3)->merge("md",6,5);\n$gs->getRow(5)->merge("md",1,11);\n\necho $gs;', 31, 1, 1),
+(128, 'Adding a label to an element', NULL, NULL, 'use Ajax\\bootstrap\\html\\base\\HtmlBsDoubleElement;$p=new HtmlBsDoubleElement("p");$p->setContent("this is a paragraph with a label");$p->addLabel("new");echo $p;', 32, 1, 0),
+(129, 'Création', '<div class="ui labeled button" tabindex="0">\n  <div class="ui red button">\n    <i class="heart icon"></i> Like\n  </div>\n  <a class="ui basic red left pointing label">\n    1,048\n  </a>\n</div>\n<div class="ui labeled button" tabindex="0">\n  <div class="ui basic blue button">\n    <i class="fork icon"></i> Forks\n  </div>\n  <a class="ui basic left pointing blue label">\n    1,048\n  </a>\n</div>', NULL, '$mess=new \\Ajax\\semantic\\html\\collections\\HtmlMessage("mess1","<p>We just updated our privacy policy here to better service our customers. We recommend reviewing the changes.</p>");\n		$mess->addHeader("Changes in Service");\n		$mess->addList(array("You can now have cover images on blog pages","Drafts will now auto-save while writing"),false);\necho $mess;', 38, 1, 1),
+(130, 'Icône', NULL, 'Header', '$mess=new Ajax\\semantic\\html\\collections\\HtmlMessage("mess2","<p>We just updated our privacy policy here to better service our customers. We recommend reviewing the changes.</p>");\n		$mess->addHeader("Changes in Service");\n		$mess->setIcon("inbox");\necho $mess;', 38, 1, 2),
+(131, 'Creation', 'A standard breadcrumb', NULL, 'use Ajax\\semantic\\html\\collections\\HtmlBreadcrumb;\r\n$bc=new HtmlBreadcrumb("bc1",array("Home","Store","T-shirt"));\r\necho $bc;', 34, 1, 1),
+(132, 'Divider', '<p>A breadcrumb can contain a divider to show the relationship between sections, this can be formatted as an icon or text.</p>\n', NULL, 'use Ajax\\semantic\\html\\collections\\HtmlBreadcrumb;\n$bc=new HtmlBreadcrumb("bc2",array("Home","Store","T-shirt"));\n$bc->setContentDivider(">");\necho $bc;', 36, 1, 2),
+(133, 'Icon divider', NULL, NULL, 'use Ajax\\semantic\\html\\collections\\HtmlBreadcrumb;\n\n$bc=new HtmlBreadcrumb("bc3",array("Home","Store","T-shirt"));\n$bc->setIconContentDivider("right angle");\necho $bc;', 36, 1, 3),
+(135, 'Various dividers', NULL, NULL, 'use Ajax\\semantic\\html\\collections\\HtmlBreadcrumb;\n\n$bc=new HtmlBreadcrumb("bc3",array("Home","Store","T-shirt"));\n$bc->setIconContentDivider("right caret",1);\necho $bc;', 36, 1, 4),
+(136, 'Directly in the controller (without view)', NULL, NULL, '$semantic=$this->jquery->semantic();\n$button=$semantic->htmlButton("btAfficher","Afficher message")->setColor("red");\n$message=$semantic->htmlMessage("message1","<b>Cliquer</b> sur le bouton...");\n$button->onClick($message->jsHtml("Click sur bouton"));\necho $button->compile($this->jquery);\necho $message;', 37, 1, 1),
+(138, 'Text', '<p>A breadcrumb can contain sections that can either be formatted as a link or text</p>\n', NULL, '$bc=$this->jquery->semantic()->htmlBreadcrumb("bc4",array("Home","Store","T-shirt"));\n$bc->asTexts();\necho $bc;\n', 36, 1, 4),
+(139, 'Individuals elements', '<p>A section may be linkable or contain a link</p>\n', NULL, '$bc=$this->jquery->semantic()->htmlBreadcrumb("bc5",array("Home")); \n$bc->addItem("Search for: <a href=''#''>paper towels</a>");\necho $bc;\n', 36, 1, 5),
+(140, 'Creation', '<p>A standard button</p>\n', NULL, '$bt=$this->jquery->semantic()->htmlButton("bt1","Follow");\necho $bt;', 39, 1, 1),
+(141, 'jQuery', '<p>A button can interract with jQuery</p>\n', NULL, '$bt=$semantic->htmlButton("bt2","Follow");\n$bt->onClick("$(this).toggleText(''Following'',''Follow'')");\necho $bt->compile($this->jquery);', 39, 1, 2),
+(142, 'Types', '<p>{{warning:Although any tag can be used for a button, it will only be keyboard focusable if you use a&lt;button&gt;tag or you add the property tabindex="0". Keyboard accessible buttons will preserve focus styles after click, which may be visually jarring.}}</p>\n', NULL, '$bt3=$semantic->htmlButton("bt3","Button");\n$bt4=$semantic->htmlButton("bt4","Focusable")->setFocusable();\necho $bt3.$bt4;', 39, 1, 3),
+(143, 'Emphasis', '<p>A button can be formatted to show different levels of emphasis<br />\n{{info:Setting your brand colors to primary and secondary color variables in site.variables will allow you to use your color theming for UI elements}}</p>\n', NULL, 'use Ajax\\semantic\\html\\base\\constants\\Emphasis;\n$bt5=$semantic->htmlButton("bt5","Save")->setEmphasis(Emphasis::PRIMARY);\n$bt6=$semantic->htmlButton("bt6","Discard");\necho $bt5.$bt6;', 39, 1, 3),
+(144, 'Animated', '<p>A button can animate to show hidden content {{info:The button will be automatically sized according to the visible content size. Make sure there is enough room for the hidden content to show}}</p>\n', NULL, 'use Ajax\\semantic\\html\\elements\\HtmlIcon;\n$bt1=$semantic->htmlButton("bt7","Sign-up for a Pro account");\n$bt1->setAnimated("$12.99 a month");\n$bt2=$semantic->htmlButton("bt8","Next");\n$bt2->setAnimated(new HtmlIcon("","right arrow"),"fade right");\necho $bt1.$bt2;\n', 39, 1, 5),
+(145, 'Labeled', '<p>A button can appear alongside a label</p>\n', NULL, '$bt=$semantic->htmlButton("bt9"," Like");\n$bt->addIcon("heart");\n$bt->addLabel("2,048")->setPointing("left");\necho $bt;', 39, 1, 6);
 
 -- --------------------------------------------------------
 
@@ -244,7 +281,7 @@ CREATE TABLE IF NOT EXISTS `rubrique` (
   `description` text,
   `idDomaine` int(11) NOT NULL,
   `ordre` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
 
 --
 -- Contenu de la table `rubrique`
@@ -252,8 +289,8 @@ CREATE TABLE IF NOT EXISTS `rubrique` (
 
 INSERT INTO `rubrique` (`id`, `titre`, `description`, `idDomaine`, `ordre`) VALUES
 (1, 'HtmlButton', '<p>Represents a <strong>Bootstrap</strong> button.</p>\n', 3, 0),
-(2, 'Configuration', '<p>Set the namespace <strong>Ajax</strong> in the file <strong>loader.php</strong></p>\n\n<pre>\n<code class="language-php">\n$loader-&gt;registerNamespaces(array(\n        ''Ajax'' =&gt; __DIR__ . ''/../../app/vendor/jcheron/phalcon-jquery/Ajax/''\n));</code></pre>\n', 1, 1),
-(3, 'Prerequisite', '<h2>Injection of the service</h2>\n\n<p>It is necessary to inject the JQuery service at application startup, and instantiate Bootstrap :</p>\n\n<pre>\n<code class="language-php">\n$di-&gt;set("jquery",function(){\n    $jquery= new JsUtils(array("driver"=&gt;"Jquery"));\n    $jquery-&gt;bootstrap(new Bootstrap());//for Twitter Bootstrap\n    return $jquery;\n});\n</code></pre>\n', 2, 0),
+(2, 'Configuration', '<p>Set the namespace <strong>Ajax</strong> in the file <strong>loader.php</strong></p>\r\n\r\n<pre>\r\n<code class="language-php">\r\n$loader-&gt;\r\nregisterNamespaces(array(\r\n        ''Ajax'' =&gt; __DIR__ . ''/../../app/vendor/jcheron/phalcon-jquery/Ajax/''\r\n));</code></pre>\r\n', 1, 1),
+(3, 'Prerequisite', '<h2>Injection of the service</h2><p>It is necessary to inject the JQuery service at application startup, and instantiate Bootstrap :</p>\r\n<pre><code class="language-php">$di-&gt;set("jquery",function(){\r\n    $jquery= new JsUtils(array("driver"=&gt;"Jquery"));\r\n    $jquery-&gt;bootstrap(new Bootstrap());//for Twitter Bootstrap\r\n    return $jquery;});\r\n</code></pre>', 2, 0),
 (4, 'Service injection', '<p>Inject the service <strong>jquery</strong> via the <strong>$di</strong> object :</p>\n\n<pre>\n<code class="language-php">\n$di-&gt;set("jquery",function(){\n    $jquery= new Ajax\\JsUtils(array("driver"=&gt;"Jquery"));\n    return $jquery;\n});</code></pre>\n', 1, 2),
 (5, 'Ajax get', '<p>Allows immediate ajax request (<strong>get</strong>), delayed or dependent (<strong>getDeferred</strong>) or launched from an event (<strong>getOn</strong>).</p>\n', 9, 0),
 (6, 'HtmlGlyphButton', '<p>Bootstrap button associated with a Glyphicon</p>\n', 7, 0),
@@ -277,10 +314,17 @@ INSERT INTO `rubrique` (`id`, `titre`, `description`, `idDomaine`, `ordre`) VALU
 (25, 'HtmlBreadcrumbs', '<p>Corresponds to the Bootstrap <strong>Breadcrumbs</strong> component</p>\n', 24, 1),
 (26, 'HtmlPagination', '<p>Corresponds to the Bootstrap <strong>Pagination </strong> component</p>\n\n<p>see&nbsp;<a href="http://getbootstrap.com/components/#pagination">http://getbootstrap.com/components/#pagination</a></p>\n', 25, 1),
 (27, 'Ajax postForm', '<p>Allows immediate submit of a form with ajax (<strong>postForm</strong>), delayed or dependent (<strong>postFormDeferred</strong>) or launched from an event (<strong>postFormOn</strong>).</p>\n', 26, 1),
-(28, 'Evènements javascript', NULL, 11, 1),
+(28, 'Javascript events', NULL, 11, 1),
 (29, 'DOM manipulation', '<p>Functions for manipulating the DOM with jQuery</p>\n', 27, 1),
 (30, 'Ajax JSON', '<p>Ajax functions for populate a view from JSON data</p>\n', 28, 1),
-(31, 'HtmlGridSystem', '<p>Allows to implement the Bootstrap <strong>Grid system</strong></p>\n', 29, 1);
+(31, 'HtmlGridSystem', '<p>Allows to implement the Bootstrap <strong>Grid system</strong></p>\n', 29, 1),
+(32, 'HtmlLabel', NULL, 30, 1),
+(33, 'Prerequisite', '<h2>Injection of the service</h2>\n\n<p>It is necessary to inject the JQuery service at application startup, and instantiate Semantic :</p>\n\n<pre>\n<code class="language-php">$di-&gt;set("jquery",function(){\n    $jquery= new JsUtils(array("driver"=&gt;"Jquery"));\n    $jquery-&gt;semantic(new Semantic());//for Semantic UI\n    return $jquery;});\n</code></pre>\n', 31, 1),
+(34, 'Breadcrumb', 'A breadcrumb is used to show hierarchy between content', 36, 1),
+(36, 'Content', NULL, 36, 2),
+(37, 'Implementation', NULL, 31, 2),
+(38, 'HtmlMessage', '<p>A message displays information that explains nearby content</p>\n', 38, 1),
+(39, 'HtmlButton', '<p>A button indicates a possible user action</p>\n', 33, 1);
 
 -- --------------------------------------------------------
 
@@ -294,7 +338,7 @@ CREATE TABLE IF NOT EXISTS `translation` (
   `idElement` int(11) NOT NULL,
   `lang` varchar(3) NOT NULL,
   `text` text NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=300 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=301 DEFAULT CHARSET=utf8;
 
 --
 -- Contenu de la table `translation`
@@ -535,15 +579,16 @@ INSERT INTO `translation` (`id`, `name`, `idElement`, `lang`, `text`) VALUES
 (264, 'exemple.description', 123, 'fr', '<p>La fonction de&nbsp;<strong>callback&nbsp;</strong>est utilisée ici pour modifier la progressbar bootstrap.</p>\n\n<p><a class="btn btn-primary btAjax" data-ajax="1">Client 1</a> <a class="btn btn-primary btAjax" data-ajax="2">Client 2</a> <a class="btn btn-primary btAjax" data-ajax="3">Client 3</a></p>\n\n<div class="alert alert-info" id="ex3"><input class="form-control" id="name" type="text" value="" />\n<div class="progress">\n<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="[[part]]" class="progress-bar progress-bar-striped active" id="pb2" role="progressbar" style="width: 1%">1%</div>\n</div>\n</div>\n'),
 (265, 'exemple.description', 124, 'fr', '<p><a class="btn btn-primary" id="btJsonArray">Charger les clients</a> <a class="btn btn-primary" id="btShowMask">Afficher le masque</a></p>\n<script>$(''#btShowMask'').click(function() {$(''#repeat'').toggleClass(''hide'');});</script>\n\n<div class="alert alert-info" id="ex3">\n<div class="hide" id="repeat">\n<div class="row">\n<div class="col-xs-6 col-md-3"><a class="thumbnail" href="#"><img src="public/img/client/client[[id]].jpg" /> </a></div>\n\n<div class="col-xs-6 col-md-9"><input class="form-control" data-id="name" readonly="true" type="text" value="" />\n<div class="progress">\n<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="[[part]]" class="progress-bar progress-bar-striped active" role="progressbar" style="width: [[part]]%">[[part]]%</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n'),
 (266, 'exemple.description', 125, 'fr', '<p><a class="btn btn-primary btAjax2" data-ajax="1">Client 1</a> <a class="btn btn-primary btAjax2" data-ajax="2">Client 2</a></p>\n\n<div class="alert alert-info" id="ex2"><input class="form-control" id="name" type="text" value="" /></div>\n'),
-(291, 'index.header', 1, 'fr', 'Librairie jQuery, jQuery UI et Twitter Bootstrap pour le framework MVC Phalcon'),
-(292, 'index.header', 2, 'fr', 'Phalcon-jQuery est une librairie pour Phalcon® permettant de générer côté serveur des scripts clients ou des composants riches (Bootstrap, jQueryUI).'),
+(291, 'index.header', 1, 'fr', 'Librairie jQuery, jQuery UI, Twitter Bootstrap  et Semantic-UI pour le framework MVC Phalcon'),
+(292, 'index.header', 2, 'fr', 'Phalcon-jQuery est une librairie pour Phalcon® permettant de générer côté serveur des scripts clients ou des composants riches (Bootstrap, jQueryUI, Semantic-UI).'),
 (293, 'index.download', 1, 'fr', 'Télécharger'),
 (294, 'index.install', 1, 'fr', '<p>Ou</p><p class="lead">Installer via composer</p><p>Créer le fichier composer.json</p>'),
 (295, 'index.install', 2, 'fr', 'En ligne de commande :'),
 (296, 'index.menu', 1, 'fr', 'Accès rapide'),
 (297, 'index.search', 1, 'fr', 'Rechercher...'),
 (298, 'index.results', 1, 'fr', 'Aucun résultat correspondant.'),
-(299, 'index.home', 1, 'fr', 'accueil');
+(299, 'index.home', 1, 'fr', 'accueil'),
+(300, 'translate.info', 1, 'fr', 'La traduction de cette page est incomplète.');
 
 --
 -- Index pour les tables exportées
@@ -592,22 +637,22 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 -- AUTO_INCREMENT pour la table `domaine`
 --
 ALTER TABLE `domaine`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=30;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=49;
 --
 -- AUTO_INCREMENT pour la table `exemple`
 --
 ALTER TABLE `exemple`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=128;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=146;
 --
 -- AUTO_INCREMENT pour la table `rubrique`
 --
 ALTER TABLE `rubrique`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=32;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=40;
 --
 -- AUTO_INCREMENT pour la table `translation`
 --
 ALTER TABLE `translation`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=300;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=301;
 --
 -- Contraintes pour les tables exportées
 --
