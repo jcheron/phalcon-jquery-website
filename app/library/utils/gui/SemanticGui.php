@@ -89,6 +89,14 @@ class SemanticGui extends BaseGUI {
 		return $messageO;
 	}
 
+	public function replaceAlerts($html){
+		$startPoint = '{{';
+		$endPoint = '}}';
+		$separateur=':';
+		$result = preg_replace('/('.preg_quote($startPoint).')(.*?)('.preg_quote($separateur).')(.*)('.preg_quote($endPoint).')/sim', '<div class="ui $2 message icon"><i class="$2 icon"></i><div class="content"> $4</div></div>', $html);
+		return $result;
+	}
+
 	public function getMenuTabs($domaines) {
 		$translateEngine=$this->controller->getTranslateEngine();
 		$jquery=$this->controller->jquery;
@@ -139,4 +147,13 @@ class SemanticGui extends BaseGUI {
 		$bc->wrap("<div class='semantic-bread'>","</div>");
 		return $bc;
 	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see \utils\gui\BaseGUI::initPHP()
+	 */
+	public function initPHP() {
+		return '$semantic=$this->jquery->semantic();';
+	}
+
 }

@@ -76,6 +76,14 @@ class BootstrapGui extends BaseGUI {
 		return new HtmlAlert($id,$message,$style);
 	}
 
+	public function replaceAlerts($html){
+		$startPoint = '{{';
+		$endPoint = '}}';
+		$separateur=':';
+		$result = preg_replace('/('.preg_quote($startPoint).')(.*?)('.preg_quote($separateur).')(.*)('.preg_quote($endPoint).')/sim', '<div class="alert alert-$2"><span class="glyphicon glyphicon-$2-sign" aria-hidden="true"></span> $4</div>', $html);
+		return $result;
+	}
+
 	public function getMenuTabs($domaines) {
 		$jquery=$this->controller->jquery;
 		$translateEngine=$this->controller->getTranslateEngine();
@@ -117,4 +125,13 @@ class BootstrapGui extends BaseGUI {
 		$bc->autoGetOnClick("#response");
 		return $bc;
 	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see \utils\gui\BaseGUI::initPHP()
+	 */
+	public function initPHP() {
+		return '$bootstrap=$this->jquery->bootstrap();';
+	}
+
 }

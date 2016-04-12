@@ -111,6 +111,6 @@ $di->set("jquery",function(){
 	//$jquery->setAjaxLoader("Chargement...");
 	$jquery->bootstrap(new Ajax\Bootstrap());//Optional for Twitter Bootstrap
 	$jquery->semantic(new Ajax\Semantic());//Optional for Semantic-UI
-
+	$jquery->exec("$.fn.toggleText = function(t1, t2){this.text((this.text()==t1)?t2:t1);};",true);
 	return $jquery;
 });

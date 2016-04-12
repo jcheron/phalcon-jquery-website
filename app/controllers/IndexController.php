@@ -98,7 +98,7 @@ class IndexController extends ControllerBase{
     		$exemples=$rubrique->getExemples(['order' => 'ordre']);
     		foreach ($exemples as $exemple){
     			echo $this->replaceTitre($this->translateEngine->translate($exemple->getId(),"exemple.titre",$exemple->getTitre()));
-    			echo $this->replaceAlerts($this->translateEngine->translate($exemple->getId(),"exemple.description",$exemple->getDescription()));
+    			echo $this->gui->replaceAlerts($this->translateEngine->translate($exemple->getId(),"exemple.description",$exemple->getDescription()));
     			$header=NULL;
     			if(StrUtils::isNotNull($exemple->getHeader())){
     				$header=$this->translateEngine->translate($exemple->getId(),"exemple.header",$exemple->getHeader());
@@ -106,7 +106,7 @@ class IndexController extends ControllerBase{
 	    		$exec="";
 	    		if($exemple->getExecPHP()){
 	    			ob_start();
-	    			eval($exemple->getPhp());
+	    			eval($this->gui->initPHP().$exemple->getPhp());
 	    			$exec=ob_get_clean();
 	    		}
 	    		$footer=NULL;

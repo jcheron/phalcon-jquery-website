@@ -16,4 +16,6 @@ abstract class BaseGUI {
 	public abstract function getAnchorsDropDown($anchors);
 	public abstract function getAlert($id,$style,$message);
 	public abstract function getPanel($id,$content,$header,$footer);
+	public abstract function replaceAlerts($html);
+	public abstract function initPHP();
 }
