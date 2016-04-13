@@ -92,12 +92,14 @@ class IndexController extends ControllerBase{
     	echo $bc->compile($this->jquery);
     	ob_start();
     	foreach ($rubriques as $rubrique){
-    		echo "<h1>".$this->translateEngine->translate($rubrique->getId(),"rubrique.titre",$rubrique->getTitre())."</h1>";
+    		$titreRubrique=$this->translateEngine->translate($rubrique->getId(),"rubrique.titre",$rubrique->getTitre());
+    		$this->anchors[$titreRubrique]=array();
+    		echo "<h1>".$titreRubrique."</h1>";
     		echo $this->translateEngine->translate($rubrique->getId(),"rubrique.description",$rubrique->getDescription());
 
     		$exemples=$rubrique->getExemples(['order' => 'ordre']);
     		foreach ($exemples as $exemple){
-    			echo $this->replaceTitre($this->translateEngine->translate($exemple->getId(),"exemple.titre",$exemple->getTitre()));
+    			echo $this->replaceTitre($titreRubrique,$this->translateEngine->translate($exemple->getId(),"exemple.titre",$exemple->getTitre()));
     			echo $this->gui->replaceAlerts($this->translateEngine->translate($exemple->getId(),"exemple.description",$exemple->getDescription()));
     			$header=NULL;
     			if(StrUtils::isNotNull($exemple->getHeader())){
@@ -120,7 +122,7 @@ class IndexController extends ControllerBase{
 
     	$all=ob_get_contents();
     	ob_end_clean();
-    	if(count($this->anchors)>2){
+    	if($this->getAnchorsCount()>2){
     		echo "<br>";
     		$ddAnchors=$this->gui->getAnchorsDropDown($this->anchors);
     		echo $ddAnchors->compile($this->jquery);
@@ -161,6 +163,14 @@ class IndexController extends ControllerBase{
     	$this->view->disable();
     }
 
+    private function getAnchorsCount(){
+    	$count=0;
+    	foreach ($this->anchors as $anchors){
+    		$count+=sizeof($anchors);
+    	}
+    	return $count;
+    }
+
     private function int($s){return(int)preg_replace('/[^\d]*(\-?\d*).*/','$1',$s);}
 
     private function replaceAlerts($html){
@@ -171,11 +181,11 @@ class IndexController extends ControllerBase{
     	return $result;
     }
 
-    private function replaceTitre($titre){
+    private function replaceTitre($titreRubrique,$titre){
     	if(StrUtils::isNotNull($titre)){
-    		$num=count($this->anchors)+1;
+    		$num=count($this->anchors[$titreRubrique])+1;
 	    	$attr=StrUtils::cleanAttr($titre);
-	    	$this->anchors[$attr]=$num." - ".$titre;
+	    	$this->anchors[$titreRubrique][$attr]=$num." - ".$titre;
 	    	$titre="<a name='".$attr."' class='anchor'><span class='octicon octicon-link'></span></a>".$num." - ".$titre;
     	}
     	return "<h3>".$titre."</h3>";

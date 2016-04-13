@@ -23,12 +23,22 @@ class SemanticGui extends BaseGUI {
 	public function getAnchorsDropDown($anchors) {
 		$ddAnchors=new HtmlDropdown("anchors",$this->controller->getTranslateEngine()->translate(1,"index.menu","Quick access"));
     	$ddAnchors->asButton()->setColor(Color::ORANGE);
-    	foreach ($anchors as $kAnchor=>$vAnchor){
-    		$item=$ddAnchors->addItem($vAnchor);
-    		$item->setProperty("href", "#".$kAnchor);
+    	foreach ($anchors as $titre=>$vAnchors){
+    		$ddAnchors->addItem(HtmlDropdownItem::header($titre));
+    		foreach ($vAnchors as $kAnchor=>$vAnchor){
+    			$item=$ddAnchors->addItem($vAnchor,$vAnchor);
+    			$item->setProperty("href", "#".$kAnchor);
+    		}
+    	}
+    	if($ddAnchors->count()>8){
+    		//$ddAnchors->insertItem(HtmlDropdownItem::searchInput("Search..."));
+    		$ddAnchors->setFullTextSearch(true);
+    		$ddAnchors->asSearch();
+			$ddAnchors->addIcon("search",true,true);
     	}
     	return $ddAnchors;
 	}
+
 
 	public function getPanel($id, $content, $header, $footer) {
 		$semantic=$this->controller->jquery->semantic();

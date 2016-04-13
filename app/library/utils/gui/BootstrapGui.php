@@ -20,8 +20,11 @@ class BootstrapGui extends BaseGUI {
 		$ddAnchors=$this->controller->jquery->bootstrap()->htmlDropdown("anchors",$this->controller->getTranslateEngine()->translate(1,"index.menu","Quick access"));
     	$ddAnchors->setStyle("btn-default");
     	$ddAnchors->asButton();
-    	foreach ($anchors as $kAnchor=>$vAnchor){
-    		$ddAnchors->addItem($vAnchor,"#".$kAnchor);
+    	foreach ($anchors as $titre=>$vAnchors){
+    		$ddAnchors->addHeader($titre);
+    		foreach ($vAnchors as $kAnchor=>$vAnchor){
+    			$ddAnchors->addItem($vAnchor,"#".$kAnchor);
+    		}
     	}
     	return $ddAnchors;
 	}
