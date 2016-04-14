@@ -13,7 +13,7 @@ use Ajax\semantic\html\elements\HtmlSegmentGroups;
 use Ajax\semantic\html\elements\HtmlHeader;
 use Ajax\semantic\html\base\constants\Emphasis;
 use Ajax\semantic\html\modules\HtmlDropdown;
-use Ajax\semantic\html\collections\HtmlMenu;
+use Ajax\semantic\html\collections\menus\HtmlMenu;
 use Ajax\semantic\html\content\HtmlDropdownItem;
 use Ajax\semantic\html\collections\HtmlMessage;
 use Ajax\semantic\html\base\constants\Color;
