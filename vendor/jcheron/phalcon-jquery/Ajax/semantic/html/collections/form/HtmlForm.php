@@ -4,7 +4,6 @@ namespace Ajax\semantic\html\collections\form;
 
 use Ajax\semantic\html\base\HtmlSemCollection;
 use Ajax\semantic\html\elements\HtmlHeader;
-use Ajax\service\JString;
 /**
  * Semantic Form component
  * @see http://semantic-ui.com/collections/form.html
@@ -46,10 +45,6 @@ class HtmlForm extends HtmlSemCollection{
 		}
 		if(isset($label))
 		 $fields=new HtmlFormField("", $fields,$label);
-		/*if(JString::isNotNull($fields->getName())){
-			if($field->getLabel()!=null)
-				$field->getLabel()->setProperty("for",$fields->getName());
-		}*/
 		$this->addItem($fields);
 		return $fields;
 	}

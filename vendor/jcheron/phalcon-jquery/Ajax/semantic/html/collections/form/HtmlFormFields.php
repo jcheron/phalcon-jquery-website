@@ -48,10 +48,12 @@ class HtmlFormFields extends HtmlSemCollection {
 	}
 
 	public function setInline(){
+		$this->_equalWidth=false;
 		$this->addToProperty("class", "inline");
 	}
 
 	public function setGrouped(){
+		$this->_equalWidth=false;
 		$this->addToProperty("class", "grouped");
 	}
 

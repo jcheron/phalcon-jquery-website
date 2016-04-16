@@ -74,14 +74,4 @@ class HtmlFormField extends HtmlSemDoubleElement {
 	public function setError(){
 		return $this->addToProperty("class", "error");
 	}
-
-	public function setInline(){
-		$this->removePropertyValue("class", "field");
-		return $this->addToProperty("class", "inline fields");
-	}
-
-	public function setGrouped(){
-		$this->removePropertyValue("class", "field");
-		return $this->addToProperty("class", "grouped fields");
-	}
 }
