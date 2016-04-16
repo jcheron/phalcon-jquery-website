@@ -4,6 +4,7 @@ namespace Ajax\semantic\html\collections\form;
 
 use Ajax\semantic\html\base\HtmlSemCollection;
 use Ajax\semantic\html\elements\HtmlHeader;
+use Ajax\service\JString;
 /**
  * Semantic Form component
  * @see http://semantic-ui.com/collections/form.html
@@ -31,17 +32,26 @@ class HtmlForm extends HtmlSemCollection{
 	}
 
 	public function addFields($fields,$label=NULL){
-		if(\is_array($fields)===false){
-			$fields = \func_get_args();
-			$end=\end($fields);
-			if(\is_string($end)){
-				$label=$end;
-				\array_pop($fields);
+		if(!$fields instanceof HtmlFormFields){
+			if(\is_array($fields)===false){
+				$fields = \func_get_args();
+				$end=\end($fields);
+				if(\is_string($end)){
+					$label=$end;
+					\array_pop($fields);
+				}else $label=NULL;
 			}
+			$this->_fields=\array_merge($this->_fields,$fields);
+			$fields=new HtmlFormFields("fields-".$this->identifier."-".$this->count(),$fields);
 		}
-		$this->_fields=\array_merge($this->_fields,$fields);
-		$field=new HtmlFormField("", new HtmlFormFields("fields-".$this->identifier."-".$this->count(),$fields),$label);
-		return $this->addItem($field);
+		if(isset($label))
+		 $fields=new HtmlFormField("", $fields,$label);
+		/*if(JString::isNotNull($fields->getName())){
+			if($field->getLabel()!=null)
+				$field->getLabel()->setProperty("for",$fields->getName());
+		}*/
+		$this->addItem($fields);
+		return $fields;
 	}
 
 	public function addItem($item){
@@ -59,5 +69,22 @@ class HtmlForm extends HtmlSemCollection{
 			$field=$this->_fields[$index];
 		}
 		return $field;
+	}
+
+	/**
+	 * automatically divide fields to be equal width
+	 * @return \Ajax\semantic\html\collections\form\HtmlForm
+	 */
+	public function setEqualWidth(){
+		return $this->addToProperty("class", "equal width");
+	}
+
+	/**
+	 * Adds a field (alias for addItem)
+	 * @param HtmlFormField $field
+	 * @return \Ajax\common\html\HtmlDoubleElement
+	 */
+	public function addField($field){
+		return $this->addItem($field);
 	}
 }
