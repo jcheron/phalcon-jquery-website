@@ -71,7 +71,7 @@ class SemanticGui extends BaseGUI {
     		}
     		return $item;
     	});
-    	$menu->getItem(0)->addToProperty("class","navbar-brand")->setProperty("href",$url->get("Index"));
+    	$menu->getItem(0)->addToProperty("class","navbar-brand")->setProperty("href",$url->get("index"));
     	$menu->setInverted()->setSize(Size::LARGE);
     	$input=new HtmlInput("search","search","",$translateEngine->translate(1,"index.search","Search..."));
     	$input->addIcon("search",Direction::RIGHT)->asLink();

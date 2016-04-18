@@ -39,7 +39,7 @@ class BootstrapGui extends BaseGUI {
 		$jquery=$this->controller->jquery;
     	$navbar=$jquery->bootstrap()->htmlNavbar("navbarJS");
     	$navbar->setClass("");
-    	$navbar->fromArray(array("brand"=>$translateEngine->translate(1,"index.home","home"),"brandHref"=>$url->get("Index")));
+    	$navbar->fromArray(array("brand"=>$translateEngine->translate(1,"index.home","home"),"brandHref"=>$url->get("index")));
     	$domaines=\Domaine::find("isNull(idParent)");
     	$navbar->fromDatabaseObjects($domaines, function($domaine) use ($url,$translateEngine) {
     		$libelle=$translateEngine->translate($domaine->getId(),"domaine.libelle",$domaine->getLibelle());

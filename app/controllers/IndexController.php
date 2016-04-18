@@ -13,7 +13,7 @@ class IndexController extends ControllerBase{
 
 	public function initialize(){
 		parent::initialize();
-		$actionName=$this->dispatcher->getActionName();
+		$actionName=strtolower($this->dispatcher->getActionName());
 		if($actionName==="index" || $actionName==="bootstrap"){
 			$this->session->set("framework", "bootstrap");
 		}elseif ($actionName==="semantic"){
