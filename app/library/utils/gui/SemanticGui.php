@@ -166,4 +166,15 @@ class SemanticGui extends BaseGUI {
 		return '$semantic=$this->jquery->semantic();';
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @see \utils\gui\BaseGUI::backButton()
+	 */
+	public function backButton() {
+		$jquery=$this->controller->jquery;
+		$result=$jquery->semantic()->htmlButton("back");
+		$result->onClick("$('html, body').animate({scrollTop: 0}, 700);return false;");
+		$result->asIcon("angle double up")->setCircular()->setColor(Color::ORANGE);
+		return $result;
+	}
 }

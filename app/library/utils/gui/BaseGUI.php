@@ -18,4 +18,5 @@ abstract class BaseGUI {
 	public abstract function getPanel($id,$content,$header,$footer);
 	public abstract function replaceAlerts($html);
 	public abstract function initPHP();
+	public abstract function backButton();
 }

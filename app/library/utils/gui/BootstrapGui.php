@@ -137,4 +137,16 @@ class BootstrapGui extends BaseGUI {
 		return '$bootstrap=$this->jquery->bootstrap();';
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @see \utils\gui\BaseGUI::backButton()
+	 */
+	public function backButton() {
+		$jquery=$this->controller->jquery;
+		$result=$jquery->bootstrap()->htmlButton("back");
+		$result->onClick("$('html, body').animate({scrollTop: 0}, 700);return false;");
+		$result->addGlyph("glyphicon-chevron-up");
+		return $result;
+	}
+
 }

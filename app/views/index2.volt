@@ -42,6 +42,7 @@
 			</ul>
 		</div>
 	</div>
+	{{ q["back"] }}
 	{{ script_foot }}
 	{{ javascript_include("js/lib/prism.js") }}
 </body>

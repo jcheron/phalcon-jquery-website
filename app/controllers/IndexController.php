@@ -54,6 +54,8 @@ class IndexController extends ControllerBase{
     	$this->session->remove("idDomaine");
     	if(!$partial){
     		$this->gui->getMainMenu();
+    		$this->gui->backButton();
+    		$this->jquery->exec('var amountScrolled = 300;$(window).scroll(function() {if ( $(window).scrollTop() > amountScrolled ) {$("#back").fadeIn("slow");} else {$("#back").fadeOut("slow");}});',true);
     	}
     	$expr=array();
     	$expr[]=$this->translateEngine->translate(1,"index.header","jQuery, jQuery UI, Twitter Bootstrap and Semantic-UI library for phalcon MVC Framework");
