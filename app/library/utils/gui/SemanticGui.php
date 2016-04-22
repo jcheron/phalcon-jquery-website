@@ -110,7 +110,9 @@ class SemanticGui extends BaseGUI {
 	public function getMenuTabs($domaines) {
 		$translateEngine=$this->controller->getTranslateEngine();
 		$jquery=$this->controller->jquery;
-    	$tabs=$jquery->semantic()->htmlMenu("tabs");
+		$sticky=$jquery->semantic()->htmlSticky("tabs");
+		$sticky->setContext("#response");
+    	$tabs=$jquery->semantic()->htmlMenu("tabs-menu");
     	$tabs->setVertical()->setInverted();
     	$tabs->fromDatabaseObjects($domaines, function($domaine) use ($translateEngine,$tabs){
     		if(count($domaine->getDomaines())>0){
@@ -139,7 +141,8 @@ class SemanticGui extends BaseGUI {
     		}
     	});
     	$jquery->getOnClick("#tabs a.item", "Index/content/","#response");
-    	return $tabs;
+    	$sticky->setContent($tabs);
+    	return $sticky;
 	}
 
 	public function getBreadcrumbs($domaines) {

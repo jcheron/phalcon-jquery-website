@@ -136,7 +136,7 @@ class IndexController extends ControllerBase{
     	}
     	echo $all;
 
-    	$this->jquery->exec("Prism.highlightAll();",true);
+    	$this->jquery->exec("Prism.highlightAll();$('.ui.sticky').sticky('refresh');",true);
     	if($param1=="main")
     		$this->jquery->get("index/menu/".$id,".col-md-3");
     	$this->jquery->getOnClick("#response a.menu", "index/content/","#response");
