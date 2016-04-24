@@ -118,7 +118,7 @@ class BootstrapGui extends BaseGUI {
 
 	public function getBreadcrumbs($domaines) {
 		$jquery=$this->controller->jquery;
-		$bc=$jquery->bootstrap()->htmlBreadcrumbs("bc",array(array("content"=>"Index","data-ajax"=>"Index")),true,0,function ($e){return $e->getProperty("data-ajax");});
+		$bc=$jquery->bootstrap()->htmlBreadcrumbs("bc",array(array("content"=>"Index","data-ajax"=>"index")),true,0,function ($e){return $e->getProperty("data-ajax");});
 		$bc->addGlyph("glyphicon-home",0);
 		$bc->fromDatabaseObjects($domaines, function($domaine){
 			$lnk= new HtmlLink("bc-".$domaine->getLibelle(),"",$domaine->getLibelle());

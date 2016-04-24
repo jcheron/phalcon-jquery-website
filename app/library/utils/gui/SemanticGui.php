@@ -147,7 +147,7 @@ class SemanticGui extends BaseGUI {
 
 	public function getBreadcrumbs($domaines) {
 		$jquery=$this->controller->jquery;
-		$bc=$jquery->semantic()->htmlBreadcrumb("bc",array(array("content"=>"Index","href"=>$this->controller->url->get("Index"))),true,0,function ($e){return $e->getProperty("data-ajax");});
+		$bc=$jquery->semantic()->htmlBreadcrumb("bc",array(array("content"=>"Index","href"=>$this->controller->url->get("index"))),true,0,function ($e){return $e->getProperty("data-ajax");});
 		$bc->setContentDivider("<i class='right angle icon divider'></i>");
 		$bc->addIcon("home",0);
 		$bc->fromDatabaseObjects($domaines, function($domaine){
