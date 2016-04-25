@@ -19,6 +19,7 @@ use Ajax\semantic\html\base\constants\CheckboxType;
 use Ajax\semantic\html\elements\HtmlReveal;
 use Ajax\semantic\html\base\constants\RevealType;
 use Ajax\semantic\html\base\constants\Direction;
+use Ajax\semantic\html\elements\HtmlStep;
 
 
 trait SemanticHtmlElementsTrait {
@@ -177,5 +178,9 @@ trait SemanticHtmlElementsTrait {
 	 */
 	public function htmlReveal($identifier, $visibleContent,$hiddenContent,$type=RevealType::FADE,$attributeType=NULL){
 		return $this->addHtmlComponent(new HtmlReveal($identifier,$visibleContent,$hiddenContent,$type,$attributeType));
+	}
+
+	public function htmlStep($identifier, $steps=array()){
+		return $this->addHtmlComponent(new HtmlStep($identifier,$steps));
 	}
 }

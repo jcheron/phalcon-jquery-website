@@ -64,7 +64,7 @@ class IndexController extends ControllerBase{
     	$expr[]=$this->translateEngine->translate(1,"index.install","<p>Or</p><p class='lead'>Install with Composer</p><p>Create the file composer.json</p>");
     	$expr[]=$this->translateEngine->translate(2,"index.install","Enter in the console");
 		$this->jquery->compile($this->view);
-		$this->view->setVars(array("jquery"=>$this->jquery->genCDNs(),"expr"=>$expr,"lang"=>$this->translateEngine->getLanguage(),"hasScript"=>$hasScript));
+		$this->view->setVars(array("expr"=>$expr,"lang"=>$this->translateEngine->getLanguage(),"hasScript"=>$hasScript));
     }
 
     private function _getArrayFromDomaine($domaine,&$array){

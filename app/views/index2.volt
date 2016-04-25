@@ -6,9 +6,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="icon" type="image/x-icon" href="public/img/favicon.ico" />
-		{{ javascript_include("https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js") }}
-		{{ javascript_include("js/semantic.min.js") }}
-		{{ stylesheet_link("css/semantic.min.css") }}
+		{{ stylesheet_link("https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css") }}
 		{{ stylesheet_link("css/styles.css") }}
 		{{ stylesheet_link("css/prism.css") }}
 	</head>
@@ -43,6 +41,8 @@
 		</div>
 	</div>
 	{{ q["back"] }}
+	{{ javascript_include("https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js") }}
+	{{ javascript_include("https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js") }}
 	{{ script_foot }}
 	{{ javascript_include("js/lib/prism.js") }}
 </body>
