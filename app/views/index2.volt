@@ -41,7 +41,7 @@
 		</div>
 	</div>
 	{{ q["back"] }}
-	{{ javascript_include("https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js") }}
+	{{ javascript_include("https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js") }}
 	{{ javascript_include("https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js") }}
 	{{ script_foot }}
 	{{ javascript_include("js/lib/prism.js") }}

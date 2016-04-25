@@ -41,8 +41,8 @@
 		</div>
 	</div>
 	{{ q["back"] }}
-	{{ javascript_include("https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js") }}
-	{{ javascript_include("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js") }}
+	{{ javascript_include("https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js") }}
+	{{ javascript_include("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js") }}
 	{{ script_foot }}
 	{{ javascript_include("js/lib/prism.js") }}
 </body>
