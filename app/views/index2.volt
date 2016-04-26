@@ -8,7 +8,7 @@
 		<link rel="icon" type="image/x-icon" href="public/img/favicon.ico" />
 		{{ stylesheet_link("https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css") }}
 		{{ stylesheet_link("css/styles.css") }}
-		{{ stylesheet_link("css/prism.css") }}
+		{{ stylesheet_link("https://cdnjs.cloudflare.com/ajax/libs/prism/1.4.1/themes/prism-okaidia.min.css") }}
 	</head>
 	<body>
 	<header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">

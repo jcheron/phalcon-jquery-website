@@ -6,6 +6,8 @@ use Ajax\semantic\html\base\HtmlSemCollection;
 use Ajax\semantic\html\content\HtmlStepItem;
 use Ajax\JsUtils;
 use Phalcon\Mvc\View;
+use Ajax\common\html\HtmlDoubleElement;
+use Ajax\semantic\html\base\constants\Side;
 
 class HtmlStep extends HtmlSemCollection{
 	protected $_activeStep;
@@ -80,5 +82,17 @@ class HtmlStep extends HtmlSemCollection{
 		return $this;
 	}
 
+	public function setAttached($side="",HtmlDoubleElement $toElement=NULL){
+		if(isset($toElement)){
+			$toElement->addToPropertyCtrl("class", "attached",array("attached"));
+		}
+		return $this->addToPropertyCtrl("class", $side." attached",Side::getConstantValues("attached"));
+	}
 
+	public function asLink(){
+		foreach ($this->content as $step){
+			$step->asLink();
+		}
+		return $this;
+	}
 }
