@@ -1,56 +1,53 @@
 <?php
+class Client extends \Phalcon\Mvc\Model {
+	
+	/**
+	 *
+	 * @var integer
+	 */
+	protected $id;
+	
+	/**
+	 *
+	 * @var string
+	 */
+	protected $name;
+	
+	/**
+	 *
+	 * @var integer
+	 */
+	protected $part;
+	protected $email;
 
-class Client extends \Phalcon\Mvc\Model
-{
+	/**
+	 * Returns table name mapped in the model.
+	 *
+	 * @return string
+	 */
+	public function getSource() {
+		return 'client';
+	}
 
-    /**
-     *
-     * @var integer
-     */
-    protected  $id;
+	/**
+	 * Allows to query a set of records that match the specified conditions
+	 *
+	 * @param mixed $parameters
+	 * @return Client[]
+	 */
+	public static function find($parameters=null) {
+		return parent::find($parameters);
+	}
 
-    /**
-     *
-     * @var string
-     */
-    protected $name;
-
-    /**
-     *
-     * @var integer
-     */
-    protected  $part;
-    /**
-     * Returns table name mapped in the model.
-     *
-     * @return string
-     */
-    public function getSource()
-    {
-        return 'client';
-    }
-
-    /**
-     * Allows to query a set of records that match the specified conditions
-     *
-     * @param mixed $parameters
-     * @return Client[]
-     */
-    public static function find($parameters = null)
-    {
-        return parent::find($parameters);
-    }
-
-    /**
-     * Allows to query the first record that match the specified conditions
-     *
-     * @param mixed $parameters
-     * @return Client
-     */
-    public static function findFirst($parameters = null)
-    {
-        return parent::findFirst($parameters);
-    }
+	/**
+	 * Allows to query the first record that match the specified conditions
+	 *
+	 * @param mixed $parameters
+	 * @return Client
+	 */
+	public static function findFirst($parameters=null) {
+		return parent::findFirst($parameters);
+	}
 
 	public function getId() {
 		return $this->id;
@@ -69,7 +66,8 @@ class Client extends \Phalcon\Mvc\Model
 		$this->name=$name;
 		return $this;
 	}
-	public function toString(){
+
+	public function toString() {
 		return $this->name;
 	}
 
@@ -82,5 +80,12 @@ class Client extends \Phalcon\Mvc\Model
 		return $this;
 	}
 
+	public function getEmail() {
+		return $this->email;
+	}
 
+	public function setEmail($email) {
+		$this->email=$email;
+		return $this;
+	}
 }
