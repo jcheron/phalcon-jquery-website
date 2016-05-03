@@ -44,8 +44,10 @@ class SemanticGui extends BaseGUI {
 		if (isset($header)) {
 			$hd=new HtmlHeader("header-" . $id, Size::MINI, $header, "content");
 			$sg=$semantic->htmlSegmentGroups($id, array ($hd,$content,$footer ));
+			$sg->getItem(1)->addToProperty("class", "example");
 		} else {
 			$sg=$semantic->htmlSegmentGroups($id, array ($content,$footer ));
+			$sg->getItem(0)->addToProperty("class", "example");
 		}
 		$sg->getItem($sg->count() - 1)->setEmphasis(Emphasis::SECONDARY);
 		return $sg;

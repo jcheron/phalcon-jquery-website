@@ -7,6 +7,7 @@ use Ajax\semantic\html\content\table\HtmlTableContent;
 use Ajax\semantic\html\base\constants\Variation;
 use Ajax\JsUtils;
 use Phalcon\Mvc\View;
+use Ajax\service\JArray;
 
 /**
  * Semantic HTML Table component
@@ -227,8 +228,7 @@ class HtmlTable extends HtmlSemDoubleElement {
 	 * @see \Ajax\semantic\html\base\HtmlSemDoubleElement::compile()
 	 */
 	public function compile(JsUtils $js=NULL, View $view=NULL) {
-		$newArray=array ("thead" => @$this->content["thead"],"tbody" => @$this->content["tbody"],"tfoot" => @$this->content["tfoot"] );
-		$this->content=$newArray;
+		$this->content=JArray::sortAssociative($this->content, [ "thead","tbody","tfoot" ]);
 		if ($this->propertyContains("class", "sortable")) {
 			$this->addEvent("execute", "$('#" . $this->identifier . "').tablesort();");
 		}

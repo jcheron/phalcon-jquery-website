@@ -131,9 +131,9 @@ class HtmlTableContent extends HtmlSemCollection {
 		}
 		if (JArray::dimension($values) == 1 && $isArray)
 			$values=[ $values ];
-		
+
 		$count=\min(\sizeof($values), $count);
-		
+
 		for($i=0; $i < $count; $i++) {
 			$row=$this->content[$i];
 			$row->setValues($values[$i]);
@@ -245,6 +245,11 @@ class HtmlTableContent extends HtmlSemCollection {
 		$this->content[0]->getItem($colIndex)->addToProperty("class", "sorted ascending");
 	}
 
+	/**
+	 * @param mixed $callback
+	 * @param string $format
+	 * @return \Ajax\semantic\html\content\table\HtmlTableContent
+	 */
 	public function conditionalCellFormat($callback, $format) {
 		$rows=$this->content;
 		foreach ( $rows as $row ) {
@@ -253,6 +258,11 @@ class HtmlTableContent extends HtmlSemCollection {
 		return $this;
 	}
 
+	/**
+	 * @param mixed $callback
+	 * @param string $format
+	 * @return \Ajax\semantic\html\content\table\HtmlTableContent
+	 */
 	public function conditionalRowFormat($callback, $format) {
 		$rows=$this->content;
 		foreach ( $rows as $row ) {
@@ -261,6 +271,10 @@ class HtmlTableContent extends HtmlSemCollection {
 		return $this;
 	}
 
+	/**
+	 * @param mixed $callback
+	 * @return \Ajax\semantic\html\content\table\HtmlTableContent
+	 */
 	public function applyCells($callback) {
 		$rows=$this->content;
 		foreach ( $rows as $row ) {
@@ -269,6 +283,10 @@ class HtmlTableContent extends HtmlSemCollection {
 		return $this;
 	}
 
+	/**
+	 * @param mixed $callback
+	 * @return \Ajax\semantic\html\content\table\HtmlTableContent
+	 */
 	public function applyRows($callback) {
 		$rows=$this->content;
 		foreach ( $rows as $row ) {
