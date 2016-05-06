@@ -54,4 +54,12 @@ class SearchCategory {
 		$this->results=$results;
 		return $this;
 	}
+
+	public function search($query, $field="title") {
+		$result=$this->results->search($query, $field);
+		if ($result !== false) {
+			return new SearchCategory($this->id, $this->name, $result);
+		}
+		return false;
+	}
 }

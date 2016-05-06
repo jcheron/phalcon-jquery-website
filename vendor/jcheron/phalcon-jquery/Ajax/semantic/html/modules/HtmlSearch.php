@@ -16,6 +16,7 @@ class HtmlSearch extends HtmlSemDoubleElement {
 		parent::__construct("search-" . $identifier, "div", "ui search", array ());
 		$this->createField($placeholder, $icon);
 		$this->createResult();
+		$this->_params["type"]="standard";
 	}
 
 	private function createField($placeholder=NULL, $icon=NULL) {
@@ -44,6 +45,20 @@ class HtmlSearch extends HtmlSemDoubleElement {
 		return $this;
 	}
 
+	public function setUrl($url) {
+		$this->_params["apiSettings"]="%{url: %quote%" . $url . "%quote%}%";
+		return $this;
+	}
+
+	public function setType($type) {
+		$this->_params["type"]=$type;
+		return $this;
+	}
+
+	public function getType() {
+		return $this->_params["type"];
+	}
+
 	private function resultsToJson() {
 		$result=\json_encode($this->_elements);
 		return $result;
@@ -53,7 +68,8 @@ class HtmlSearch extends HtmlSemDoubleElement {
 		$searchFields=\json_encode($this->_searchFields);
 		$searchFields=str_ireplace("\"", "%quote%", $searchFields);
 		$this->_params["searchFields"]="%" . $searchFields . "%";
-		$this->_params["source"]="%content%";
+		if ($this->getType() === "standard")
+			$this->_params["source"]="%content%";
 		$this->addEvent("beforeExecute", "var content=" . $this->resultsToJson() . ";");
 		if (isset($this->_bsComponent) === false) {
 			$this->_bsComponent=$js->semantic()->search("#" . $this->identifier, $this->_params);

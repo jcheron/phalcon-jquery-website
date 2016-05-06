@@ -17,6 +17,14 @@ class SearchCategories {
 	}
 
 	public function search($query, $field="title") {
+		$result=array ();
+		foreach ( $this->categories as $category ) {
+			$r=$category->search($query, $field);
+			if ($r !== false)
+				$result[]=$r;
+		}
+		$this->categories=$result;
+		return $this;
 	}
 
 	public function __toString() {

@@ -15,11 +15,15 @@ class JsonController extends ControllerBase {
 		print_r(json_encode($clients->toArray(), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE));
 	}
 
-	public function searchAction() {
+	public function searchAction($query=NULL) {
 		$this->view->disable();
 		$this->response->setContentType('application/json', 'UTF-8');
 		$search=new SearchCategories();
 		$search->add([ [ "title" => "France" ],[ "title" => "Germany" ],[ "title" => "Great Britain" ] ], "Europe");
-		echo ($search);
+		$search->add([ "Afghanistan","Armenia","Azerbaijan" ], "Asia");
+		if (isset($query))
+			echo $search->search($query);
+		else
+			echo ($search);
 	}
 }

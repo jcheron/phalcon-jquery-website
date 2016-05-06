@@ -26,6 +26,11 @@ class Search extends SimpleExtComponent {
 		$this->params["searchFields"]=$fields;
 		return $this;
 	}
+
+	public function setApiSettings($value) {
+		$this->params["apiSettings"]=$value;
+		return $this;
+	}
 	
 	// TODO other events implementation
 }

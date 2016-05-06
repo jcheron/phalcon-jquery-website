@@ -2,6 +2,8 @@
 
 namespace Ajax\semantic\components\search;
 
+use Ajax\service\JArray;
+
 class SearchResults {
 	private $elements;
 
@@ -17,18 +19,34 @@ class SearchResults {
 	}
 
 	public function addResult($object) {
-		$this->_elements[]=$object;
+		$this->elements[]=$object;
 		return $this;
 	}
 
 	public function addResults($objects) {
-		$this->elements=\array_merge($this->elements, $objects);
+		if (JArray::dimension($objects) === 1) {
+			foreach ( $objects as $object ) {
+				$this->addResult([ "title" => $object ]);
+			}
+		} else
+			$this->elements=\array_merge($this->elements, $objects);
 		return $this;
 	}
 
 	public function search($query, $field="title") {
+		$result=array ();
 		foreach ( $this->elements as $element ) {
+			if (\array_key_exists($field, $element)) {
+				$value=$element[$field];
+				if (\stripos($value, $query) !== false) {
+					$result[]=$element;
+				}
+			}
 		}
+		if (\sizeof($result) > 0) {
+			return $result;
+		}
+		return false;
 	}
 
 	public function __toString() {
