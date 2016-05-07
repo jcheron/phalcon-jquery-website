@@ -1,6 +1,8 @@
 <?php
 use Phalcon\Mvc\View;
 use Ajax\semantic\components\search\SearchCategories;
+use Ajax\semantic\components\search\SearchResults;
+use Ajax\semantic\components\search\SearchCategory;
 class JsonController extends ControllerBase {
 
 	public function jsonAction($index) {
@@ -25,5 +27,35 @@ class JsonController extends ControllerBase {
 			echo $search->search($query);
 		else
 			echo ($search);
+	}
+
+	public function countriesAction($query=NULL) {
+		$this->view->disable();
+		$this->response->setContentType('application/json', 'UTF-8');
+		$search=new SearchResults();
+		if (isset($query) === false) {
+			$countries=Countries::find();
+		} else {
+			$countries=Countries::find("countryName like '%" . $query . "%'");
+		}
+		$search->fromDatabaseObjects($countries, function ($country) {
+			return $country->getCountryName();
+		});
+		echo $search->getResponse();
+	}
+
+	public function countriesCatAction($query=NULL) {
+		$this->view->disable();
+		$this->response->setContentType('application/json', 'UTF-8');
+		$search=new SearchCategories();
+		if (isset($query) === false) {
+			$countries=Countries::find();
+		} else {
+			$countries=Countries::find("countryName like '%" . $query . "%'");
+		}
+		$search->fromDatabaseObjects($countries, function ($country) use($search) {
+			$search->add($country->getCountryName(), $country->getContinentName());
+		});
+		echo $search->getResponse();
 	}
 }
