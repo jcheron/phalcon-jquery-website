@@ -1,154 +1,180 @@
 <?php
+class Countries extends \Phalcon\Mvc\Model {
+	
+	/**
+	 *
+	 * @var integer
+	 */
+	protected $id;
+	
+	/**
+	 *
+	 * @var string
+	 */
+	protected $countryCode;
+	
+	/**
+	 *
+	 * @var string
+	 */
+	protected $countryName;
+	
+	/**
+	 *
+	 * @var string
+	 */
+	protected $continentName;
+	
+	/**
+	 *
+	 * @var number
+	 */
+	protected $population;
+	
+	/**
+	 *
+	 * @var string
+	 */
+	protected $languages;
+	protected $capital;
 
-class Countries extends \Phalcon\Mvc\Model
-{
+	/**
+	 * Method to set the value of field id
+	 *
+	 * @param integer $id
+	 * @return $this
+	 */
+	public function setId($id) {
+		$this->id=$id;
+		
+		return $this;
+	}
 
-    /**
-     *
-     * @var integer
-     */
-    protected $id;
+	/**
+	 * Method to set the value of field countryCode
+	 *
+	 * @param string $countryCode
+	 * @return $this
+	 */
+	public function setCountryCode($countryCode) {
+		$this->countryCode=$countryCode;
+		
+		return $this;
+	}
 
-    /**
-     *
-     * @var string
-     */
-    protected $countryCode;
+	/**
+	 * Method to set the value of field countryName
+	 *
+	 * @param string $countryName
+	 * @return $this
+	 */
+	public function setCountryName($countryName) {
+		$this->countryName=$countryName;
+		
+		return $this;
+	}
 
-    /**
-     *
-     * @var string
-     */
-    protected $countryName;
+	/**
+	 * Method to set the value of field continentName
+	 *
+	 * @param string $continentName
+	 * @return $this
+	 */
+	public function setContinentName($continentName) {
+		$this->continentName=$continentName;
+		
+		return $this;
+	}
 
-    /**
-     *
-     * @var string
-     */
-    protected $continentName;
+	/**
+	 * Returns the value of field id
+	 *
+	 * @return integer
+	 */
+	public function getId() {
+		return $this->id;
+	}
 
-    /**
-     * Method to set the value of field id
-     *
-     * @param integer $id
-     * @return $this
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
+	/**
+	 * Returns the value of field countryCode
+	 *
+	 * @return string
+	 */
+	public function getCountryCode() {
+		return $this->countryCode;
+	}
 
-        return $this;
-    }
+	/**
+	 * Returns the value of field countryName
+	 *
+	 * @return string
+	 */
+	public function getCountryName() {
+		return $this->countryName;
+	}
 
-    /**
-     * Method to set the value of field countryCode
-     *
-     * @param string $countryCode
-     * @return $this
-     */
-    public function setCountryCode($countryCode)
-    {
-        $this->countryCode = $countryCode;
+	/**
+	 * Returns the value of field continentName
+	 *
+	 * @return string
+	 */
+	public function getContinentName() {
+		return $this->continentName;
+	}
 
-        return $this;
-    }
+	/**
+	 * Returns table name mapped in the model.
+	 *
+	 * @return string
+	 */
+	public function getSource() {
+		return 'countries';
+	}
 
-    /**
-     * Method to set the value of field countryName
-     *
-     * @param string $countryName
-     * @return $this
-     */
-    public function setCountryName($countryName)
-    {
-        $this->countryName = $countryName;
+	/**
+	 * Allows to query a set of records that match the specified conditions
+	 *
+	 * @param mixed $parameters
+	 * @return Countries[]
+	 */
+	public static function find($parameters=null) {
+		return parent::find($parameters);
+	}
 
-        return $this;
-    }
+	/**
+	 * Allows to query the first record that match the specified conditions
+	 *
+	 * @param mixed $parameters
+	 * @return Countries
+	 */
+	public static function findFirst($parameters=null) {
+		return parent::findFirst($parameters);
+	}
 
-    /**
-     * Method to set the value of field continentName
-     *
-     * @param string $continentName
-     * @return $this
-     */
-    public function setContinentName($continentName)
-    {
-        $this->continentName = $continentName;
+	public function getPopulation() {
+		return $this->population;
+	}
 
-        return $this;
-    }
+	public function setPopulation($population) {
+		$this->population=$population;
+		return $this;
+	}
 
-    /**
-     * Returns the value of field id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+	public function getLanguages() {
+		return $this->languages;
+	}
 
-    /**
-     * Returns the value of field countryCode
-     *
-     * @return string
-     */
-    public function getCountryCode()
-    {
-        return $this->countryCode;
-    }
+	public function setLanguages($languages) {
+		$this->languages=$languages;
+		return $this;
+	}
 
-    /**
-     * Returns the value of field countryName
-     *
-     * @return string
-     */
-    public function getCountryName()
-    {
-        return $this->countryName;
-    }
+	public function getCapital() {
+		return $this->capital;
+	}
 
-    /**
-     * Returns the value of field continentName
-     *
-     * @return string
-     */
-    public function getContinentName()
-    {
-        return $this->continentName;
-    }
-
-    /**
-     * Returns table name mapped in the model.
-     *
-     * @return string
-     */
-    public function getSource()
-    {
-        return 'countries';
-    }
-
-    /**
-     * Allows to query a set of records that match the specified conditions
-     *
-     * @param mixed $parameters
-     * @return Countries[]
-     */
-    public static function find($parameters = null)
-    {
-        return parent::find($parameters);
-    }
-
-    /**
-     * Allows to query the first record that match the specified conditions
-     *
-     * @param mixed $parameters
-     * @return Countries
-     */
-    public static function findFirst($parameters = null)
-    {
-        return parent::findFirst($parameters);
-    }
-
+	public function setCapital($capital) {
+		$this->capital=$capital;
+		return $this;
+	}
 }

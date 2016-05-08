@@ -624,3 +624,9 @@ h6:hover .anchor .octicon-link {
 	right: 20px;
 	bottom: 20px;
 }
+.ui.category.search>.results .category .result {
+	margin-left: 200px;
+}
+.ui.category.search>.results .category>.name {
+	width: 200px;
+}
