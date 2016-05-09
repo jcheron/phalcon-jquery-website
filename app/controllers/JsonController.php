@@ -81,7 +81,10 @@ class JsonController extends ControllerBase {
 			$countries=Countries::find("countryName like '%" . $query . "%'");
 		}
 		$search->fromDatabaseObjects($countries, function ($country) use($search) {
-			$search->add(new SearchResult($country->getCountryCode(), $country->getCountryName(), "Population : " . number_format($country->getPopulation()) . "<br>Capital : " . $country->getCapital(), "https://lipis.github.io/flag-icon-css/flags/4x3/" . strtolower($country->getCountryCode()) . ".svg"), $country->getContinentName());
+			$code=$country->getCountryCode();
+			$description="Population : " . number_format($country->getPopulation()) . "<br>Capital : " . $country->getCapital();
+			$image="https://lipis.github.io/flag-icon-css/flags/4x3/" . strtolower($code) . ".svg";
+			$search->add(new SearchResult($code, $country->getCountryName(), $description, $image), $country->getContinentName());
 		});
 		echo $search->getResponse();
 	}
