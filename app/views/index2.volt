@@ -6,11 +6,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" type="image/x-icon" href="public/img/favicon.ico" />
-{{
-stylesheet_link("https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css")
-}} {{ stylesheet_link("css/styles.css") }} {{
-stylesheet_link("https://cdnjs.cloudflare.com/ajax/libs/prism/1.4.1/themes/prism-okaidia.min.css")
-}}
+{{stylesheet_link("https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css")}}
+{{stylesheet_link("css/styles.css")}}
+{{stylesheet_link("https://cdnjs.cloudflare.com/ajax/libs/prism/1.4.1/themes/prism-okaidia.min.css")}}
 </head>
 <body>
 	<header class="navbar navbar-static-top bs-docs-nav" id="top"
@@ -44,12 +42,10 @@ stylesheet_link("https://cdnjs.cloudflare.com/ajax/libs/prism/1.4.1/themes/prism
 			</ul>
 		</div>
 	</div>
-	{{ q["back"] }} {{
-	javascript_include("https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js")
-	}} {{
-	javascript_include("https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js")
-	}} {{ script_foot }} {{ javascript_include("js/lib/prism.js") }}
-	{{javascript_include("js/lib/jquery.tablesort.min.js") }}
-
+	{{ q["back"] }}
+	{{javascript_include("https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js")}}
+	{{javascript_include("https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js")}}
+	{{ script_foot }} {{javascript_include("js/lib/prism.js")}}
+	{{javascript_include("js/lib/jquery.tablesort.min.js")}}
 </body>
 </html>
