@@ -630,3 +630,6 @@ h6:hover .anchor .octicon-link {
 .ui.category.search>.results .category>.name {
 	width: 200px;
 }
+.ui.header>a{
+	color: black;
+}

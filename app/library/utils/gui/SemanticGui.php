@@ -187,4 +187,34 @@ class SemanticGui extends BaseGUI {
 		$result->asIcon("angle double up")->setCircular()->setColor(Color::ORANGE);
 		return $result;
 	}
+
+	public function showMainDomaine($id, $domaines) {
+		$jquery=$this->controller->jquery;
+		$grid=$jquery->semantic()->htmlGrid("my-Grid-main");
+		
+		foreach ( $domaines as $domaine ) {
+			$col=$grid->addCol(4);
+			$idDom="ss-item-" . $domaine->getId();
+			$col->addContent(new HtmlHeader("", 3, "<a href='#' id='" . $idDom . "'>" . $domaine->getLibelle() . "</a>", "page"));
+			
+			$rubrique=\Rubrique::findFirst(array ("idDomaine = " . $domaine->getId(),"order" => "ordre" ));
+			if ($rubrique !== false) {
+				$exemple=\Exemple::findFirst(array ("idRubrique = " . $rubrique->getId(),"order" => "demo DESC" ));
+				if ($exemple !== false && $exemple->getDemo() > 0) {
+					$exec="";
+					$col->setWidth(4 * $exemple->getDemo());
+					if ($exemple->getExecPHP()) {
+						ob_start();
+						$this->jquery=$jquery;
+						eval($this->initPHP() . $exemple->getPhp());
+						$exec=ob_get_clean();
+						
+						$col->addContent($exec);
+					}
+				}
+			}
+		}
+		$jquery->getOnClick(".ui.header>a", "Index/content/", "#response");
+		echo $grid;
+	}
 }
