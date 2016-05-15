@@ -18,6 +18,9 @@
 .ui.menu:first-child{
 	margin-bottom: 0;
 }
+#tabs .ui.item>.header{
+	cursor: pointer;
+}
 #scroll{
 	position: relative;
 }

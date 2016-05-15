@@ -134,14 +134,16 @@ class SemanticGui extends BaseGUI {
 						return $elm;
 					});
 				}
-				return $tabs->generateMenuAsItem($ssMenu, $libelle);
+				$returnTabs=$tabs->generateMenuAsItem($ssMenu, $libelle);
+				$tabs->getItemHeader()->setIdentifier("itemHeader-" . $domaine->getId());
+				return $returnTabs;
 			} else {
 				$libelle=$translateEngine->translate($domaine->getId(), "domaine.libelle", $domaine->getLibelle());
 				$elm=new HtmlSemDoubleElement("ss-item-" . $domaine->getId(), "a", "", $libelle);
 				return $elm;
 			}
 		});
-		$jquery->getOnClick("#tabs a.item", "Index/content/", "#response");
+		$jquery->getOnClick("#tabs a.item, #tabs .ui.dropdown.item,#tabs .ui.item>.header", "Index/content/", "#response");
 		$sticky->setContent($tabs);
 		return $sticky;
 	}

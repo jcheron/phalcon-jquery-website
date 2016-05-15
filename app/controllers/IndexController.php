@@ -157,7 +157,7 @@ class IndexController extends ControllerBase {
 
 	public function menuAction($id) {
 		$id=$this->int($id);
-		$domaines=Domaine::find(array ("idParent = " . $id,"order" => "ordre" ));
+		$domaines=Domaine::find(array ("idParent = " . $id,"order" => "ordre ASC" ));
 		$tabs=$this->gui->getMenuTabs($domaines);
 		
 		echo $tabs->compile($this->jquery);
