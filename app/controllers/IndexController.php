@@ -113,7 +113,7 @@ class IndexController extends ControllerBase {
 					if (StrUtils::isNotNull($exemple->getPhp())) {
 						$footer="<pre><code class='language-php'>" . htmlentities($exemple->getPhp()) . "</code></pre>";
 					}
-					$p=$this->gui->getPanel("id-" . $exemple->getId(), "<p class='bs-example'>" . $exec . "</p>", $header, $footer);
+					$p=$this->gui->getPanel("id-" . $exemple->getId(), "<div class='bs-example'>" . $exec . "</div>", $header, $footer);
 					echo $p->compile();
 				}
 			}
