@@ -104,14 +104,18 @@ class IndexController extends ControllerBase {
 						$header=$this->translateEngine->translate($exemple->getId(), "exemple.header", $exemple->getHeader());
 					}
 					$exec="";
+					$startPoint='<hidden>';
+					$endPoint='</hidden>';
 					if ($exemple->getExecPHP()) {
 						ob_start();
-						eval($this->gui->initPHP() . $exemple->getPhp());
+						$php=str_ireplace([ $startPoint,$endPoint ], "", $exemple->getPhp());
+						eval($this->gui->initPHP() . $php);
 						$exec=ob_get_clean();
 					}
 					$footer=NULL;
 					if (StrUtils::isNotNull($exemple->getPhp())) {
-						$footer="<pre><code class='language-php'>" . htmlentities($exemple->getPhp()) . "</code></pre>";
+						$php=preg_replace('#(' . preg_quote($startPoint) . ')(.*)(' . preg_quote($endPoint) . ')#si', '', $exemple->getPhp());
+						$footer="<pre><code class='language-php'>" . htmlentities($php) . "</code></pre>";
 					}
 					$p=$this->gui->getPanel("id-" . $exemple->getId(), "<div class='bs-example'>" . $exec . "</div>", $header, $footer);
 					echo $p->compile();

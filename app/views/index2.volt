@@ -31,7 +31,7 @@
 			<div class="col-md-3 three wide column"></div>
 		</div>
 	</div>
-	<div class="sitemap">
+	<div class="site_map">
 		<div class="ui container">
 			<ul>
 				<li class="copyright">Kobject.net © 2008-2015 - <a

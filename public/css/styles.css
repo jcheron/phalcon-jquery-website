@@ -143,7 +143,7 @@ header {
     margin-bottom: 3px;
 }
 
-.sitemap {
+.site_map {
     box-sizing: border-box;
     height: 300px;
     width:100%;
@@ -619,6 +619,74 @@ h6:hover .anchor .octicon-link {
     display: block;
     min-height: 50px;
 }
+
+.bs-example .column .icon {
+  opacity: 1;
+  height: 1em;
+  color: #333333;
+  display: block;
+  margin: 0em auto 0.25em;
+  font-size: 2em;
+  -webkit-transition:
+    color 0.6s ease,
+    transform 0.2s ease;
+  -moz-transition:
+    color 0.6s ease,
+    transform 0.2s ease;
+  -o-transition:
+    color 0.6s ease,
+    transform 0.2s ease;
+  -ms-transition:
+    color 0.6s ease,
+    transform 0.2s ease;
+  transition:
+    color 0.6s ease,
+    transform 0.2s ease;
+}
+.bs-example .grid > .column {
+  opacity: 0.8;
+  text-align: center;
+  color: transparent;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-transition:
+    color 0.3s ease,
+    opacity 0.3s ease;
+  -moz-transition:
+    color 0.3s ease,
+    opacity 0.3s ease;
+  -o-transition:
+    color 0.3s ease,
+    opacity 0.3s ease;
+  -ms-transition:
+    color 0.3s ease,
+    opacity 0.3s ease;
+  transition:
+    color 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.bs-example  .grid:hover .column {
+  color: #777777;
+}
+.bs-example .grid:hover .column .icon {
+  color: #333333;
+}
+
+.bs-example .grid .column:hover .icon {
+  color: #000000;
+  -webkit-transform: scale(1.5);
+  -moz-transform: scale(1.5);
+  -o-transform: scale(1.5);
+  -ms-transform: scale(1.5);
+  transform: scale(1.5);
+}
+.bs-example .grid .column:hover {
+  opacity: 1;
+  color: #444444;
+}
+
 
 #back {
 	display: none;
