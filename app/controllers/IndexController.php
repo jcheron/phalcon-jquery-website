@@ -12,7 +12,7 @@ class IndexController extends ControllerBase {
 	public function initialize() {
 		parent::initialize();
 		$actionName=strtolower($this->dispatcher->getActionName());
-		if ($actionName === "index" || $actionName === "bootstrap") {
+		if ($actionName === "bootstrap") {
 			$this->session->set("framework", "bootstrap");
 		} elseif ($actionName === "semantic") {
 			$this->session->set("framework", "semantic");
@@ -27,7 +27,7 @@ class IndexController extends ControllerBase {
 	public function indexAction($lang=NULL) {
 		$partial=false;
 		$hasScript=false;
-		
+
 		if (isset($lang)) {
 			$this->translateEngine->setLanguage($lang, $this->session);
 		}
@@ -48,7 +48,7 @@ class IndexController extends ControllerBase {
 			}
 			$this->jquery->exec("Prism.highlightAll();", true);
 		}
-		
+
 		$this->session->remove("idDomaine");
 		if (!$partial) {
 			$this->gui->getMainMenu();
@@ -57,10 +57,15 @@ class IndexController extends ControllerBase {
 		}
 		$expr=array ();
 		$expr[]=$this->translateEngine->translate(1, "index.header", "jQuery, jQuery UI, Twitter Bootstrap and Semantic-UI library for phalcon MVC Framework");
-		$expr[]=$this->translateEngine->translate(2, "index.header", "Phalcon-jQuery is a Phalcon® library for generating scripts or rich components (Twitter Bootstrap, jQueryUI, Semantic-UI) on server side.");
+		$expr[]=$this->translateEngine->translate(2, "index.header", "A Phalcon® library for generating scripts or rich components (Twitter Bootstrap, jQueryUI, Semantic-UI) on server side.");
 		$expr[]=$this->translateEngine->translate(1, "index.download", "Download");
 		$expr[]=$this->translateEngine->translate(1, "index.install", "<p>Or</p><p class='lead'>Install with Composer</p><p>Create the file composer.json</p>");
 		$expr[]=$this->translateEngine->translate(2, "index.install", "Enter in the console");
+
+		$bt=$this->jquery->semantic()->htmlButton("bt-download", $expr[2])->asLink("https://github.com/jcheron/phalcon-jquery/archive/v1.0.5.zip");
+		$bt->addIcon("download");
+		$bt->addLabel("Phalcon-jQuery Azhar v1.0.5")->asLink("https://github.com/jcheron/phalcon-jquery/archive/v1.0.5.zip")->setPointing("left");
+
 		$this->jquery->compile($this->view);
 		$this->view->setVars(array ("expr" => $expr,"lang" => $this->translateEngine->getLanguage(),"hasScript" => $hasScript ));
 	}
@@ -94,7 +99,7 @@ class IndexController extends ControllerBase {
 				$this->anchors[$titreRubrique]=array ();
 				echo "<h1>" . $titreRubrique . "</h1>";
 				echo $this->translateEngine->translate($rubrique->getId(), "rubrique.description", $rubrique->getDescription());
-				
+
 				$exemples=$rubrique->getExemples([ 'order' => 'ordre' ]);
 				foreach ( $exemples as $exemple ) {
 					echo $this->replaceTitre($titreRubrique, $this->translateEngine->translate($exemple->getId(), "exemple.titre", $exemple->getTitre()));
@@ -125,7 +130,7 @@ class IndexController extends ControllerBase {
 			$ssDomaines=Domaine::find(array ("idParent = " . $id,"order" => "ordre" ));
 			$this->gui->showMainDomaine($id, $ssDomaines);
 		}
-		
+
 		$all=ob_get_contents();
 		ob_end_clean();
 		if ($this->getAnchorsCount() > 2) {
@@ -139,7 +144,7 @@ class IndexController extends ControllerBase {
 			$all=$alert . $all;
 		}
 		echo $all;
-		
+
 		$this->jquery->exec("Prism.highlightAll();", true);
 		if ($this->session->get("framework") === "semantic") {
 			$this->jquery->exec("$('.ui.sticky').sticky('refresh');", true);
@@ -163,7 +168,7 @@ class IndexController extends ControllerBase {
 		$id=$this->int($id);
 		$domaines=Domaine::find(array ("idParent = " . $id,"order" => "ordre ASC" ));
 		$tabs=$this->gui->getMenuTabs($domaines);
-		
+
 		echo $tabs->compile($this->jquery);
 		echo $this->jquery->compile();
 		$this->view->disable();
@@ -218,7 +223,7 @@ class IndexController extends ControllerBase {
 				});
 				if (sizeof($arrayTranslations) > 0)
 					$domaines=Domaine::find($this->_getCondition($arrayTranslations));
-				
+
 				$arrayRubriques=$translations->filter(function ($object) use($text) {
 					if (Text::startsWith($object->getName(), "rubrique" && stristr($object->getText(), $text) !== false)) {
 						return $object;
@@ -226,7 +231,7 @@ class IndexController extends ControllerBase {
 				});
 				if (sizeof($arrayRubriques) > 0)
 					$rubriques=Rubrique::find($this->_getCondition($arrayRubriques));
-				
+
 				$arrayExemples=$translations->filter(function ($object) use($text) {
 					if (Text::startsWith($object->getName(), "exemple")) {
 						if (stristr($object->getText(), $text) !== false)
@@ -267,7 +272,7 @@ class IndexController extends ControllerBase {
 			}
 			echo $dom;
 		}
-		
+
 		$rub=$this->jquery->bootstrap()->htmlPanel("listRubriques", "", "Rubriques (" . sizeof($rubriques) . ")");
 		if (sizeof($rubriques) > 0) {
 			$hasResults=true;
@@ -277,7 +282,7 @@ class IndexController extends ControllerBase {
 			}
 			echo $rub;
 		}
-		
+
 		$ex=$this->jquery->bootstrap()->htmlPanel("listExemples", "", "Exemples (" . sizeof($exemples) . ")");
 		if (sizeof($exemples) > 0) {
 			$rubrique="";
@@ -297,7 +302,7 @@ class IndexController extends ControllerBase {
 				}
 				$titre=$this->translateEngine->translate($exemple->getId(), "exemple.titre", $exemple->getTitre());
 				$description=$this->translateEngine->translate($exemple->getId(), "exemple.description", $exemple->getDescription());
-				
+
 				$ex->addContent((new HtmlLink("ex-" . $domaine->getId(), "", "<h4>" . $this->_highlight($titre, $text) . "</h4>"))->setClass("exemple")->setProperty("data-anchor", StrUtils::cleanAttr($titre)));
 				$ex->addContent("<div>" . $this->_highlight(strip_tags($description), $text) . "</div>");
 			}
@@ -313,14 +318,14 @@ class IndexController extends ControllerBase {
 	}
 
 	public function semanticAction($idDomaine=null) {
-		$this->view->setMainView("index2");
+		$this->view->setMainView("index");
 		if (isset($idDomaine))
 			$this->jquery->get("Index/content/main/" . $idDomaine, "#response");
 		$this->indexAction($this->translateEngine->getLanguage());
 	}
 
 	public function bootstrapAction($idDomaine=null) {
-		$this->view->setMainView("index");
+		$this->view->setMainView("index_bs");
 		if (isset($idDomaine))
 			$this->jquery->get("Index/content/main/" . $idDomaine, "#response");
 		$this->indexAction($this->translateEngine->getLanguage());

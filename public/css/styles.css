@@ -15,6 +15,19 @@
 /*
 --------------------------------------------Semantic
 */
+
+#jumbotron{
+	background-color: #F6F4F4;
+	padding: 36px;
+}
+#button-bt-download{
+	background-color: #478678;
+	color: #ffffff;
+}
+
+#button-bt-download a{
+	color: #ffffff;
+}
 .ui.menu:first-child{
 	margin-bottom: 0;
 }
