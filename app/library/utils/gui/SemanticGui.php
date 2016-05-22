@@ -193,12 +193,12 @@ class SemanticGui extends BaseGUI {
 	public function showMainDomaine($id, $domaines) {
 		$jquery=$this->controller->jquery;
 		$grid=$jquery->semantic()->htmlGrid("my-Grid-main");
-		
+
 		foreach ( $domaines as $domaine ) {
 			$col=$grid->addCol(4);
 			$idDom="ss-item-" . $domaine->getId();
 			$col->addContent(new HtmlHeader("", 3, "<a href='#' id='" . $idDom . "'>" . $domaine->getLibelle() . "</a>", "page"));
-			
+
 			$rubrique=\Rubrique::findFirst(array ("idDomaine = " . $domaine->getId(),"order" => "ordre" ));
 			if ($rubrique !== false) {
 				$exemple=\Exemple::findFirst(array ("idRubrique = " . $rubrique->getId(),"order" => "demo DESC" ));
@@ -206,11 +206,14 @@ class SemanticGui extends BaseGUI {
 					$exec="";
 					$col->setWidth(4 * $exemple->getDemo());
 					if ($exemple->getExecPHP()) {
+						$startPoint='<hidden>';
+						$endPoint='</hidden>';
 						ob_start();
 						$this->jquery=$jquery;
-						eval($this->initPHP() . $exemple->getPhp());
+						$php=str_ireplace([ $startPoint,$endPoint ], "", $exemple->getPhp());
+						eval($this->initPHP() . $php);
 						$exec=ob_get_clean();
-						
+
 						$col->addContent($exec);
 					}
 				}
