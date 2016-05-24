@@ -129,8 +129,8 @@ trait SemanticHtmlElementsTrait {
 	 * @param string $tagName
 	 * @return HtmlLabel
 	 */
-	public function htmlLabel($identifier, $content="", $tagName="div") {
-		return $this->addHtmlComponent(new HtmlLabel($identifier, $content, $tagName));
+	public function htmlLabel($identifier, $content="", $icon=NULL,$tagName="div") {
+		return $this->addHtmlComponent(new HtmlLabel($identifier, $content,$icon, $tagName));
 	}
 
 	/**

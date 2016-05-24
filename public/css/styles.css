@@ -12,9 +12,30 @@
   font-weight: normal;
   font-style: normal;
 }
+body{
+	font-family: 'Segoe UI', Frutiger, 'Frutiger Linotype', 'Dejavu Sans', 'Helvetica Neue', Arial, sans-serif;!important
+}
 /*
 --------------------------------------------Semantic
 */
+
+/* Wireframe Image */
+.bs-example .wireframe.image {
+  opacity: 0.5;
+}
+.bs-example .accordion .content > .wireframe.image {
+  opacity: 0.5 !important;
+}
+.bs-example :not(.images) > .wireframe.image {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.bs-example :not(.images) > .wireframe.image:first-child {
+  margin-top: 0em;
+}
+.bs-example :not(.images) > .wireframe.image:last-child {
+  margin-bottom: 0em;
+}
 
 #jumbotron{
 	background-color: #F6F4F4;
@@ -633,7 +654,7 @@ h6:hover .anchor .octicon-link {
     min-height: 50px;
 }
 
-.bs-example .column .icon {
+.bs-example.all-icons .column .icon {
   opacity: 1;
   height: 1em;
   color: #333333;
@@ -656,7 +677,7 @@ h6:hover .anchor .octicon-link {
     color 0.6s ease,
     transform 0.2s ease;
 }
-.bs-example .grid > .column {
+.bs-example.all-icons .grid > .column {
   opacity: 0.8;
   text-align: center;
   color: transparent;
@@ -680,14 +701,14 @@ h6:hover .anchor .octicon-link {
     opacity 0.3s ease;
 }
 
-.bs-example  .grid:hover .column {
+.bs-example.all-icons  .grid:hover .column {
   color: #777777;
 }
-.bs-example .grid:hover .column .icon {
+.bs-example.all-icons .grid:hover .column .icon {
   color: #333333;
 }
 
-.bs-example .grid .column:hover .icon {
+.bs-example.all-icons .grid .column:hover .icon {
   color: #000000;
   -webkit-transform: scale(1.5);
   -moz-transform: scale(1.5);
@@ -695,7 +716,7 @@ h6:hover .anchor .octicon-link {
   -ms-transform: scale(1.5);
   transform: scale(1.5);
 }
-.bs-example .grid .column:hover {
+.bs-example.all-icons .grid .column:hover {
   opacity: 1;
   color: #444444;
 }

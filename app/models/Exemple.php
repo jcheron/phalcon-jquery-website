@@ -1,59 +1,65 @@
 <?php
 class Exemple extends \Phalcon\Mvc\Model {
-	
+
 	/**
 	 *
 	 * @var integer
 	 */
 	protected $id;
-	
+
 	/**
 	 *
 	 * @var string
 	 */
 	protected $titre;
-	
+
 	/**
 	 *
 	 * @var string
 	 */
 	protected $description;
-	
+
 	/**
 	 *
 	 * @var string
 	 */
 	protected $header;
-	
+
 	/**
 	 *
 	 * @var string
 	 */
 	protected $php;
-	
+
 	/**
 	 *
 	 * @var integer
 	 */
 	protected $idRubrique;
-	
+
 	/**
 	 *
 	 * @var integer
 	 */
 	protected $execPHP;
-	
+
 	/**
 	 *
 	 * @var integer
 	 */
 	protected $ordre;
-	
+
 	/**
 	 *
 	 * @var integer
 	 */
 	protected $demo;
+
+	/**
+	 *
+	 * @var string
+	 */
+	protected $css;
 
 	/**
 	 * Method to set the value of field id
@@ -63,7 +69,7 @@ class Exemple extends \Phalcon\Mvc\Model {
 	 */
 	public function setId($id) {
 		$this->id=$id;
-		
+
 		return $this;
 	}
 
@@ -75,7 +81,7 @@ class Exemple extends \Phalcon\Mvc\Model {
 	 */
 	public function setPhp($php) {
 		$this->php=$php;
-		
+
 		return $this;
 	}
 
@@ -87,7 +93,7 @@ class Exemple extends \Phalcon\Mvc\Model {
 	 */
 	public function setIdRubrique($idRubrique) {
 		$this->idRubrique=$idRubrique;
-		
+
 		return $this;
 	}
 
@@ -99,7 +105,7 @@ class Exemple extends \Phalcon\Mvc\Model {
 	 */
 	public function setExecPHP($execPHP) {
 		$this->execPHP=$execPHP;
-		
+
 		return $this;
 	}
 
@@ -219,4 +225,14 @@ class Exemple extends \Phalcon\Mvc\Model {
 		$this->demo=$demo;
 		return $this;
 	}
+
+	public function getCss() {
+		return $this->css;
+	}
+
+	public function setCss($css) {
+		$this->css=$css;
+		return $this;
+	}
+
 }

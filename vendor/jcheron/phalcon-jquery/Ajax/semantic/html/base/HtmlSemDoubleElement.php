@@ -8,6 +8,7 @@ use Ajax\semantic\html\content\InternalPopup;
 use Phalcon\Mvc\View;
 use Ajax\semantic\html\base\traits\BaseTrait;
 use Ajax\semantic\html\modules\HtmlDimmer;
+use Ajax\semantic\html\elements\HtmlLabel;
 
 /**
  * Base class for Semantic double elements
@@ -51,6 +52,19 @@ class HtmlSemDoubleElement extends HtmlDoubleElement {
 		$dimmer->setContainer($this);
 		$this->addContent($dimmer);
 		return $dimmer;
+	}
+
+	public function addLabel($label, $before=false, $icon=NULL) {
+		$labelO=$label;
+		if (\is_object($label) === false) {
+			$labelO=new HtmlLabel("label-" . $this->identifier, $label);
+			if (isset($icon))
+				$labelO->addIcon($icon);
+		} else {
+			$labelO->addToPropertyCtrl("class", "label", array ("label" ));
+		}
+		$this->addContent($labelO, $before);
+		return $labelO;
 	}
 
 	public function jsShowDimmer($show=true) {

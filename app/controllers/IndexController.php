@@ -122,7 +122,7 @@ class IndexController extends ControllerBase {
 						$php=preg_replace('#(' . preg_quote($startPoint) . ')(.*)(' . preg_quote($endPoint) . ')#si', '', $exemple->getPhp());
 						$footer="<pre><code class='language-php'>" . htmlentities($php) . "</code></pre>";
 					}
-					$p=$this->gui->getPanel("id-" . $exemple->getId(), "<div class='bs-example'>" . $exec . "</div>", $header, $footer);
+					$p=$this->gui->getPanel("id-" . $exemple->getId(), "<div class='bs-example ".$exemple->getCss()."'>" . $exec . "</div>", $header, $footer);
 					echo $p->compile();
 				}
 			}

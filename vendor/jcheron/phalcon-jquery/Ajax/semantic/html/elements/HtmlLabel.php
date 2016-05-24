@@ -14,7 +14,7 @@ class HtmlLabel extends HtmlSemDoubleElement {
 	public function __construct($identifier, $caption="", $icon=NULL, $tagName="div") {
 		parent::__construct($identifier, $tagName, "ui label");
 		$this->content=$caption;
-		if (isset($icon))
+		if (isset($icon)===true)
 			$this->addIcon($icon);
 	}
 
@@ -24,7 +24,10 @@ class HtmlLabel extends HtmlSemDoubleElement {
 	 * @return \Ajax\semantic\html\elements\HtmlLabel
 	 */
 	public function setPointing($value=Direction::NONE) {
-		return $this->addToPropertyCtrl("class", $value . " pointing", Direction::getConstantValues("pointing"));
+		if($value==="left" || $value==="right")
+			return $this->addToPropertyCtrl("class", $value." pointing", Direction::getConstantValues("pointing"));
+		else
+			return $this->addToPropertyCtrl("class", "pointing ".$value, Direction::getConstantValues("pointing",true));
 	}
 
 	/**
@@ -83,11 +86,15 @@ class HtmlLabel extends HtmlSemDoubleElement {
 		return $div;
 	}
 
-	public function asRibbon() {
-		return $this->addToPropertyCtrl("class", "ribbon", array ("ribbon" ));
+	public function asRibbon($direction=Direction::NONE) {
+		return $this->addToPropertyCtrl("class", $direction." ribbon", array ("ribbon","right ribbon","left ribbon" ));
 	}
 
 	public static function ribbon($identifier, $caption) {
 		return (new HtmlLabel($identifier, $caption))->asRibbon();
+	}
+
+	public static function tag($identifier, $caption) {
+		return (new HtmlLabel($identifier, $caption))->asTag();
 	}
 }

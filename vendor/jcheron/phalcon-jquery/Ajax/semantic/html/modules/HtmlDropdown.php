@@ -196,6 +196,10 @@ class HtmlDropdown extends HtmlSemDoubleElement {
 		}
 	}
 
+	public function setCompact(){
+		return $this->addToPropertyCtrl("class", "compact", array("compact"));
+	}
+
 	public function setAction($action){
 		$this->_params["action"]=$action;
 	}
