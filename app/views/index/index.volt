@@ -6,6 +6,7 @@
 		<div class="header">What's new ?</div>
 		<div class="content">Phalcon-JQuery 2.0 (with Semantic-UI) is coming soon</div>
 	</div>
+	<div class="ui red ribbon label">Overview</div>
 	<p>{{ q["bt-download"] }}</p>
 	<p>{{ expr[3] }}</p>
 	<pre><code class="language-javascript">{

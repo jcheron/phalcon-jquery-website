@@ -9,6 +9,7 @@ use Phalcon\Mvc\View;
 use Ajax\semantic\html\base\traits\BaseTrait;
 use Ajax\semantic\html\modules\HtmlDimmer;
 use Ajax\semantic\html\elements\HtmlLabel;
+use Ajax\semantic\html\base\constants\Direction;
 
 /**
  * Base class for Semantic double elements
@@ -65,6 +66,22 @@ class HtmlSemDoubleElement extends HtmlDoubleElement {
 		}
 		$this->addContent($labelO, $before);
 		return $labelO;
+	}
+
+	public function attachLabel($label,$side,$direction=Direction::NONE,$icon=NULL){
+		$label=$this->addLabel($label,true,$icon);
+		$label->setAttached($side,$direction);
+		return $this;
+	}
+
+	/**
+	 *
+	 * @return \Ajax\semantic\html\base\HtmlSemDoubleElement
+	 */
+	public function asLink($href=NULL) {
+		if (isset($href))
+			$this->setProperty("href", $href);
+		return $this->setTagName("a");
 	}
 
 	public function jsShowDimmer($show=true) {

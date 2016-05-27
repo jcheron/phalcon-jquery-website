@@ -19,5 +19,6 @@ class HtmlMenuItem extends HtmlSemDoubleElement {
 		$this->content=new HtmlSemDoubleElement("content-" . $this->identifier, "div", "content");
 		$this->content->setContent($content);
 		$this->content->addContent(new HtmlIcon("icon" . $this->identifier, $icon), $before);
+		return $this;
 	}
 }

@@ -55,26 +55,5 @@ class TestController extends ControllerBase {
 	}
 
 	public function testAction(){
-		$paragraph=new HtmlImg("","http://semantic-ui.com/images/wireframe/short-paragraph.png");
-		$semantic=$this->jquery->semantic();
-		$paragraph->addToProperty("class","wireframe");
-		$seg1=$semantic->htmlSegment("seg7");
-		$seg1->addLabel("Overview")->asRibbon()->setColor("red");
-		$seg1->addContent("Account Details");
-		$seg1->addContent($paragraph);
-		$seg1->addLabel("Overview")->asRibbon()->setColor("blue");
-		$seg1->addContent("User reviews");
-		$seg1->addContent($paragraph);
-
-
-		$seg2=$semantic->htmlSegment("seg8");
-		$seg2->addLabel("Specs")->asRibbon("right")->setColor("orange");
-		$seg2->addContent($paragraph);
-		$seg2->addLabel("Reviews")->asRibbon("right")->setColor("blue");
-		$seg2->addContent($paragraph);
-
-		$grid=$semantic->htmlGrid("",0,2);
-		$grid->setValues([$seg1,$seg2]);
-		echo $grid;
 	}
 }

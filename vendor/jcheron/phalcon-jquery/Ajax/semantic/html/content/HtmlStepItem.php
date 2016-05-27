@@ -72,9 +72,6 @@ class HtmlStepItem extends HtmlSemDoubleElement {
 		return $this->addToPropertyCtrl("class", $status, StepStatus::getConstants());
 	}
 
-	public function asLink(){
-		return $this->setTagName("a");
-	}
 	public function removeStatus(){
 		$this->removePropertyValues("class", StepStatus::getConstants());
 	}

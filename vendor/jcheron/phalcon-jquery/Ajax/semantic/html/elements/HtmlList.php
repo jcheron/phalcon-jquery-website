@@ -64,6 +64,10 @@ class HtmlList extends HtmlSemCollection {
 		return $this->addToProperty("class", "relaxed");
 	}
 
+	public function setSelection() {
+		return $this->addToProperty("class", "selection");
+	}
+
 	public function setDivided() {
 		return $this->addToProperty("class", "divided");
 	}

@@ -3,10 +3,10 @@
 namespace Ajax\semantic\html\elements;
 
 use Ajax\semantic\html\base\HtmlSemDoubleElement;
-use Ajax\common\html\html5\HtmlImg;
-use Ajax\common\html\HtmlDoubleElement;
 use Ajax\semantic\html\base\constants\Direction;
 use Ajax\semantic\html\base\traits\LabeledIconTrait;
+use Ajax\semantic\html\base\constants\Side;
+use Ajax\semantic\html\elements\html5\HtmlImg;
 
 class HtmlLabel extends HtmlSemDoubleElement {
 	use LabeledIconTrait;
@@ -39,6 +39,14 @@ class HtmlLabel extends HtmlSemDoubleElement {
 		return $this->addToPropertyCtrl("class", $side . " corner", array ("right corner","left corner" ));
 	}
 
+	public function setHorizontal(){
+		return $this->addToPropertyCtrl("class", "hozizontal",array("horizontal"));
+	}
+
+	public function setFloating(){
+		return $this->addToPropertyCtrl("class", "floating",array("floating"));
+	}
+
 	/**
 	 *
 	 * @return \Ajax\semantic\html\elements\HtmlLabel
@@ -47,14 +55,9 @@ class HtmlLabel extends HtmlSemDoubleElement {
 		return $this->addToProperty("class", "tag");
 	}
 
-	/**
-	 *
-	 * @return \Ajax\semantic\html\elements\HtmlLabel
-	 */
-	public function asLink($href=NULL) {
-		if (isset($href))
-			$this->setProperty("href", $href);
-		return $this->setTagName("a");
+	public function setEmpty(){
+		$this->content=NULL;
+		return $this->addToPropertyCtrl("class", "empty",array("empty"));
 	}
 
 	public function setBasic() {
@@ -66,11 +69,39 @@ class HtmlLabel extends HtmlSemDoubleElement {
 	 * @param string $src
 	 * @param string $alt
 	 * @param string $before
-	 * @return \Ajax\semantic\html\elements\HtmlLabel
+	 * @return \Ajax\semantic\html\elements\html5\HtmlImg
 	 */
-	public function addImage($src, $alt="", $before=true) {
+	public function addEmphasisImage($src, $alt="", $before=true) {
 		$this->addToProperty("class", "image");
-		return $this->addContent(new HtmlImg("image-" . $this->identifier, $src, $alt), $before);
+		return $this->addImage($src,$alt,$before);
+	}
+
+	/**
+	 * Adds an avatar image
+	 * @param string $src
+	 * @param string $alt
+	 * @param string $before
+	 * @return \Ajax\semantic\html\elements\html5\HtmlImg
+	 */
+	public function addAvatarImage($src, $alt="", $before=true) {
+		$img=$this->addImage($src,$alt,$before);
+		$img->setClass("ui image");
+		$img->asAvatar();
+		return $img;
+	}
+
+	/**
+	*  Adds an image
+	* @param string $src
+	* @param string $alt
+	* @param string $before
+	* @return \Ajax\semantic\html\elements\html5\HtmlImg
+	*/
+	public function addImage($src, $alt="", $before=true) {
+		$img=new HtmlImg("image-" . $this->identifier, $src, $alt);
+		$img->setClass("");
+		$this->addContent($img, $before);
+		return $img;
 	}
 
 	/**
@@ -79,8 +110,7 @@ class HtmlLabel extends HtmlSemDoubleElement {
 	 * @return \Ajax\common\html\HtmlDoubleElement
 	 */
 	public function addDetail($detail) {
-		$div=new HtmlDoubleElement("detail-" . $this->identifier, $this->tagName);
-		$div->setClass("detail");
+		$div=new HtmlSemDoubleElement("detail-" . $this->identifier, $this->tagName,"detail");
 		$div->setContent($detail);
 		$this->addContent($div);
 		return $div;
@@ -88,6 +118,13 @@ class HtmlLabel extends HtmlSemDoubleElement {
 
 	public function asRibbon($direction=Direction::NONE) {
 		return $this->addToPropertyCtrl("class", $direction." ribbon", array ("ribbon","right ribbon","left ribbon" ));
+	}
+
+	public function setAttached($side=Side::TOP,$direction=Direction::NONE){
+		if($direction!==Direction::NONE)
+			return $this->addToPropertyCtrl("class", $side." ".$direction." attached",Side::getConstantValues($direction." attached"));
+		else
+			return $this->addToPropertyCtrl("class", $side." attached",Side::getConstantValues("attached"));
 	}
 
 	public static function ribbon($identifier, $caption) {

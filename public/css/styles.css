@@ -212,6 +212,9 @@ header {
 .jumbotron .lead{
     font-weight: 500;
 }
+#jumbotron .ribbon{
+	margin-left: -24px;
+}
 #response{
 	min-height: 500px;
 }
