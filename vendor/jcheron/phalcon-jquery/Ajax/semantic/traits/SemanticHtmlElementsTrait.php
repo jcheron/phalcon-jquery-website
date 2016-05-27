@@ -21,6 +21,7 @@ use Ajax\semantic\html\elements\HtmlStep;
 use Ajax\semantic\html\elements\HtmlFlag;
 use Ajax\semantic\html\elements\HtmlImage;
 use Ajax\semantic\html\base\constants\State;
+use Ajax\semantic\html\elements\HtmlLabelGroups;
 
 trait SemanticHtmlElementsTrait {
 
@@ -131,6 +132,10 @@ trait SemanticHtmlElementsTrait {
 	 */
 	public function htmlLabel($identifier, $content="", $icon=NULL,$tagName="div") {
 		return $this->addHtmlComponent(new HtmlLabel($identifier, $content,$icon, $tagName));
+	}
+
+	public function htmlLabelGroups($identifier,$labels=array(),$attributes=array()){
+		return $this->addHtmlComponent(new HtmlLabelGroups($identifier,$labels,$attributes));
 	}
 
 	/**

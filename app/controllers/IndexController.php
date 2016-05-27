@@ -14,7 +14,7 @@ class IndexController extends ControllerBase {
 		$actionName=strtolower($this->dispatcher->getActionName());
 		if ($actionName === "bootstrap") {
 			$this->session->set("framework", "bootstrap");
-		} elseif ($actionName === "semantic") {
+		} elseif ($actionName === "semantic" || $actionName==="index") {
 			$this->session->set("framework", "semantic");
 		}
 		if ($this->session->get("framework") === "bootstrap") {
