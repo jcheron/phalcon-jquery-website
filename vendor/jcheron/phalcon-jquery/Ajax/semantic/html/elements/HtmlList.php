@@ -18,11 +18,7 @@ class HtmlList extends HtmlSemCollection {
 
 	protected function createItem($value) {
 		$count=$this->count();
-		if (\is_array($value)) {
-			$item=new HtmlListItem("item-" . $this->identifier . "-" . $count, $value[0]);
-			$item->addIcon($value[1]);
-		} else
-			$item=new HtmlListItem("item-" . $this->identifier . "-" . $count, $value);
+		$item=new HtmlListItem("item-" . $this->identifier . "-" . $count, $value);
 		return $item;
 	}
 
@@ -49,6 +45,14 @@ class HtmlList extends HtmlSemCollection {
 
 	public function setCelled() {
 		return $this->addToProperty("class", "celled");
+	}
+
+	public function setBulleted() {
+		return $this->addToProperty("class", "bulleted");
+	}
+
+	public function setOrdered() {
+		return $this->addToProperty("class", "ordered");
 	}
 
 	public function run(JsUtils $js) {
