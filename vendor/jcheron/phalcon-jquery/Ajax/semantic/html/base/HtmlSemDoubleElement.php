@@ -3,13 +3,13 @@
 namespace Ajax\semantic\html\base;
 
 use Ajax\common\html\HtmlDoubleElement;
-use Ajax\JsUtils;
 use Ajax\semantic\html\content\InternalPopup;
-use Phalcon\Mvc\View;
+
 use Ajax\semantic\html\base\traits\BaseTrait;
 use Ajax\semantic\html\modules\HtmlDimmer;
 use Ajax\semantic\html\elements\HtmlLabel;
 use Ajax\semantic\html\base\constants\Direction;
+use Ajax\JsUtils;
 
 /**
  * Base class for Semantic double elements
@@ -91,7 +91,7 @@ class HtmlSemDoubleElement extends HtmlDoubleElement {
 		return '$("#.' . $this->identifier . ').dimmer("' . $status . '");';
 	}
 
-	public function compile(JsUtils $js=NULL, View $view=NULL) {
+	public function compile(JsUtils $js=NULL, $view=NULL) {
 		if (isset($this->_popup))
 			$this->_popup->compile();
 		return parent::compile($js, $view);

@@ -28,6 +28,10 @@ class HtmlList extends HtmlSemCollection {
 		return $header;
 	}
 
+	public function getItemPart($index,$partName="header"){
+		return $this->getItem($index)->getPart($partName);
+	}
+
 	public function itemsAs($tagName) {
 		return $this->contentAs($tagName);
 	}
@@ -74,6 +78,10 @@ class HtmlList extends HtmlSemCollection {
 
 	public function setDivided() {
 		return $this->addToProperty("class", "divided");
+	}
+
+	public function setHorizontal() {
+		return $this->addToProperty("class", "horizontal");
 	}
 
 	public function addCheckedList($items=array(), $masterItem=NULL, $values=array()) {

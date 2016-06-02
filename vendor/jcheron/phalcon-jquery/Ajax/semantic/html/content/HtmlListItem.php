@@ -19,6 +19,7 @@ class HtmlListItem extends HtmlAbsractItem {
 				$desc=@$content[2];
 			}else{
 				$icon=@$content["icon"];
+				$image=@$content["image"];
 				$title=@$content["title"];
 				$header=@$content["header"];
 				$desc=@$content["description"];
@@ -26,6 +27,9 @@ class HtmlListItem extends HtmlAbsractItem {
 			}
 			if(isset($icon)===true){
 				$this->setIcon($icon);
+			}
+			if(isset($image)===true){
+				$this->setImage($image);
 			}
 			if(isset($title)===true){
 				$this->setTitle($title,$desc);

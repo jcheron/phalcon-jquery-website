@@ -5,8 +5,9 @@ namespace Ajax\semantic\html\content;
 use Ajax\semantic\html\base\HtmlSemDoubleElement;
 use Ajax\semantic\html\elements\HtmlIcon;
 use Ajax\JsUtils;
-use Phalcon\Mvc\View;
+
 use Ajax\service\JArray;
+use Ajax\semantic\html\elements\html5\HtmlImg;
 
 abstract class HtmlAbsractItem extends HtmlSemDoubleElement {
 
@@ -20,6 +21,12 @@ abstract class HtmlAbsractItem extends HtmlSemDoubleElement {
 
 	public function setIcon($icon){
 		$this->content["icon"]=new HtmlIcon("icon-".$this->identifier, $icon);
+	}
+
+	public function setImage($image){
+		$image=new HtmlImg("icon-".$this->identifier, $image);
+		$image->asAvatar();
+		$this->content["image"]=$image;
 	}
 
 	private function createContent(){
@@ -40,13 +47,18 @@ abstract class HtmlAbsractItem extends HtmlSemDoubleElement {
 		return $this;
 	}
 
+	public function getPart($partName="header"){
+		$content=\array_merge($this->content["content"]->getContent(),array(@$this->content["icon"],@$this->content["image"]));
+		return $this->getElementByPropertyValue("class", $partName, $content);
+	}
+
 	public function setActive(){
 		$this->setTagName("div");
 		$this->removeProperty("href");
 		return $this->addToPropertyCtrl("class", "active", array("active"));
 	}
 
-	public function asLink($href=NULL){
+	public function asLink($href=NULL,$part=NULL){
 		$this->setTagName("a");
 		if(isset($href))
 			$this->setProperty("href", $href);
@@ -59,7 +71,7 @@ abstract class HtmlAbsractItem extends HtmlSemDoubleElement {
 	 *
 	 * @see \Ajax\semantic\html\base\HtmlSemDoubleElement::compile()
 	 */
-	public function compile(JsUtils $js=NULL, View $view=NULL) {
+	public function compile(JsUtils $js=NULL, $view=NULL) {
 		if(\is_array($this->content))
 			$this->content=JArray::sortAssociative($this->content, [ "icon","image","content" ]);
 		return parent::compile($js, $view);

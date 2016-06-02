@@ -4,7 +4,7 @@ use Ajax\bootstrap\html\base\CssRef;
 class AccueilController extends ControllerBase {
 	public function afterExecuteRoute($dispatcher){
 		$bc=$this->jquery->bootstrap()->htmlBreadcrumbs("bc10");
-		$bc->fromDispatcher($dispatcher,0);
+		$bc->fromDispatcher($this->jquery,$dispatcher,0);
 		$bc->addGlyph("glyphicon-home",0);
 		$bc->jsSetContent($this->jquery);
 		$bc->autoGetOnClick("#ajax-content");

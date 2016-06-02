@@ -4,12 +4,12 @@ namespace Ajax\semantic\html\modules;
 
 use Ajax\semantic\html\base\HtmlSemDoubleElement;
 use Ajax\semantic\html\content\HtmlDropdownItem;
-use Ajax\JsUtils;
 use Ajax\semantic\html\elements\HtmlIcon;
 use Ajax\common\html\html5\HtmlInput;
 use Ajax\service\JArray;
 use Ajax\semantic\html\base\constants\Direction;
 use Ajax\semantic\html\base\traits\LabeledIconTrait;
+use Ajax\JsUtils;
 
 class HtmlDropdown extends HtmlSemDoubleElement {
 	use LabeledIconTrait {
