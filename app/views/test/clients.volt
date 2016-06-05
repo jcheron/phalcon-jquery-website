@@ -9,3 +9,4 @@
 		{% endfor %}
 		</tbody>
 </table>
+{{ Test }}

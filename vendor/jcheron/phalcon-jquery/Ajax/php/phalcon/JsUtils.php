@@ -11,7 +11,6 @@ class JsUtils extends \Ajax\JsUtils implements InjectionAwareInterface{
 	protected $_di;
 	public function setDi(DiInterface $di) {
 		$this->_di=$di;
-		//$this->_setDi($di);
 	}
 
 	public function getDi() {
@@ -35,18 +34,23 @@ class JsUtils extends \Ajax\JsUtils implements InjectionAwareInterface{
 		$view->setVar($view_var,$output);
 	}
 
-	public function forward($initialController,$controller,$action){
-		$dispatcher = $initialController->dispatcher;
-		$dispatcher->setControllerName($controller);
-		$dispatcher->setActionName($action);
+	public function forward($initialControllerInstance,$controllerName,$actionName,$params=NULL){
+		$dispatcher = $initialControllerInstance->dispatcher;
+		$dispatcher->setControllerName($controllerName);
+		$dispatcher->setActionName($actionName);
+		if(\is_array($params)){
+			$dispatcher->setParams($params);
+		}
 		$dispatcher->dispatch();
-		$template=$initialController->view->getRender($dispatcher->getControllerName(), $dispatcher->getActionName(),$dispatcher->getParams(), function ($view) {
+		$template=$initialControllerInstance->view->getRender($dispatcher->getControllerName(), $dispatcher->getActionName(),NULL, function ($view) {
 			$view->setRenderLevel(View::LEVEL_ACTION_VIEW);
 		});
 		return $template;
 	}
 
-	public function renderContent($view, $controller, $action, $params=NULL) {
+	public function renderContent($initialControllerInstance, $viewName, $params=NULL) {
+		list($controller,$action)=\explode("/", $viewName);
+		$view=$initialControllerInstance->view;
 		$template=$view->getRender($controller, $action, $params, function ($view) {
 			$view->setRenderLevel(View::LEVEL_ACTION_VIEW);
 		});

@@ -7,7 +7,6 @@ use Ajax\config\Config;
 use Ajax\lib\CDNJQuery;
 use Ajax\lib\CDNGuiGen;
 use Ajax\lib\CDNCoreCss;
-use Phalcon\Version;
 use Ajax\common\traits\JsUtilsEventsTrait;
 use Ajax\common\traits\JsUtilsActionsTrait;
 use Ajax\common\traits\JsUtilsAjaxTrait;
@@ -49,28 +48,23 @@ abstract class JsUtils{
 	 */
 	protected $config;
 
-	protected function _setDi($di) {
-		if ($this->js!=null&&$di!=null)
-			$this->js->setDi($di);
-	}
-
 	public abstract function getUrl($url);
 	public abstract function addViewElement($identifier,$content,$view);
 	/**
-	 * render the content of $controller::$action and set the response to the modal content
-	 * @param Controller $initialController
-	 * @param string $controller a Phalcon controller
-	 * @param string $action a Phalcon action
+	 * render the content of $controllerName::$actionName and set the response to the modal content
+	 * @param Controller $initialControllerInstance
+	 * @param string $controllerName the controller name
+	 * @param string $actionName the action name
+	 * @param mixed $params
 	 */
-	public abstract function forward($initialController,$controller,$action);
+	public abstract function forward($initialControllerInstance,$controllerName,$actionName,$params=NULL);
 	/**
-	 * render the content of an existing view : $controller/$action and set the response to the modal content
-	 * @param View $view
-	 * @param string $controller a Phalcon controller
-	 * @param string $action a Phalcon action
+	 * render the content of an existing view : $viewName and set the response to the modal content
+ 	 * @param Controller $initialControllerInstance
+	 * @param View $viewName
 	 * @param $params The parameters to pass to the view
 	 */
-	public abstract function renderContent($view, $controller, $action, $params=NULL);
+	public abstract function renderContent($initialControllerInstance,$viewName, $params=NULL);
 
 	/**
 	 * Collect url parts from the request dispatcher : controllerName, actionName, parameters

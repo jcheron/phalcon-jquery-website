@@ -31,10 +31,10 @@ class TestController extends ControllerBase {
 		echo $this->jquery->compile();
 	}
 
-	public function clientsAction() {
+	public function clientsAction($test) {
 		$clients=Client::find();
 		$this->view->setRenderLevel(View::LEVEL_MAIN_LAYOUT);
-		$this->view->setVars(array ("model" => "Clients","objects" => $clients ));
+		$this->view->setVars(array ("model" => "Clients","objects" => $clients,"Test"=>$test));
 	}
 
 	public function clientAction($idClient) {

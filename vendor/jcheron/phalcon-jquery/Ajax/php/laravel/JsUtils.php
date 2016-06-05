@@ -2,10 +2,11 @@
 
 namespace Ajax\php\laravel;
 
+use Illuminate\Support\Facades\App;
 
 class JsUtils extends \Ajax\JsUtils{
 	public function getUrl($url){
-		return $url;
+		return \url($url);
 	}
 	public function addViewElement($identifier,$content,$view){
 		$controls=$view->__get("q");
@@ -20,35 +21,19 @@ class JsUtils extends \Ajax\JsUtils{
 		$view->__set($view_var,$output);
 	}
 
-	public function forward($initialController,$controller,$action){
-		$dispatcher = $initialController->dispatcher;
-		$dispatcher->setControllerName($controller);
-		$dispatcher->setActionName($action);
-		$dispatcher->dispatch();
-		$template=$initialController->view->getRender($dispatcher->getControllerName(), $dispatcher->getActionName(),$dispatcher->getParams(), function ($view) {
-			$view->setRenderLevel(View::LEVEL_ACTION_VIEW);
-		});
-		return $template;
+	public function forward($initialControllerInstance,$controllerName,$actionName,$params=NULL){
+		\ob_start();
+		App::make($controllerName)->{$actionName}($params);
+		$result=\ob_get_contents();
+		\ob_end_clean();
+		return $result;
 	}
 
-	public function renderContent($view, $controller, $action, $params=NULL) {
-		$template=$view->getRender($controller, $action, $params, function ($view) {
-			$view->setRenderLevel(View::LEVEL_ACTION_VIEW);
-		});
-		return $template;
+	public function renderContent($initialControllerInstance,$viewName, $params=NULL) {
+		return \view()->make($viewName,$params)->render();
 	}
 
 	public function fromDispatcher($dispatcher){
-		$params=$dispatcher->getParams();
-		$action=$dispatcher->getActionName();
-		$items=array($dispatcher->getControllerName());
-		if(\sizeof($params)>0 || \strtolower($action)!="index" ){
-			$items[]=$action;
-			foreach ($params as $p){
-				if(\is_object($p)===false)
-					$items[]=$p;
-			}
-		}
-		return $items;
+		return $dispatcher->segments();
 	}
 }

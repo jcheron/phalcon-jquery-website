@@ -29,6 +29,35 @@ class HtmlAccordion extends HtmlSemCollection{
 		return ($value instanceof HtmlAccordionItem)===false;
 	}
 
+	public function addPanel($title,$content){
+		return $this->addItem([$title,$content]);
+	}
+
+	/**
+	 * render the content of $controller::$action and set the response to a new panel
+	 * @param JsUtils $js
+	 * @param string $title The panel title
+	 * @param Controller $initialControllerInstance
+	 * @param string $controllerName the controller name
+	 * @param string $actionName the action name
+	 * @param mixed $params
+	 */
+	public function forwardPanel(JsUtils $js,$title,$initialControllerInstance,$controllerName,$actionName,$params=NULL){
+		return $this->addPanel($title, $js->forward($initialControllerInstance, $controllerName, $actionName,$params));
+	}
+
+	/**
+	 * render the content of an existing view : $controller/$action and set the response to a new panel
+	 * @param JsUtils $js
+	 * @param string $title The panel title
+	 * @param Controller $initialControllerInstance
+	 * @param string $viewName
+	 * @param $params The parameters to pass to the view
+	 */
+	public function renderViewPanel(JsUtils $js,$title,$initialControllerInstance, $viewName, $params=array()) {
+		return $this->addPanel($title, $js->renderContent($initialControllerInstance, $viewName,$params));
+	}
+
 	/*
 	 * (non-PHPdoc)
 	 * @see BaseHtml::run()
