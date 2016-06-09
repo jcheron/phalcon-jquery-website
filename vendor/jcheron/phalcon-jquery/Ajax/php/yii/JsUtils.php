@@ -2,13 +2,12 @@
 
 namespace Ajax\php\yii;
 
-use Phalcon\DiInterface;
-use Phalcon\Mvc\View;
-use Phalcon\Mvc\Controller;
 use yii\helpers\Url;
 
 class JsUtils extends \Ajax\JsUtils{
 	public function getUrl($url){
+		if($url==="")
+			$url="/";
 		return Url::toRoute($url);
 	}
 
@@ -38,6 +37,7 @@ class JsUtils extends \Ajax\JsUtils{
 	}
 
 	public function fromDispatcher($dispatcher){
-		return $dispatcher->segments();
+		$uri=new \Ajax\php\yii\URI();
+		return $uri->segment_array();
 	}
 }
